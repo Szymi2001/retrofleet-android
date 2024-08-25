@@ -1,0 +1,51 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ng-container *ngFor="let car of myFleet; let i = index">
+        <ion-col size="12" size-md="6">
+          <ion-card>
+            <ion-item lines="none">
+              <ion-col size="3">
+                <ion-thumbnail class="rounded-thumbnail">
+                  <img
+                    [src]="croppedImages[i] || '/assets/images/car-icon.png'"
+                    alt="Zdjęcie pojazdu"
+                  />
+                </ion-thumbnail>
+              </ion-col>
+              <ion-col size="8">
+                <ion-card-content>
+                  <p>Pojazd: {{ car.brand }} {{ car.model }}</p>
+                  <p>Rok produkcji: {{ car.year }}</p>
+                  <p>Przebieg: {{ car.mileage }} km</p>
+                  <p>
+                    Status:
+                    <ion-progress-bar
+                      [value]="getCarStatus(i)"
+                    ></ion-progress-bar>
+                    <span class="progress-text">
+                      {{ (getCarStatus(i)).toFixed(0) }}%
+                    </span>
+                  </p>
+                </ion-card-content>
+              </ion-col>
+              <ion-col size="1" class="flex h-full p-0 justify-content-start align-items-start">
+                <ion-button
+                  (click)="presentPopover($event, car)"
+                  fill="clear"
+                >
+                  <ion-icon slot="icon-only" name="ellipsis-vertical-outline" class="text-xl"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-item>
+          </ion-card>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button size="small" id="inputmodal" (click)="openDialog()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

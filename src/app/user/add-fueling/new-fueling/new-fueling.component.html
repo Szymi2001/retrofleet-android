@@ -1,0 +1,138 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Dodaj tankowanie</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="fuelReceiptForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-input
+        label="Koszt"
+        labelPlacement="floating"
+        type="text"
+        inputmode="decimal"
+        maxlength="11"
+        formControlName="price"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Wybierz pojazd"
+        labelPlacement="floating"
+        interface="action-sheet"
+        formControlName="selectedCar"
+      >
+        <ion-select-option
+          *ngFor="let vehicle of vehicleStrings"
+          [value]="vehicle"
+        >
+          {{ vehicle.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item id="fueling-date">
+      <ion-label>Data tankowania</ion-label>
+      <ion-note slot="end">{{
+        fuelReceiptForm.get("date")?.value | date : "dd/MM/yyyy"
+      }}</ion-note>
+    </ion-item>
+    <ion-modal trigger="fueling-date" [cssClass]="'bottom-end'">
+      <ng-template>
+        <ion-datetime
+          id="date"
+          presentation="date"
+          [max]="maxDate"
+          size="cover"
+          showDefaultButtons="true"
+          cancelText="Anuluj"
+          doneText="Zatwierdź"
+          formControlName="date"
+        ></ion-datetime>
+      </ng-template>
+    </ion-modal>
+
+    <ion-item>
+      <ion-input
+        label="Przebieg (km)"
+        labelPlacement="floating"
+        type="text"
+        inputmode="numeric"
+        maxlength="7"
+        formControlName="mileage"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-textarea
+        label="Opis dotyczący tankowania (opcjonalne)"
+        labelPlacement="floating"
+        formControlName="description"
+        autoGrow="true"
+        maxlength="100"
+        rows="4"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Rodzaj paliwa"
+        labelPlacement="floating"
+        interface="action-sheet"
+        formControlName="fuelType"
+      >
+        <ion-select-option *ngFor="let fuel of fuelTypes" [value]="fuel">
+          {{ fuel }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Ilość paliwa"
+        labelPlacement="floating"
+        type="text"
+        inputmode="numeric"
+        maxlength="6"
+        formControlName="fuelAmount"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Rodzaj płatności"
+        labelPlacement="floating"
+        interface="action-sheet"
+        formControlName="transactionType"
+      >
+        <ion-select-option
+          *ngFor="let transaction of transactionTypes"
+          [value]="transaction"
+        >
+          {{ transaction.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Numer paragonu"
+        labelPlacement="floating"
+        interface="action-sheet"
+        type="number"
+        formControlName="receiptNumber"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top">
+      Dodaj
+    </ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "RetroFleet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

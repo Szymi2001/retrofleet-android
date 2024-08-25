@@ -1,0 +1,22 @@
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Wyświetlanie</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      
+      <ion-item>
+        <ion-icon
+      slot="start"
+      [name]="paletteToggle ? 'sunny-outline' : 'moon-outline'"
+    ></ion-icon>
+        <ion-toggle
+          [(ngModel)]="paletteToggle"
+          (ionChange)="toggleDarkModeChange($event)"
+          >Dark Mode</ion-toggle
+        >
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

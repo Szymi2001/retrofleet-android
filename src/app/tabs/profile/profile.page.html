@@ -1,0 +1,155 @@
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Dane użytkownika</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <strong>Login:</strong>
+                </ion-col>
+                <ion-col size="6"> {{ userInfo.login }} </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <strong>Imię:</strong>
+                </ion-col>
+                <ion-col size="6"> {{ userInfo.name }} </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <strong>Nazwisko:</strong>
+                </ion-col>
+                <ion-col size="6"> {{ userInfo.surname }} </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <strong>Email:</strong>
+                </ion-col>
+                <ion-col size="6"> {{ userInfo.email }} </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-button
+              expand="full"
+              color="primary"
+              type="submit"
+              class="ion-margin-top"
+            >
+              Zmień dane
+            </ion-button>
+            <ion-button
+              expand="full"
+              color="warning"
+              type="submit"
+              class="ion-margin-top"
+            >
+              Zmień hasło
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Usuń konto użytkownika</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form
+              [formGroup]="deleteAccount"
+              (ngSubmit)="onDeleteAccountSubmit()"
+            >
+              <ion-item>
+                <ion-input
+                  type="password"
+                  formControlName="password"
+                  placeholder="Wprowadź hasło"
+                >
+                </ion-input>
+              </ion-item>
+              <ion-button
+                expand="full"
+                color="danger"
+                type="submit"
+                class="ion-margin-top"
+              >
+                Usuń konto
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Odzyskiwanie hasła</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form
+              [formGroup]="remindQuestions"
+              (ngSubmit)="onRemindQuestionsSubmit()"
+            >
+              <ion-item>
+                <ion-label position="stacked">Pierwsze pytanie:</ion-label>
+                <ion-select
+                  formControlName="first_question"
+                  interface="action-sheet"
+                  cancelText="Anuluj"
+                >
+                  <ion-select-option
+                    *ngFor="let question of firstQuestions"
+                    [value]="question.label"
+                  >
+                    {{ question.label }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-input
+                  formControlName="first_answer"
+                  placeholder="Wpisz odpowiedź"
+                >
+                </ion-input>
+              </ion-item>
+
+              <ion-item class="ion-margin-top">
+                <ion-label position="stacked">Drugie pytanie:</ion-label>
+                <ion-select
+                  formControlName="second_question"
+                  interface="action-sheet"
+                >
+                  <ion-select-option
+                    *ngFor="let question of secondQuestions"
+                    [value]="question.label"
+                  >
+                    {{ question.label }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-input
+                  formControlName="second_answer"
+                  placeholder="Wpisz odpowiedź"
+                >
+                </ion-input>
+              </ion-item>
+
+              <ion-button
+                expand="full"
+                color="primary"
+                type="submit"
+                class="ion-margin-top"
+              >
+                <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                Zatwierdź
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

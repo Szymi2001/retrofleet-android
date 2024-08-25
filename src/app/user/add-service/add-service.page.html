@@ -1,0 +1,55 @@
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-margin-top">
+      <ion-col size="12" class="ion-margin-bottom">
+        <ion-list>
+          <ion-item>
+            <ion-select
+              interface="action-sheet"
+              cancelText="Anuluj"
+              placeholder="Sortuj według typu"
+              [(ngModel)]="selectedType"
+              (ionChange)="onSortChange($event)"
+            >
+              <ion-select-option
+                *ngFor="let option of serviceOptions"
+                [value]="option.value"
+              >
+                {{ option.name }}
+              </ion-select-option>
+            </ion-select>
+            <ion-button
+              fill="clear"
+              (click)="clearFilters()"
+              slot="end"
+            >
+              <ion-icon name="filter" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <ion-list *ngFor="let service of filteredServices">
+          <ion-item lines="full">
+            <ion-label>
+              <h2>{{ service.brand + ' ' + service.model }}</h2>
+              <p>Typ: {{ service.type }}</p>
+              <p>Data: {{ service.date }}</p>
+              <p>Cena: {{ service.insertedPrice }} zł</p>
+              <p>Przebieg: {{ service.mileage }} km</p>
+              <p>Opis: {{ service.description || 'Brak opisu' }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-item *ngIf="myServices.length == 0">
+          <ion-label>Dodaj serwis pojazdu.</ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button size="small" id="inputmodal" (click)="openDialog()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

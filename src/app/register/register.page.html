@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Załóż konto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-margin-top">
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card class="ion-text-center">
+          <ion-buttons slot="start">
+            <ion-back-button default-href="#"></ion-back-button>
+          </ion-buttons>
+          <ion-card-header>
+            <ion-card-title>Zarejestruj się</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              <ion-item>
+                <ion-icon name="person-outline" slot="start"></ion-icon>
+                <ion-input
+                placeholder="Nazwa użytkownika"
+                  type="text"
+                  formControlName="username"
+                  clearInput
+                  required>
+                </ion-input>
+              </ion-item>
+              <!-- <div *ngIf="submitted && registerForm.get('username')?.invalid">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <span>Uzupełnij pole</span>
+              </div> -->
+
+              <ion-item class="ion-margin-top">
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-input
+                  placeholder="Hasło"
+                  type="password"
+                  formControlName="password">
+                </ion-input>
+              </ion-item>
+
+              <ion-item class="ion-margin-top">
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-input
+                  placeholder="Powtórz hasło"
+                  type="password"
+                  formControlName="repeatPassword">
+                </ion-input>
+              </ion-item>
+
+              <ion-button 
+                expand="block" 
+                type="submit" 
+                class="ion-margin-top">
+                Załóż konto
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

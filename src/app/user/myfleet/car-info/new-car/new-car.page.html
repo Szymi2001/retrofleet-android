@@ -1,0 +1,179 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Dodaj pojazd</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Zamknij</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()">
+    <ion-list>
+      <!-- VIN -->
+      <ion-item>
+        <ion-input
+          formControlName="enteredVin"
+          type="text"
+          maxlength="17"
+          placeholder="Wprowadź VIN"
+        ></ion-input>
+      </ion-item>
+
+      <!-- Zarejestrowany -->
+      <ion-item>
+        <ion-input
+          formControlName="registrationNumber"
+          placeholder="Wprowadź nr rejestracyjny"
+        ></ion-input>
+      </ion-item>
+
+      <!-- Aktualny przebieg -->
+      <ion-item>
+        <ion-input
+          formControlName="enteredMileage"
+          type="number"
+          placeholder="Wprowadź przebieg (km)"
+        ></ion-input>
+      </ion-item>
+
+      <!-- Marka -->
+      <ion-item>
+        <ion-select
+          interface="popover"
+          formControlName="selectedBrand"
+          (ionChange)="filterModels()"
+          placeholder="Wybierz markę pojazdu"
+        >
+          <ion-select-option *ngFor="let brand of carBrands" [value]="brand">
+            {{ brand }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Model -->
+      <ion-item>
+        <ion-select
+          interface="popover"
+          formControlName="selectedModel"
+          placeholder="Wybierz model pojazdu"
+        >
+          <ion-select-option *ngFor="let model of carModels" [value]="model">
+            {{ model }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Rok -->
+      <ion-item>
+        <ion-select
+          interface="popover"
+          formControlName="selectedYear"
+          placeholder="Wybierz rok produkcji"
+        >
+          <ion-select-option
+            *ngFor="let year of carProductionYear"
+            [value]="year"
+          >
+            {{ year }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Kolor -->
+      <ion-item>
+        <ion-select
+          formControlName="selectedColor"
+          placeholder="Wybierz kolor"
+          interface="popover"
+        >
+          <ion-select-option *ngFor="let color of carColors" [value]="color">
+            {{ color }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Nadwozie -->
+      <ion-item>
+        <ion-select
+          interface="popover"
+          formControlName="selectedBodyType"
+          placeholder="Wybierz rodzaj nadwozia"
+        >
+          <ion-select-option
+            *ngFor="let bodyType of carBodyTypes"
+            [value]="bodyType"
+          >
+            {{ bodyType }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Rodzaj paliwa -->
+      <ion-item>
+        <ion-select
+          interface="popover"
+          formControlName="selectedFuelType"
+          placeholder="Wybierz rodzaj paliwa"
+        >
+          <ion-select-option
+            *ngFor="let fuelType of carFuelTypes"
+            [value]="fuelType"
+          >
+            {{ fuelType }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Badanie techniczne -->
+      <ion-item>
+        <ion-label>Data badania technicznego</ion-label>
+        <ion-datetime-button
+          datetime="technicalInspectionDate"
+        ></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="technicalInspectionDate"
+              presentation="date"
+              [max]="maxDate"
+              showDefaultButtons="true"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+      <!-- Ubezpieczenie -->
+      <ion-item>
+        <ion-label>Ubezpieczenie (data ważności)</ion-label>
+        <ion-datetime-button
+          datetime="insuranceExpiryDate"
+        ></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="insuranceExpiryDate"
+              presentation="date"
+              showDefaultButtons="true"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+      <!-- Wpis do rejestru zabytków -->
+      <ion-item>
+        <ion-label>Wpis do rejestru zabytków</ion-label>
+        <ion-checkbox formControlName="isHeritageListed"></ion-checkbox>
+      </ion-item>
+
+      <!-- Submit Button -->
+      <ion-button
+        expand="full"
+        type="submit"
+        color="primary"
+        class="ion-margin-top"
+        >Dodaj pojazd</ion-button
+      >
+    </ion-list>
+  </form>
+</ion-content>

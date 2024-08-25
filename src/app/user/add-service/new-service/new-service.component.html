@@ -1,0 +1,125 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Dodaj serwis</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-input
+        label="Koszt"
+        labelPlacement="floating"
+        type="text"
+        inputmode="decimal"
+        maxlength="11"
+        formControlName="price"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Wybierz pojazd"
+        labelPlacement="floating"
+        cancelText="Anuluj"
+        interface="action-sheet"
+        formControlName="selectedCar"
+      >
+        <ion-select-option
+          *ngFor="let vehicle of vehicleStrings"
+          [value]="vehicle"
+        >
+          {{ vehicle.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item id="service-date">
+      <ion-label>Data serwisu</ion-label>
+      <ion-note slot="end">{{
+        serviceForm.get("date")?.value | date : "dd/MM/yyyy"
+      }}</ion-note>
+    </ion-item>
+    <ion-modal trigger="service-date" [cssClass]="'bottom-end'">
+      <ng-template>
+        <ion-datetime
+          id="date"
+          presentation="date"
+          [max]="maxDate"
+          size="cover"
+          showDefaultButtons="true"
+          cancelText="Anuluj"
+          doneText="Zatwierdź"
+          formControlName="date"
+        ></ion-datetime>
+      </ng-template>
+    </ion-modal>
+
+    <ion-item>
+      <ion-input
+        label="Przebieg (km)"
+        labelPlacement="floating"
+        type="text"
+        inputmode="numeric"
+        maxlength="7"
+        formControlName="mileage"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-textarea
+        label="Opis dotyczący serwisu (opcjonalne)"
+        labelPlacement="floating"
+        formControlName="description"
+        maxlength="100"
+        rows="4"
+        auto-grow="true"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Typ serwisu</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-segment scrollable="true" formControlName="type">
+        <ion-segment-button
+          *ngFor="let option of serviceOptions"
+          [value]="option.value"
+        >
+          {{ option.name }}
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <ion-button class="ion-margin-top" expand="block" (click)="onSubmit()">
+      <ion-icon name="add" slot="start"></ion-icon>
+      Dodaj serwis</ion-button
+    >
+  </form>
+
+  <!-- <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Sortuj według typu</ion-label>
+        <ion-select
+          [formControl]="typeControl"
+          placeholder="Sortuj według typu"
+          (ionChange)="onSortChange($event)"
+        >
+          <ion-select-option *ngFor="let option of serviceOptions" [value]="option.value">
+            {{ option.name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-button fill="clear" (click)="clearFilters()">
+          <ion-icon name="filter-off-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card> -->
+</ion-content>

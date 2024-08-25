@@ -1,0 +1,60 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Zaloguj się</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-margin-top">
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card class="ion-text-center">
+          <ion-buttons slot="start">
+            <ion-back-button default-href="#"></ion-back-button>
+          </ion-buttons>
+          <ion-card-header>
+            <ion-card-title>Zaloguj się</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <ion-item>
+                <ion-icon name="person-outline" slot="start"></ion-icon>
+                <ion-input
+                  placeholder="Nazwa użytkownika"
+                  type="text"
+                  formControlName="login"
+                  [class.invalid]="submitted && !loginForm.get('login')?.valid">
+                </ion-input>
+              </ion-item>
+
+              <ion-item class="ion-margin-top">
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-input
+                  placeholder="Hasło"
+                  type="password"
+                  formControlName="password"
+                  [class.invalid]="submitted && !loginForm.get('password')?.valid">
+                </ion-input>
+              </ion-item>
+
+              <ion-button 
+                expand="block" 
+                type="submit" 
+                class="ion-margin-top">
+                Zaloguj się
+              </ion-button>
+            </form>
+
+            <ion-text class="ion-margin-top">
+              Nie masz konta? 
+              <a routerLink="../register" class="ion-text-primary">Zarejestruj się</a>
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

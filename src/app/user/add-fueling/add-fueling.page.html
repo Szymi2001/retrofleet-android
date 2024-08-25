@@ -1,0 +1,19 @@
+<ion-content>
+  <!-- <ion-list *ngFor="let service of filteredServices">
+    <ion-item lines="full">
+      <ion-label>
+        <h3>{{ service.brand + ' ' + service.model }}</h3>
+        <p>Typ: {{ service.type }}</p>
+        <p>Data: {{ service.date }}</p>
+        <p>Cena: {{ service.insertedPrice }} zł</p>
+        <p>Przebieg: {{ service.mileage }} km</p>
+        <p>Opis: {{ service.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list> -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button size="small" id="inputmodal" (click)="openDialog()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

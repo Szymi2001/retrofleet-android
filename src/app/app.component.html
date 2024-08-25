@@ -1,0 +1,73 @@
+<ion-app>
+  <!-- Pasek nawigacyjny -->
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>{{ pageTitle }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Główna zawartość -->
+  <ion-content>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-content>
+  
+
+  <!-- Menu -->
+  <ion-menu contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="dismiss()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <ion-list>
+            <ng-container *ngFor="let item of menuItems">
+              <!-- Renderowanie grupy menu -->
+              <ng-container *ngIf="isMenuGroup(item)">
+                <ion-list-header>{{ item.groupTitle }}</ion-list-header>
+                <ng-container *ngFor="let subItem of item.items">
+                  <ion-item (click)="goToPage(subItem.path, subItem.action)">
+                    <ion-icon slot="start" [name]="subItem.icon"></ion-icon>
+                    {{ subItem.title }}
+                  </ion-item>
+                </ng-container>
+              </ng-container>
+              <!-- Renderowanie pojedynczego elementu menu -->
+              <ng-container *ngIf="!isMenuGroup(item)">
+                <ion-item (click)="goToPage(item.path, item.action)">
+                  <ion-icon slot="start" [name]="item.icon"></ion-icon>
+                  {{ item.title }}
+                </ion-item>
+              </ng-container>
+            </ng-container>
+          </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button *ngIf="!isLoggedIn" tab="home">
+        <ion-icon name="home"></ion-icon>
+        <ion-label>Strona startowa</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button *ngIf="isLoggedIn" tab="profile">
+        <ion-icon name="person-outline"></ion-icon>
+        <ion-label>Mój profil</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="settings">
+        <ion-icon name="settings-outline"></ion-icon>
+        <ion-label>Ustawienia</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-app>
