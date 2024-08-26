@@ -1,0 +1,28 @@
+{
+  "LOGIN": {
+    "TITLE": "Login in",
+    "LOGIN_PLACEHOLDER": "Username",
+    "PASSWORD_PLACEHOLDER": "Password",
+    "BUTTON_LABEL": "Login in",
+    "NO_ACCOUNT_TEXT": "Doesn't have account?",
+    "NO_ACCOUNT_LINK_TEXT": "Create account"
+  },
+  "REGISTER": {
+    "TITLE": "Create account",
+    "LOGIN_PLACEHOLDER": "Username",
+    "PASSWORD_PLACEHOLDER": "Password",
+    "REPEAT_PASSWORD_PLACEHOLDER": "Repeat password",
+    "BUTTON_LABEL": "Create account"
+  },
+  "SETTINGS": {
+    "TITLE": "Settings"
+  },
+  "PROFILE": {
+    "TITLE": "My profile"
+  },
+  "MENU": {
+    "MANAGEMENT_TITLE": "Management",
+    "REPORTS.TITLE": "Reports",
+    "SETTINGS.TITLE": "Settings"
+  }
+}

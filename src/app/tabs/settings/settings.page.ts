@@ -13,6 +13,7 @@ export class SettingsPage implements OnInit {
   isLoggedIn: boolean = true;
 
   paletteToggle = false;
+  fontSize: string = 'medium';
 
   constructor(
     private themeService: ThemeService,
@@ -47,5 +48,17 @@ export class SettingsPage implements OnInit {
 
   toggleDarkPalette(shouldAdd: any) {
     document.documentElement.classList.toggle('ion-palette-dark', shouldAdd);
+  }
+
+  onFontSizeChange(event: any) {
+    this.fontSize = event.detail.value;
+    this.updateFontSize();
+  }
+
+  updateFontSize() {
+    document.documentElement.style.setProperty(
+      'font-size',
+      `var(--font-size-${this.fontSize})`
+    );
   }
 }

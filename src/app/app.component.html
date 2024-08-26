@@ -54,19 +54,24 @@
 
   <ion-tabs>
     <ion-tab-bar slot="bottom">
-      <ion-tab-button *ngIf="!isLoggedIn" tab="home">
-        <ion-icon name="home"></ion-icon>
-        <ion-label>Strona startowa</ion-label>
+      <ion-tab-button *ngIf="!isLoggedIn" tab="login">
+        <ion-icon name="log-in-outline"></ion-icon>
+        <ion-label>{{ 'LOGIN.TITLE' | translate }}</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button *ngIf="!isLoggedIn" tab="register">
+        <ion-icon name="person-add-outline"></ion-icon>
+        <ion-label>{{ 'REGISTER.TITLE' | translate }}</ion-label>
       </ion-tab-button>
 
       <ion-tab-button *ngIf="isLoggedIn" tab="profile">
         <ion-icon name="person-outline"></ion-icon>
-        <ion-label>Mój profil</ion-label>
+        <ion-label>{{ 'PROFILE.TITLE' | translate }}</ion-label>
       </ion-tab-button>
 
       <ion-tab-button tab="settings">
         <ion-icon name="settings-outline"></ion-icon>
-        <ion-label>Ustawienia</ion-label>
+        <ion-label>{{ 'SETTINGS.TITLE' | translate }}</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>

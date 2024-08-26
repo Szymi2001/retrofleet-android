@@ -83,9 +83,12 @@
       <!-- Kolor -->
       <ion-item>
         <ion-select
+          label="Wybierz kolor"
+          labelPlacement="floating"
+          cancelText="Anuluj"
+          okText="Zatwierdź"
           formControlName="selectedColor"
-          placeholder="Wybierz kolor"
-          interface="popover"
+          interface="action-sheet"
         >
           <ion-select-option *ngFor="let color of carColors" [value]="color">
             {{ color }}
@@ -134,6 +137,8 @@
         <ion-modal [keepContentsMounted]="true">
           <ng-template>
             <ion-datetime
+              doneText="Zatwierdź"
+              cancelText="Anuluj"
               id="technicalInspectionDate"
               presentation="date"
               [max]="maxDate"
@@ -152,6 +157,8 @@
         <ion-modal [keepContentsMounted]="true">
           <ng-template>
             <ion-datetime
+              doneText="Zatwierdź"
+              cancelText="Anuluj"
               id="insuranceExpiryDate"
               presentation="date"
               showDefaultButtons="true"

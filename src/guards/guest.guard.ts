@@ -14,10 +14,10 @@ export class GuestGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.authService.getLoggedInSubject().pipe(
+    return this.authService.isLoggedIn().pipe(
       map(isLoggedIn => {
         if (isLoggedIn) {
-          this.router.navigate(['/tabs/myfleet']);
+          this.router.navigate(['/myfleet']);
           return false;
         }
         return true;

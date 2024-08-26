@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { filter } from 'rxjs';
 import { AuthService } from 'src/services/auth.service';
@@ -20,6 +21,10 @@ interface MenuGroup {
 
 type MenuItems = MenuItem | MenuGroup;
 
+interface Translations {
+  [key: string]: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -35,9 +40,12 @@ export class AppComponent  {
     private menuController: MenuController,
     private authService: AuthService,
     private themeService: ThemeService,
+    private translate: TranslateService,
     private router: Router
   ) {
     this.themeService.loadSettings();
+    //TODO: Obsługa zmiany języka
+    translate.use('en')
   }
 
   ngOnInit(): void {
@@ -59,13 +67,14 @@ export class AppComponent  {
   
     switch (activeRoute) {
       case 'profile':
-        this.pageTitle = 'Mój profil';
+        this.translate.get('PROFILE.TITLE').subscribe((translatedTitle: string) => {
+          this.pageTitle = translatedTitle;
+        });
         break;
       case 'settings':
-        this.pageTitle = 'Ustawienia';
-        break;
-      case 'home':
-        this.pageTitle = 'RetroFleet';
+        this.translate.get('SETTINGS.TITLE').subscribe((translatedTitle: string) => {
+          this.pageTitle = translatedTitle;
+        });
         break;
       default:
         const menuItem = this.menuItems.find(item =>
@@ -97,22 +106,24 @@ export class AppComponent  {
 
   updateMenuItems() {
     if (!this.isLoggedIn) {
-      this.menuItems = [
-        {
-          title: 'Zaloguj się',
-          icon: 'log-in-outline',
-          path: '/login',
-        },
-        {
-          title: 'Załóż konto',
-          icon: 'person-add-outline',
-          path: '/register',
-        },
-      ];
+      this.translate.get(['MENU.MANAGEMENT_TITLE', 'LOGIN.TITLE', 'REGISTER.TITLE']).subscribe((translations: Translations) => {
+        this.menuItems = [
+          {
+            title: translations['LOGIN.TITLE'],
+            icon: 'log-in-outline',
+            path: '/login',
+          },
+          {
+            title: translations['REGISTER.TITLE'],
+            icon: 'person-add-outline',
+            path: '/register',
+          },
+        ];
+      });
     } else {
       this.menuItems = [
         {
-          groupTitle: 'Zarządzanie flotą',
+          groupTitle: 'Zarządzanie',
           items: [
             {
               title: 'Moja flota',
@@ -162,7 +173,7 @@ export class AppComponent  {
             {
               title: 'Wyloguj się',
               icon: 'log-out-outline',
-              path: '/home',
+              path: '/login',
               action: () => this.logout()
             }
           ]

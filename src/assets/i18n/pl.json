@@ -1,0 +1,28 @@
+{
+  "LOGIN": {
+    "TITLE": "Zaloguj się",
+    "LOGIN_FORM": "Nazwa użytkownika",
+    "PASSWORD_FORM": "Hasło",
+    "BUTTON_LABEL": "Zaloguj się",
+    "NO_ACCOUNT_TEXT": "Nie posiadasz konta?",
+    "NO_ACCOUNT_LINK_TEXT": "Załóż konto"
+  },
+  "REGISTER": {
+    "TITLE": "Załóż konto",
+    "LOGIN_PLACEHOLDER": "Nazwa użytkownika",
+    "PASSWORD_PLACEHOLDER": "Hasło",
+    "REPEAT_PASSWORD_PLACEHOLDER": "Powtórz hasło",
+    "BUTTON_LABEL": "Stwórz konto"
+  },
+  "SETTINGS": {
+    "TITLE": "Ustawienia"
+  },
+  "PROFILE": {
+    "TITLE": "Mój profil"
+  },
+  "MENU": {
+    "MANAGEMENT": "Zarządzanie",
+    "REPORTS": "Raporty",
+    "SETTINGS": "Ustawienia"
+  }
+}

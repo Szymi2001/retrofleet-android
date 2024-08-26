@@ -1,13 +1,4 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button default-href="#"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Zaloguj się</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content padding>
   <ion-grid>
     <ion-row class="ion-justify-content-center ion-margin-top">
       <ion-col size="12" size-md="6" size-lg="4">
@@ -16,14 +7,14 @@
             <ion-back-button default-href="#"></ion-back-button>
           </ion-buttons>
           <ion-card-header>
-            <ion-card-title>Zaloguj się</ion-card-title>
+            <ion-card-title>{{ 'LOGIN.TITLE' | translate }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
               <ion-item>
                 <ion-icon name="person-outline" slot="start"></ion-icon>
                 <ion-input
-                  placeholder="Nazwa użytkownika"
+                  placeholder="{{ 'LOGIN.LOGIN_PLACEHOLDER' | translate }}"
                   type="text"
                   formControlName="login"
                   [class.invalid]="submitted && !loginForm.get('login')?.valid">
@@ -33,7 +24,7 @@
               <ion-item class="ion-margin-top">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
                 <ion-input
-                  placeholder="Hasło"
+                  placeholder="{{ 'LOGIN.PASSWORD_PLACEHOLDER' | translate }}"
                   type="password"
                   formControlName="password"
                   [class.invalid]="submitted && !loginForm.get('password')?.valid">
@@ -44,13 +35,13 @@
                 expand="block" 
                 type="submit" 
                 class="ion-margin-top">
-                Zaloguj się
+                {{ 'LOGIN.BUTTON_LABEL' | translate }}
               </ion-button>
             </form>
 
             <ion-text class="ion-margin-top">
-              Nie masz konta? 
-              <a routerLink="../register" class="ion-text-primary">Zarejestruj się</a>
+              {{ 'LOGIN.NO_ACCOUNT_TEXT' | translate }}
+              <a routerLink="../register" class="ion-text-primary">{{ 'LOGIN.NO_ACCOUNT_LINK_TEXT' | translate }}</a>
             </ion-text>
           </ion-card-content>
         </ion-card>

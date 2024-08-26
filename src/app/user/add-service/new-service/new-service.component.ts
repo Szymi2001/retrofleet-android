@@ -55,6 +55,8 @@ export class NewServiceComponent  implements OnInit {
 
   myServices: Service[] = [];
 
+
+  //TODO: Zmienić na wyświetlanie <interface>
   serviceOptions = [
     { name: 'Silnik', value: 'Silnik' },
     { name: 'Olej', value: 'Olej' },

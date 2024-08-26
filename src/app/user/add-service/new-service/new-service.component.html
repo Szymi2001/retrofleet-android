@@ -83,18 +83,20 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Typ serwisu</ion-label>
-    </ion-item>
-
-    <ion-item>
-      <ion-segment scrollable="true" formControlName="type">
-        <ion-segment-button
+      <ion-select
+        label="Typ serwisu"
+        labelPlacement="floating"
+        cancelText="Anuluj"
+        interface="action-sheet"
+        formControlName="type"
+      >
+        <ion-select-option
           *ngFor="let option of serviceOptions"
           [value]="option.value"
         >
-          {{ option.name }}
-        </ion-segment-button>
-      </ion-segment>
+          {{ option.value }}
+        </ion-select-option>
+      </ion-select>
     </ion-item>
 
     <ion-button class="ion-margin-top" expand="block" (click)="onSubmit()">

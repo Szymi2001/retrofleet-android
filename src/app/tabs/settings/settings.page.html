@@ -17,6 +17,21 @@
           >Dark Mode</ion-toggle
         >
       </ion-item>
+
+      <ion-item>
+        <ion-label>Rozmiar czcionki</ion-label>
+        <ion-segment [(ngModel)]="fontSize" (ionChange)="onFontSizeChange($event)">
+          <ion-segment-button value="small">
+            Mały
+          </ion-segment-button>
+          <ion-segment-button value="medium">
+            Średni
+          </ion-segment-button>
+          <ion-segment-button value="large">
+            Duży
+          </ion-segment-button>
+        </ion-segment>
+      </ion-item>
     </ion-card-content>
   </ion-card>
 </ion-content>

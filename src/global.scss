@@ -41,3 +41,7 @@
 ion-router-outlet ion-content {
     --padding-top: 3.5rem;
 }
+
+body {
+    font-size: var(--ion-font-size, var(--font-size-medium));
+}
