@@ -45,3 +45,7 @@ ion-router-outlet ion-content {
 body {
     font-size: var(--ion-font-size, var(--font-size-medium));
 }
+
+.card-content-md {
+    -webkit-padding-start: 0;
+}

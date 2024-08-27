@@ -1,0 +1,133 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Nowa trasa</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-select
+        label="Wybierz pojazd"
+        labelPlacement="floating"
+        interface="popover"
+        formControlName="selectedCar"
+      >
+        <ion-select-option
+          *ngFor="let vehicle of vehicleStrings"
+          [value]="vehicle"
+          >{{ vehicle.label }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="ion-padding-top">
+      <ion-input
+        label="Lokalizacja początkowa"
+        labelPlacement="floating"
+        type="text"
+        formControlName="startLocation"
+        (ionInput)="onStartCityInput($event)"
+        (ionBlur)="calculateDistance()"
+      ></ion-input>
+    </ion-item>
+    <ion-list class="ion-padding-bottom" *ngIf="filteredStartCities.length > 0">
+      <ion-item
+        *ngFor="let city of filteredStartCities"
+        (click)="selectStartCity(city)"
+      >
+        {{ city.label }}
+      </ion-item>
+    </ion-list>
+
+    <ion-item class="ion-padding-top">
+      <ion-input
+        label="Lokalizacja końcowa"
+        labelPlacement="floating"
+        type="text"
+        formControlName="endLocation"
+        (ionBlur)="calculateDistance()"
+        (ionInput)="onEndCityInput($event)"
+      ></ion-input>
+    </ion-item>
+    <ion-list class="ion-padding-bottom" *ngIf="filteredEndCities.length > 0">
+      <ion-item
+        *ngFor="let city of filteredEndCities"
+        (click)="selectEndCity(city)"
+      >
+        {{ city.label }}
+      </ion-item>
+    </ion-list>
+
+    <ion-item class="ion-padding-top">
+      <ion-input
+        label="Długość trasy"
+        labelPlacement="floating"
+        type="text"
+        formControlName="distance"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Czas trwania"
+        labelPlacement="floating"
+        type="text"
+        formControlName="duration"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Status"
+        labelPlacement="floating"
+        interface="popover"
+        formControlName="status"
+      >
+        <ion-select-option
+          *ngFor="let status of statusOptions"
+          [value]="status"
+          >{{ status.label }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Data</ion-label>
+      <ion-datetime-button datetime="date"></ion-datetime-button>
+
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
+          id="date"
+          presentation="date"
+          size="cover"
+          showDefaultButtons="true"
+          cancelText="Anuluj"
+          doneText="Zatwierdź"
+          formControlName="date"
+        ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Szczegóły trasy</ion-label>
+      <ion-textarea
+        formControlName="description"
+        maxlength="100"
+        auto-grow="true"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-button class="ion-margin-top" expand="block" (click)="onSubmit()">
+      <ion-icon name="add" slot="start"></ion-icon>
+      Dodaj trasę</ion-button
+    >
+  </form>
+</ion-content>

@@ -1,6 +1,6 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Dodaj serwis</ion-title>
+    <ion-title>Nowy serwis</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon slot="icon-only" name="close-outline"></ion-icon>
@@ -26,8 +26,7 @@
       <ion-select
         label="Wybierz pojazd"
         labelPlacement="floating"
-        cancelText="Anuluj"
-        interface="action-sheet"
+        interface="popover"
         formControlName="selectedCar"
       >
         <ion-select-option
@@ -39,15 +38,13 @@
       </ion-select>
     </ion-item>
 
-    <ion-item id="service-date">
-      <ion-label>Data serwisu</ion-label>
-      <ion-note slot="end">{{
-        serviceForm.get("date")?.value | date : "dd/MM/yyyy"
-      }}</ion-note>
-    </ion-item>
-    <ion-modal trigger="service-date" [cssClass]="'bottom-end'">
-      <ng-template>
-        <ion-datetime
+    <ion-item>
+      <ion-label>Data</ion-label>
+      <ion-datetime-button datetime="date"></ion-datetime-button>
+
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
           id="date"
           presentation="date"
           [max]="maxDate"
@@ -57,8 +54,9 @@
           doneText="Zatwierdź"
           formControlName="date"
         ></ion-datetime>
-      </ng-template>
-    </ion-modal>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
 
     <ion-item>
       <ion-input
@@ -104,24 +102,4 @@
       Dodaj serwis</ion-button
     >
   </form>
-
-  <!-- <ion-card>
-    <ion-card-content>
-      <ion-item>
-        <ion-label>Sortuj według typu</ion-label>
-        <ion-select
-          [formControl]="typeControl"
-          placeholder="Sortuj według typu"
-          (ionChange)="onSortChange($event)"
-        >
-          <ion-select-option *ngFor="let option of serviceOptions" [value]="option.value">
-            {{ option.name }}
-          </ion-select-option>
-        </ion-select>
-        <ion-button fill="clear" (click)="clearFilters()">
-          <ion-icon name="filter-off-outline"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-card-content>
-  </ion-card> -->
 </ion-content>

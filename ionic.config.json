@@ -3,5 +3,14 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "proxies": [
+    {
+      "path": "/google-api",
+      "proxyUrl": "https://maps.googleapis.com",
+      "pathRewrite": {
+        "^/google-api": ""
+      }
+    }
+  ]
 }
