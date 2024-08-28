@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+<<<<<<< HEAD
 import { TranslateService } from '@ngx-translate/core';
+=======
+>>>>>>> 2108c01 (module settings, more translations)
 import axios from 'axios';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/services/auth.service';
@@ -23,7 +26,10 @@ export class LoginPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+<<<<<<< HEAD
     private translate: TranslateService,
+=======
+>>>>>>> 2108c01 (module settings, more translations)
     private router: Router,
     private authService: AuthService
   ) {
@@ -52,6 +58,11 @@ export class LoginPage implements OnInit {
     const login = this.loginForm.get('login')?.value;
     const password = this.loginForm.get('password')?.value;
 
+<<<<<<< HEAD
+=======
+
+    //TODO: Haszowanie hasła
+>>>>>>> 2108c01 (module settings, more translations)
     try {
       const response = await axios.post(`${this.baseUrl}/users/login`, {
         login,

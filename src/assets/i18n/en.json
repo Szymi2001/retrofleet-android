@@ -15,6 +15,7 @@
     "BUTTON_LABEL": "Create account"
   },
   "SETTINGS": {
+<<<<<<< HEAD
     "TITLE": "Settings"
   },
   "PROFILE": {
@@ -24,5 +25,51 @@
     "MANAGEMENT_TITLE": "Management",
     "REPORTS.TITLE": "Reports",
     "SETTINGS.TITLE": "Settings"
+=======
+    "TITLE": "Settings",
+    "DISPLAY_TITLE": "Appearance & Display",
+    "DARK_MODE_TITLE": "Dark mode",
+    "LANGUAGE_TITLE": "Select language",
+    "BUTTON_EN": "English",
+    "BUTTON_PL": "Polish"
+  },
+  "PROFILE": {
+    "TITLE": "My profile",
+    "USER_DATA_LABEL": "User data",
+    "LOGIN_LABEL": "Login",
+    "NAME_LABEL": "Name",
+    "SURNAME_LABEL": "Surname",
+    "CHANGE_USER_DATA_BUTTON": "CHANGE DATA",
+    "CHANGE_USER_PASSWORD_BUTTON": "CHANGE PASSWORD",
+    "DELETE_ACCOUNT_LABEL": "Delete account",
+    "DELETE_ACCOUNT_PLACEHOLDER": "Enter password",
+    "DELETE_ACCOUNT_BUTTON": "DELETE ACCOUNT",
+    "PASSWORD_RECOVERY_LABEL": "Password recovery",
+    "FIRST_QUESTION_LABEL": "First question",
+    "SECOND_QUESTION_LABEL": "Second question",
+    "QUESTIONS_INPUT_PLACEHOLDER": "Enter answer",
+    "CONFIRM_BUTTON": "CONFIRM"
+  },
+  "MENU": {
+    "MANAGEMENT_TITLE": "Management",
+    "MYFLEET_TITLE": "My fleet",
+    "CALENDAR_TITLE": "Calendar",
+    "LOGBOOK_TITLE": "Logbook",
+    "SERVICES_TITLE": "Services",
+    "FUELING_TITLE": "Fuelings",
+    "SERVICE_SUMMARY_TITLE": "Service summary",
+    "FUELING_SUMMARY_TITLE": "Fueling summary",
+    "LOGOUT_TITLE": "Log out",
+    "REPORTS_TITLE": "Reports",
+    "SETTINGS_TITLE": "Settings"
+  },
+  "MYFLEET": {
+    "CAR_LABEL": "Vehicle",
+    "PRODUCTION_YEAR_LABEL": "Production year",
+    "MILEAGE_LABEL": "Mileage",
+    "MORE_INFO_LABEL": "More information",
+    "ADD_PICTURE_LABEL": "Add picture",
+    "DELETE_CAR_LABEL": "Delete vehicle"
+>>>>>>> 2108c01 (module settings, more translations)
   }
 }

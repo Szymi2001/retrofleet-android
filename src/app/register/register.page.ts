@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+<<<<<<< HEAD
 import { MessageService } from 'primeng/api';
+=======
+>>>>>>> 2108c01 (module settings, more translations)
 
 @Component({
   selector: 'app-register',
@@ -18,7 +21,10 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder, 
+<<<<<<< HEAD
     private messageService: MessageService,
+=======
+>>>>>>> 2108c01 (module settings, more translations)
     private router: Router) {}
 
   ngOnInit(): void {

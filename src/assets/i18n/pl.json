@@ -1,8 +1,13 @@
 {
   "LOGIN": {
     "TITLE": "Zaloguj się",
+<<<<<<< HEAD
     "LOGIN_FORM": "Nazwa użytkownika",
     "PASSWORD_FORM": "Hasło",
+=======
+    "LOGIN_PLACEHOLDER": "Nazwa użytkownika",
+    "PASSWORD_PLACEHOLDER": "Hasło",
+>>>>>>> 2108c01 (module settings, more translations)
     "BUTTON_LABEL": "Zaloguj się",
     "NO_ACCOUNT_TEXT": "Nie posiadasz konta?",
     "NO_ACCOUNT_LINK_TEXT": "Załóż konto"
@@ -15,6 +20,7 @@
     "BUTTON_LABEL": "Stwórz konto"
   },
   "SETTINGS": {
+<<<<<<< HEAD
     "TITLE": "Ustawienia"
   },
   "PROFILE": {
@@ -24,5 +30,52 @@
     "MANAGEMENT": "Zarządzanie",
     "REPORTS": "Raporty",
     "SETTINGS": "Ustawienia"
+=======
+    "TITLE": "Ustawienia",
+    "DISPLAY_TITLE": "Wygląd i wyświetlanie",
+    "DARK_MODE_TITLE": "Tryb ciemny",
+    "LANGUAGE_TITLE": "Wybierz język",
+    "BUTTON_EN": "Angielski",
+    "BUTTON_PL": "Polski"
+  },
+  "PROFILE": {
+    "TITLE": "Mój profil",
+    "USER_DATA_LABEL": "Dane użytkownika",
+    "LOGIN_LABEL": "Nazwa użytkownika",
+    "NAME_LABEL": "Imię",
+    "SURNAME_LABEL": "Nazwisko",
+    "EMAIL_LABEL": "Email",
+    "CHANGE_USER_DATA_BUTTON": "ZMIEŃ DANE",
+    "CHANGE_USER_PASSWORD_BUTTON": "ZMIEŃ HASŁO",
+    "DELETE_ACCOUNT_LABEL": "Usuń konto",
+    "DELETE_ACCOUNT_PLACEHOLDER": "Wprowadź hasło",
+    "DELETE_ACCOUNT_BUTTON": "USUŃ KONTO",
+    "PASSWORD_RECOVERY_LABEL": "Odzyskiwanie hasła",
+    "FIRST_QUESTION_LABEL": "Pierwsze pytanie",
+    "SECOND_QUESTION_LABEL": "Drugie pytanie",
+    "QUESTIONS_INPUT_PLACEHOLDER": "Wpisz odpowiedź",
+    "CONFIRM_BUTTON": "ZATWIERDŹ"
+  },
+  "MENU": {
+    "MANAGEMENT_TITLE": "Zarządzanie",
+    "MYFLEET_TITLE": "Moja flota",
+    "CALENDAR_TITLE": "Kalendarz",
+    "LOGBOOK_TITLE": "Dziennik jazd",
+    "SERVICES_TITLE": "Serwisy",
+    "FUELING_TITLE": "Tankowania",
+    "SERVICE_SUMMARY_TITLE": "Podsumowanie serwisów",
+    "FUELING_SUMMARY_TITLE": "Podsumowanie tankowań",
+    "LOGOUT_TITLE": "Wyloguj się",
+    "REPORTS_TITLE": "Raporty",
+    "SETTINGS_TITLE": "Ustawienia"
+  },
+  "MYFLEET": {
+    "CAR_LABEL": "Pojazd",
+    "PRODUCTION_YEAR_LABEL": "Rok produkcji",
+    "MILEAGE_LABEL": "Przebieg",
+    "MORE_INFO_LABEL": "Więcej informacji",
+    "ADD_PICTURE_LABEL": "Dodaj zdjęcie",
+    "DELETE_CAR_LABEL": "Usuń pojazd"
+>>>>>>> 2108c01 (module settings, more translations)
   }
 }

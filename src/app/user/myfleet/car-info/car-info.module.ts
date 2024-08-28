@@ -11,6 +11,10 @@ import { MoreOptionsComponent } from './more-options/more-options.component';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { ImagePickerComponent } from './image-picker/image-picker.component';
 import { EditInfoComponent } from './edit-info/edit-info.component';
+<<<<<<< HEAD
+=======
+import { TranslateModule } from '@ngx-translate/core';
+>>>>>>> 2108c01 (module settings, more translations)
 
 @NgModule({
   imports: [
@@ -18,7 +22,12 @@ import { EditInfoComponent } from './edit-info/edit-info.component';
     FormsModule,
     IonicModule,
     CarInfoPageRoutingModule,
+<<<<<<< HEAD
     ImageCropperComponent
+=======
+    ImageCropperComponent,
+    TranslateModule
+>>>>>>> 2108c01 (module settings, more translations)
   ],
   declarations: [CarInfoPage, MoreOptionsComponent, ImagePickerComponent, EditInfoComponent],
   providers: [DatePipe]

@@ -205,5 +205,8 @@ export class NewServiceComponent  implements OnInit {
       serviceAdded: serviceAdded
     });
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2108c01 (module settings, more translations)
 }

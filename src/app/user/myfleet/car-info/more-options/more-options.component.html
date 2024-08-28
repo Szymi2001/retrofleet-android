@@ -1,6 +1,7 @@
 <ion-list>
   <ion-item button (click)="handleEditInfo(); dismiss()">
     <ion-icon name="search-outline" slot="start"></ion-icon>
+<<<<<<< HEAD
     <ion-label>Więcej informacji</ion-label>
   </ion-item>
   <ion-item button (click)="handleImagePicker(); dismiss()">
@@ -10,5 +11,16 @@
   <ion-item button (click)="handleDelete(); dismiss()">
     <ion-icon name="trash-outline" slot="start"></ion-icon>
     <ion-label>Usuń pojazd</ion-label>
+=======
+    <ion-label>{{ 'MYFLEET.MORE_INFO_LABEL' | translate }}</ion-label>
+  </ion-item>
+  <ion-item button (click)="handleImagePicker(); dismiss()">
+    <ion-icon name="camera-outline" slot="start"></ion-icon>
+    <ion-label>{{ 'MYFLEET.ADD_PICTURE_LABEL' | translate }}</ion-label>
+  </ion-item>
+  <ion-item button (click)="handleDelete(); dismiss()">
+    <ion-icon name="trash-outline" slot="start"></ion-icon>
+    <ion-label>{{ 'MYFLEET.DELETE_CAR_LABEL' | translate }}</ion-label>
+>>>>>>> 2108c01 (module settings, more translations)
   </ion-item>
 </ion-list>
