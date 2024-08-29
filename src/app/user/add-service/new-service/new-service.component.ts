@@ -1,8 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { FleetService } from 'src/services/fleetService.service';
-import { VehicleMaintenanceService } from 'src/services/vehicleMaintenanceService.service';
+import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
+import { VehicleMaintenanceService } from 'src/services/endpoints/vehicleMaintenanceEndpoint.service';
 
 const MONTHS = [
   'styczeń',
@@ -205,8 +205,4 @@ export class NewServiceComponent  implements OnInit {
       serviceAdded: serviceAdded
     });
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2108c01 (module settings, more translations)
 }

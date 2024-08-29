@@ -4,41 +4,27 @@
       <ion-col size="12">
         <ion-card>
           <ion-card-header>
-<<<<<<< HEAD
-            <ion-card-title>Dane użytkownika</ion-card-title>
-=======
-            <ion-card-title>{{ 'PROFILE.USER_DATA_LABEL' | translate }}</ion-card-title>
->>>>>>> 2108c01 (module settings, more translations)
+            <ion-card-title
+              >{{ 'PROFILE.USER_DATA_LABEL' | translate }}</ion-card-title
+            >
           </ion-card-header>
           <ion-card-content>
             <ion-grid>
               <ion-row>
                 <ion-col size="6">
-<<<<<<< HEAD
-                  <strong>Login:</strong>
-=======
                   <strong>{{ 'PROFILE.LOGIN_LABEL' | translate }}:</strong>
->>>>>>> 2108c01 (module settings, more translations)
                 </ion-col>
                 <ion-col size="6"> {{ userInfo.login }} </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col size="6">
-<<<<<<< HEAD
-                  <strong>Imię:</strong>
-=======
                   <strong>{{ 'PROFILE.NAME_LABEL' | translate }}:</strong>
->>>>>>> 2108c01 (module settings, more translations)
                 </ion-col>
                 <ion-col size="6"> {{ userInfo.name }} </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col size="6">
-<<<<<<< HEAD
-                  <strong>Nazwisko:</strong>
-=======
                   <strong>{{ 'PROFILE.SURNAME_LABEL' | translate }}:</strong>
->>>>>>> 2108c01 (module settings, more translations)
                 </ion-col>
                 <ion-col size="6"> {{ userInfo.surname }} </ion-col>
               </ion-row>
@@ -50,40 +36,156 @@
               </ion-row>
             </ion-grid>
             <ion-button
-              expand="full"
+              expand="block"
               color="primary"
               type="submit"
+              (click)="setOpenChangeDataModal(true)"
               class="ion-margin-top"
             >
-<<<<<<< HEAD
-              Zmień dane
-=======
+              <ion-icon slot="start" name="pencil-outline"></ion-icon>
               {{ 'PROFILE.CHANGE_USER_DATA_BUTTON' | translate }}
->>>>>>> 2108c01 (module settings, more translations)
             </ion-button>
+            <ion-modal [isOpen]="isChangeDataModalOpen">
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar>
+                    <ion-title
+                      >{{ 'PROFILE.CHANGE_USER_DATA_LABEL' | translate
+                      }}</ion-title
+                    >
+                    <ion-buttons slot="end">
+                      <ion-button (click)="setOpenChangeDataModal(false)">
+                        <ion-icon
+                          slot="icon-only"
+                          name="close-outline"
+                        ></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-content class="ion-padding">
+                  <form
+                    [formGroup]="changeUserInfo"
+                    (ngSubmit)="changeUserInfoOnSubmit()"
+                  >
+                    <ion-item>
+                      <ion-input
+                        label="{{ 'PROFILE.NAME_LABEL' | translate }}"
+                        labelPlacement="floating"
+                        type="text"
+                        formControlName="name"
+                      ></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                      <ion-input
+                        label="{{ 'PROFILE.SURNAME_LABEL' | translate }}"
+                        labelPlacement="floating"
+                        type="text"
+                        formControlName="surname"
+                      ></ion-input>
+                    </ion-item>
+
+                    <ion-button
+                      expand="block"
+                      type="submit"
+                      class="ion-margin-top"
+                    >
+                      <ion-icon
+                        slot="start"
+                        name="checkmark-outline"
+                      ></ion-icon>
+                      {{ 'PROFILE.CONFIRM_BUTTON' | translate }}
+                    </ion-button>
+                  </form>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
             <ion-button
-              expand="full"
+              expand="block"
               color="warning"
               type="submit"
+              (click)="setOpenChangePasswordModal(true)"
               class="ion-margin-top"
             >
-<<<<<<< HEAD
-              Zmień hasło
-=======
+              <ion-icon slot="start" name="key-outline"></ion-icon>
               {{ 'PROFILE.CHANGE_USER_PASSWORD_BUTTON' | translate }}
->>>>>>> 2108c01 (module settings, more translations)
             </ion-button>
+            <ion-modal [isOpen]="isChangePasswordModalOpen">
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar>
+                    <ion-title
+                      >{{ 'PROFILE.CHANGE_USER_PASSWORD_LABEL' | translate
+                      }}</ion-title
+                    >
+                    <ion-buttons slot="end">
+                      <ion-button (click)="setOpenChangePasswordModal(false)">
+                        <ion-icon
+                          slot="icon-only"
+                          name="close-outline"
+                        ></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-content class="ion-padding">
+                  <form
+                    [formGroup]="changePassword"
+                    (ngSubmit)="changePasswordOnSubmit()"
+                  >
+                    <ion-item>
+                      <ion-input
+                        label="{{ 'PROFILE.OLD_PASSWORD_PLACEHOLDER' | translate }}"
+                        labelPlacement="floating"
+                        type="password"
+                        formControlName="old_password"
+                      ></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                      <ion-input
+                        label="{{ 'PROFILE.NEW_PASSWORD_PLACEHOLDER' | translate }}"
+                        labelPlacement="floating"
+                        type="password"
+                        formControlName="new_password"
+                      ></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                      <ion-input
+                        label="{{ 'PROFILE.REPEAT_NEW_PASSWORD_PLACEHOLDER' | translate }}"
+                        labelPlacement="floating"
+                        type="password"
+                        formControlName="repeat_password"
+                      ></ion-input>
+                    </ion-item>
+
+                    <ion-button
+                      expand="block"
+                      type="submit"
+                      color="warning"
+                      class="ion-margin-top"
+                    >
+                      <ion-icon
+                        slot="start"
+                        name="checkmark-outline"
+                      ></ion-icon>
+                      {{ 'PROFILE.CONFIRM_BUTTON' | translate }}
+                    </ion-button>
+                  </form>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
           </ion-card-content>
         </ion-card>
       </ion-col>
       <ion-col size="12">
         <ion-card>
           <ion-card-header>
-<<<<<<< HEAD
-            <ion-card-title>Usuń konto użytkownika</ion-card-title>
-=======
-            <ion-card-title>{{ 'PROFILE.DELETE_ACCOUNT_LABEL' | translate }}</ion-card-title>
->>>>>>> 2108c01 (module settings, more translations)
+            <ion-card-title
+              >{{ 'PROFILE.DELETE_ACCOUNT_LABEL' | translate }}</ion-card-title
+            >
           </ion-card-header>
           <ion-card-content>
             <form
@@ -94,25 +196,18 @@
                 <ion-input
                   type="password"
                   formControlName="password"
-<<<<<<< HEAD
-                  placeholder="Wprowadź hasło"
-=======
                   placeholder="{{ 'PROFILE.DELETE_ACCOUNT_PLACEHOLDER' | translate }}"
->>>>>>> 2108c01 (module settings, more translations)
                 >
                 </ion-input>
               </ion-item>
               <ion-button
-                expand="full"
+                expand="block"
                 color="danger"
                 type="submit"
                 class="ion-margin-top"
               >
-<<<<<<< HEAD
-                Usuń konto
-=======
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
                 {{ 'PROFILE.DELETE_ACCOUNT_BUTTON' | translate }}
->>>>>>> 2108c01 (module settings, more translations)
               </ion-button>
             </form>
           </ion-card-content>
@@ -121,11 +216,10 @@
       <ion-col size="12">
         <ion-card>
           <ion-card-header>
-<<<<<<< HEAD
-            <ion-card-title>Odzyskiwanie hasła</ion-card-title>
-=======
-            <ion-card-title>{{ 'PROFILE.PASSWORD_RECOVERY_LABEL' | translate }}</ion-card-title>
->>>>>>> 2108c01 (module settings, more translations)
+            <ion-card-title
+              >{{ 'PROFILE.PASSWORD_RECOVERY_LABEL' | translate
+              }}</ion-card-title
+            >
           </ion-card-header>
           <ion-card-content>
             <form
@@ -133,11 +227,9 @@
               (ngSubmit)="onRemindQuestionsSubmit()"
             >
               <ion-item>
-<<<<<<< HEAD
-                <ion-label position="stacked">Pierwsze pytanie:</ion-label>
-=======
-                <ion-label position="stacked">{{ 'PROFILE.FIRST_QUESTION_LABEL' | translate }}:</ion-label>
->>>>>>> 2108c01 (module settings, more translations)
+                <ion-label position="stacked"
+                  >{{ 'PROFILE.FIRST_QUESTION_LABEL' | translate }}:</ion-label
+                >
                 <ion-select
                   formControlName="first_question"
                   interface="action-sheet"
@@ -154,21 +246,15 @@
               <ion-item>
                 <ion-input
                   formControlName="first_answer"
-<<<<<<< HEAD
-                  placeholder="Wpisz odpowiedź"
-=======
                   placeholder="{{ 'PROFILE.QUESTIONS_INPUT_PLACEHOLDER' | translate }}"
->>>>>>> 2108c01 (module settings, more translations)
                 >
                 </ion-input>
               </ion-item>
 
               <ion-item class="ion-margin-top">
-<<<<<<< HEAD
-                <ion-label position="stacked">Drugie pytanie:</ion-label>
-=======
-                <ion-label position="stacked">{{ 'PROFILE.SECOND_QUESTION_LABEL' | translate }}</ion-label>
->>>>>>> 2108c01 (module settings, more translations)
+                <ion-label position="stacked"
+                  >{{ 'PROFILE.SECOND_QUESTION_LABEL' | translate }}</ion-label
+                >
                 <ion-select
                   formControlName="second_question"
                   interface="action-sheet"
@@ -185,27 +271,19 @@
               <ion-item>
                 <ion-input
                   formControlName="second_answer"
-<<<<<<< HEAD
-                  placeholder="Wpisz odpowiedź"
-=======
                   placeholder="{{ 'PROFILE.QUESTIONS_INPUT_PLACEHOLDER' | translate }}"
->>>>>>> 2108c01 (module settings, more translations)
                 >
                 </ion-input>
               </ion-item>
 
               <ion-button
-                expand="full"
+                expand="block"
                 color="primary"
                 type="submit"
                 class="ion-margin-top"
               >
                 <ion-icon slot="start" name="checkmark-outline"></ion-icon>
-<<<<<<< HEAD
-                Zatwierdź
-=======
                 {{ 'PROFILE.CONFIRM_BUTTON' | translate }}
->>>>>>> 2108c01 (module settings, more translations)
               </ion-button>
             </form>
           </ion-card-content>

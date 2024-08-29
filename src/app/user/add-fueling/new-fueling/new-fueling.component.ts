@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { fleetDataService } from 'src/services/fleetData.service';
-import { FleetService } from 'src/services/fleetService.service';
+import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 
 interface FuelReceipt {
   _id?: string;

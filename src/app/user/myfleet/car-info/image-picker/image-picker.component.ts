@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-import { ImageService } from 'src/services/imageService.service';
+import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { ImageUpdateService } from 'src/services/imageUpdate.service';
 
 @Component({

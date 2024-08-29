@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-<<<<<<< HEAD
-import { MessageService } from 'primeng/api';
-=======
->>>>>>> 2108c01 (module settings, more translations)
+import { backend_Url } from '../app.component';
 
 @Component({
   selector: 'app-register',
@@ -14,17 +11,13 @@ import { MessageService } from 'primeng/api';
 export class RegisterPage implements OnInit {
 
   //adres backendu
-  baseUrl = 'http://192.168.0.154:3000';
+  private baseUrl = backend_Url;
 
   registerForm!: FormGroup;
   submitted = false;
 
   constructor(
     private formBuilder: FormBuilder, 
-<<<<<<< HEAD
-    private messageService: MessageService,
-=======
->>>>>>> 2108c01 (module settings, more translations)
     private router: Router) {}
 
   ngOnInit(): void {

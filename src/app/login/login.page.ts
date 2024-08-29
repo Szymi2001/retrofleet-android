@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import axios from 'axios';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/services/auth.service';
+import { backend_Url } from '../app.component';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ import { AuthService } from 'src/services/auth.service';
 })
 export class LoginPage implements OnInit {
   //adres backendu
-  private baseUrl = 'http://192.168.0.154:3000';
+  private baseUrl = backend_Url;
   private subscription!: Subscription;
 
   loginForm!: FormGroup;

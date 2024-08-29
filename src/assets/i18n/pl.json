@@ -1,16 +1,9 @@
 {
   "LOGIN": {
     "TITLE": "Zaloguj się",
-<<<<<<< HEAD
-    "LOGIN_FORM": "Nazwa użytkownika",
-    "PASSWORD_FORM": "Hasło",
-=======
     "LOGIN_PLACEHOLDER": "Nazwa użytkownika",
     "PASSWORD_PLACEHOLDER": "Hasło",
->>>>>>> 2108c01 (module settings, more translations)
-    "BUTTON_LABEL": "Zaloguj się",
-    "NO_ACCOUNT_TEXT": "Nie posiadasz konta?",
-    "NO_ACCOUNT_LINK_TEXT": "Załóż konto"
+    "BUTTON_LABEL": "Zaloguj się"
   },
   "REGISTER": {
     "TITLE": "Załóż konto",
@@ -20,17 +13,6 @@
     "BUTTON_LABEL": "Stwórz konto"
   },
   "SETTINGS": {
-<<<<<<< HEAD
-    "TITLE": "Ustawienia"
-  },
-  "PROFILE": {
-    "TITLE": "Mój profil"
-  },
-  "MENU": {
-    "MANAGEMENT": "Zarządzanie",
-    "REPORTS": "Raporty",
-    "SETTINGS": "Ustawienia"
-=======
     "TITLE": "Ustawienia",
     "DISPLAY_TITLE": "Wygląd i wyświetlanie",
     "DARK_MODE_TITLE": "Tryb ciemny",
@@ -45,7 +27,12 @@
     "NAME_LABEL": "Imię",
     "SURNAME_LABEL": "Nazwisko",
     "EMAIL_LABEL": "Email",
+    "CHANGE_USER_DATA_LABEL": "Zmiana danych",
     "CHANGE_USER_DATA_BUTTON": "ZMIEŃ DANE",
+    "OLD_PASSWORD_PLACEHOLDER": "Wprowadź stare hasło",
+    "NEW_PASSWORD_PLACEHOLDER": "Wprowadź nowe hasło",
+    "REPEAT_NEW_PASSWORD_PLACEHOLDER": "Powtórz nowe hasło",
+    "CHANGE_USER_PASSWORD_LABEL": "Zmiana hasła",
     "CHANGE_USER_PASSWORD_BUTTON": "ZMIEŃ HASŁO",
     "DELETE_ACCOUNT_LABEL": "Usuń konto",
     "DELETE_ACCOUNT_PLACEHOLDER": "Wprowadź hasło",
@@ -76,6 +63,27 @@
     "MORE_INFO_LABEL": "Więcej informacji",
     "ADD_PICTURE_LABEL": "Dodaj zdjęcie",
     "DELETE_CAR_LABEL": "Usuń pojazd"
->>>>>>> 2108c01 (module settings, more translations)
+  },
+  "DELETECAR-ALERT": {
+    "DELETE_CONFIRMATION_HEADER": "Potwierdzenie usunięcia",
+    "DELETE_CONFIRMATION_MESSAGE": "Czy na pewno chcesz usunąć ten pojazd?",
+    "CANCEL": "Anuluj",
+    "DELETE": "Usuń"
+  },
+  "MORE-INFO": {
+    "TITLE": "Informacje o pojeździe",
+    "MILEAGE_LABEL": "Przebieg",
+    "BRAND_LABEL": "Marka",
+    "MODEL_LABEL": "Model",
+    "YEAR_LABEL": "Rok produkcji",
+    "BODY_TYPE_LABEL": "Typ nadwozia",
+    "FUEL_TYPE_LABEL": "Typ paliwa",
+    "COLOR_LABEL": "Kolor",
+    "HERITAGE_LISTED_LABEL": "Wpis do rejestru zabytków",
+    "HERITAGE_LISTED_YES": "Tak",
+    "HERITAGE_LISTED_NO": "Nie",
+    "TECHNICAL_INSPECTION_DATE_LABEL": "Przegląd techniczny",
+    "REGISTRATION_NUMBER_LABEL": "Numery rejestracyjne",
+    "INSURANCE_EXPIRY_DATE_LABEL": "Ubezpieczenie"
   }
 }

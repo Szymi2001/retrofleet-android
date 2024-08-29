@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { backend_Url } from 'src/app/app.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private baseUrl = 'http://192.168.0.154:3000';
+  private baseUrl = backend_Url;
 
   async updateUserInfo(userId: any, name: string, surname: string): Promise<any> {
     try {

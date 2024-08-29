@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { FleetService } from 'src/services/fleetService.service';
+import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 import { RouteService } from 'src/services/routeService.service';
 import { NewDrivingLogComponent } from './new-driving-log/new-driving-log.component';
 

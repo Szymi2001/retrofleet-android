@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { VehicleMaintenanceService } from 'src/services/vehicleMaintenanceService.service';
+import { VehicleMaintenanceService } from 'src/services/endpoints/vehicleMaintenanceEndpoint.service';
 import { NewServiceComponent } from './new-service/new-service.component';
 
 const MONTHS = [

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
-import { ProfileService } from 'src/services/profileService.service';
+import { ProfileService } from 'src/services/endpoints/profileEndpoint.service';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 export interface UserInfo {
   login: string;
@@ -26,6 +27,9 @@ export class ProfilePage implements OnInit {
   //Sekcja informacje
   changeUserInfo!: FormGroup;
   changePassword!: FormGroup;
+
+  isChangeDataModalOpen = false;
+  isChangePasswordModalOpen = false;
 
   submittedUserInfo = false;
   submittedNewPassword = false;
@@ -101,6 +105,31 @@ export class ProfilePage implements OnInit {
     this.secondQuestions = [...this.firstQuestions];
   }
 
+  //Modals
+  setOpenChangeDataModal(isOpen: boolean) {
+    this.changeUserInfo.reset();
+    this.isChangeDataModalOpen = isOpen;
+  }
+
+  setOpenChangePasswordModal(isOpen: boolean) {
+    this.changePassword.reset();
+    this.isChangePasswordModalOpen = isOpen;
+  }
+
+  async onChangeDataModalDismiss(event: any) {
+    const data = event.detail.data;
+    if (data) {
+      console.log('Change Data Modal Data:', data);
+    }
+  }
+
+  async onChangePasswordModalDismiss(event: any) {
+    const data = event.detail.data;
+    if (data) {
+      console.log('Change Password Modal Data:', data);
+    }
+  }
+
   private async loadUserInfo(): Promise<void> {
     if (!this.userId) return;
 
@@ -119,6 +148,7 @@ export class ProfilePage implements OnInit {
     const { name, surname } = this.changeUserInfo.value;
     await this.updateUserInfo(name, surname);
     this.loadUserInfo();
+    this.setOpenChangeDataModal(false);
   }
 
   async updateUserInfo(name: string, surname: string) {
@@ -148,6 +178,7 @@ export class ProfilePage implements OnInit {
         old_password,
         new_password
       );
+      this.setOpenChangePasswordModal(false);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
@@ -159,10 +190,6 @@ export class ProfilePage implements OnInit {
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
-  }
-
-  onUserInfoSubmit(): void {
-
   }
 
   onRemindQuestionsSubmit(): void {

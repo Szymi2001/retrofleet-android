@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import axios from 'axios';
-import { FleetService } from 'src/services/fleetService.service';
+import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 
 const MONTHS = [
   'styczeń',
@@ -40,7 +40,6 @@ interface Route {
 })
 export class NewDrivingLogComponent implements OnInit {
   private userId = localStorage.getItem('userId');
-  private apiKey: string = 'AIzaSyANgW5cskfKiJbsiv-3xPSTDwYvNOKg3ic';
 
   vehicleStrings: any[] = [];
   receivedData: any[] = [];
@@ -139,27 +138,22 @@ export class NewDrivingLogComponent implements OnInit {
   async getCities(query: string): Promise<any[]> {
     try {
       const response = await axios.get(
-        `/google-api/maps/api/place/autocomplete/json`,
+        'http://localhost:3000/googlePlaces/getCities',
         {
           params: {
-            input: query,
-            types: '(cities)',
-            key: this.apiKey,
-            language: 'pl',
+            query: query,
           },
         }
       );
-      return response.data.predictions.map((prediction: any) => ({
-        label: prediction.description,
-        value: prediction.description,
-      }));
+      console.log(response);
+      return response.data;
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
-      return [];
+      throw error;
     }
   }
 
-  async calculateDistance() {
+  async calculateDistance(): Promise<void> {
     const startLocation = this.routeForm.get('startLocation')?.value;
     const endLocation = this.routeForm.get('endLocation')?.value;
 
@@ -169,34 +163,23 @@ export class NewDrivingLogComponent implements OnInit {
 
     try {
       const response = await axios.get(
-        `/google-api/maps/api/distancematrix/json`,
+        'http://localhost:3000/googlePlaces/getDistance',
         {
           params: {
-            origins: startLocation,
-            destinations: endLocation,
-            key: this.apiKey,
-            language: 'pl',
+            startLocation: startLocation,
+            endLocation: endLocation,
           },
         }
       );
 
-      const element = response.data.rows[0].elements[0];
-      if (element.status === 'OK') {
-        this.distance = (element.distance.value / 1000).toFixed(2);
-        this.duration = element.duration.text;
+      const { distance, duration } = response.data;
 
-        this.routeForm.patchValue({
-          distance: this.distance + ' km',
-          duration: this.duration,
-        });
-      } else {
-        console.error('Nie można obliczyć odległości.');
-        this.distance = null;
-        this.duration = null;
-      }
+      this.routeForm.patchValue({
+        distance: distance,
+        duration: duration,
+      });
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
-      this.distance = null;
     }
   }
 
@@ -220,7 +203,7 @@ export class NewDrivingLogComponent implements OnInit {
     try {
       //await this.routeService.addRoute(newRoute);
       this.myRoutes.push(newRoute);
-      console.log(newRoute)
+      console.log(newRoute);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }

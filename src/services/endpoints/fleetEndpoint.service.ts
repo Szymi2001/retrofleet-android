@@ -5,7 +5,7 @@ import axios from 'axios';
   providedIn: 'root',
 })
 export class FleetService {
-  private baseUrl = 'http://192.168.0.154:3000';
+  private baseUrl = 'https://backend-server-rust.vercel.app';
 
   async getVehicles(userId: string): Promise<any> {
     try {

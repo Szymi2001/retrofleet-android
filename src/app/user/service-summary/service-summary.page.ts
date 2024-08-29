@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FleetService } from 'src/services/fleetService.service';
-import { VehicleMaintenanceService } from 'src/services/vehicleMaintenanceService.service';
+import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
+import { VehicleMaintenanceService } from 'src/services/endpoints/vehicleMaintenanceEndpoint.service';
 import { ChartConfiguration } from 'chart.js';
 
 interface Vehicle {

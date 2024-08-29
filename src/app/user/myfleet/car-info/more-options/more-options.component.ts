@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ImagePickerComponent } from '../image-picker/image-picker.component';
 import { EditInfoComponent } from '../edit-info/edit-info.component';
-import { ImageService } from 'src/services/imageService.service';
-import { FleetService } from 'src/services/fleetService.service';
+import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
+import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 import { CarService } from 'src/services/carService.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-more-options',
@@ -20,6 +21,7 @@ export class MoreOptionsComponent {
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
+    private translate: TranslateService,
     private imageService: ImageService,
     private fleetService: FleetService,
     private carService: CarService
@@ -46,25 +48,41 @@ export class MoreOptionsComponent {
   }
 
   async presentDeleteConfirmation(carId: string) {
-    const alert = await this.alertController.create({
-      header: 'Potwierdzenie usunięcia',
-      message: 'Czy na pewno chcesz usunąć ten pojazd?',
-      buttons: [
-        {
-          text: 'Anuluj',
-          role: 'cancel',
-          cssClass: 'secondary',
-        },
-        {
-          text: 'Usuń',
-          handler: async () => {
-            await this.deleteCar(carId);
-          },
-        },
-      ],
-    });
+    this.translate
+      .get([
+        'DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER',
+        'DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE',
+        'DELETECAR-ALERT.CANCEL',
+        'DELETECAR-ALERT.DELETE',
+      ])
+      .subscribe(async (translations) => {
+        const header =
+          translations['DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER'];
+        const message =
+          translations['DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE'];
+        const cancelText = translations['DELETECAR-ALERT.CANCEL'];
+        const deleteText = translations['DELETECAR-ALERT.DELETE'];
 
-    await alert.present();
+        const alert = await this.alertController.create({
+          header: header,
+          message: message,
+          buttons: [
+            {
+              text: cancelText,
+              role: 'cancel',
+              cssClass: 'secondary',
+            },
+            {
+              text: deleteText,
+              handler: async () => {
+                await this.deleteCar(carId);
+              },
+            },
+          ],
+        });
+
+        await alert.present();
+      });
   }
 
   async deleteCar(carId: string) {
@@ -82,7 +100,7 @@ export class MoreOptionsComponent {
       console.error('Błąd:', error.response?.data || error.message);
     }
   }
-  
+
   async handleEditInfo() {
     await this.openEditInfo();
     await this.dismissPopover();

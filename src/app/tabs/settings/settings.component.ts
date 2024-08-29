@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
     );
   }
 
-  initializeDarkPalette(isDark: any) {
+  initializeDarkPalette(isDark: boolean) {
     this.paletteToggle = isDark;
     this.toggleDarkPalette(isDark);
   }

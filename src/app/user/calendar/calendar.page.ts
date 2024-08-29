@@ -2,6 +2,7 @@ import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import axios from 'axios';
 import { CalendarComponent, CalendarMode } from 'ionic8-calendar';
+import { backend_Url } from 'src/app/app.component';
 
 interface Event {
   user_id: string | null;
@@ -19,7 +20,7 @@ interface Event {
 })
 export class CalendarPage {
   //Adres backendu
-  private baseUrl = 'http://192.168.0.154:3000';
+  private baseUrl = backend_Url;
   @ViewChild(CalendarComponent) myCalendar!: CalendarComponent;
 
   submitted = false;
@@ -61,11 +62,7 @@ export class CalendarPage {
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-<<<<<<< HEAD
-    //this.getEvents();
-=======
     this.getEvents();
->>>>>>> 2108c01 (module settings, more translations)
     this.initializeForm();
   }
 
@@ -98,14 +95,11 @@ export class CalendarPage {
         `${this.baseUrl}/event/getEvents/${userId}`
       );
       this.eventSource = response.data;
+      console.log(this.eventSource)
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2108c01 (module settings, more translations)
   converToUTC(date: Date): Date {
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth();
@@ -128,11 +122,7 @@ export class CalendarPage {
     
     this.eventSource.push(newEvent);
     this.myCalendar.eventSource = [...this.eventSource];
-<<<<<<< HEAD
-    console.log(this.eventSource);
-=======
     //TODO: Dodać wysyłanie na serwer
->>>>>>> 2108c01 (module settings, more translations)
   }
 
   buildNewEvent(): Event {
