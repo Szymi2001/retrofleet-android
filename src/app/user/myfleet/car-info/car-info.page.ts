@@ -1,13 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController, PopoverController } from '@ionic/angular';
+import {
+  ModalController,
+  PopoverController,
+} from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
-import { NewCarPage } from './new-car/new-car.page';
-import { MoreOptionsComponent } from './more-options/more-options.component';
 import { ImageUpdateService } from 'src/services/imageUpdate.service';
 import { CarService } from 'src/services/carService.service';
+import { AddVehicleModalComponent } from './add-vehicle-modal/add-vehicle-modal.component';
+import { CarPopoverComponent } from './car-popover/car-popover.component';
 
 export interface Vehicle {
   _id?: string;
@@ -32,26 +35,24 @@ export interface Vehicle {
   styleUrls: ['./car-info.page.scss'],
 })
 export class CarInfoPage implements OnInit {
+  @ViewChild('popover') popover: any;
 
   private subscription!: Subscription;
   private userId = localStorage.getItem('userId');
 
-  submitted: boolean = false;
+  //ImagePicker
+  croppedImages: any[] = [];
 
   myFleet: Vehicle[] = [];
   selectedCar: any = [];
 
-  croppedImages: any[] = [];
-
-  @ViewChild('moreOptionsPopover', { static: true }) moreOptionsPopover: any;
-
   constructor(
+    private modalController: ModalController,
+    private popoverController: PopoverController,
     private fleetService: FleetService,
     private imageService: ImageService,
     private imageUpdateService: ImageUpdateService,
     private carService: CarService,
-    private modalController: ModalController,
-    private popoverController: PopoverController,
     private datePipe: DatePipe
   ) {}
 
@@ -62,18 +63,43 @@ export class CarInfoPage implements OnInit {
       this.downloadPhotos(this.userId!);
     });
 
-    this.carService.carToRemove$.subscribe(carId => {
+    this.carService.carToRemove$.subscribe((carId) => {
       if (carId) {
         this.handleRemove(carId);
         this.carService.clearCarToRemove();
       }
-    })
+    });
   }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  async openAddVehicleModal() {
+    const modal = await this.modalController.create({
+      component: AddVehicleModalComponent,
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.addVehicle(data.data);
+      }
+    });
+
+    return await modal.present();
+  }
+
+  async presentPopover(event: Event, carObject: any) {
+    const popover = await this.popoverController.create({
+      component: CarPopoverComponent,
+      event: event,
+      translucent: true,
+      componentProps: { carObject: carObject },
+    });
+
+    return await popover.present();
   }
 
   //Pobieranie pojazdów z serwera
@@ -92,30 +118,36 @@ export class CarInfoPage implements OnInit {
     }
   }
 
-  //Otwieranie okna dialogowego dodawania pojazdu
-  async openDialog() {
-    const modal = await this.modalController.create({
-      component: NewCarPage,
-    });
-    return await modal.present();
-  }
+  async addVehicle(vehicleData: any) {
+    const technicalInspectionFormattedDate = this.formatDate(
+      vehicleData.technicalInspectionDate
+    );
+    const insuranceExpiryFormattedDate = this.formatDate(
+      vehicleData.insuranceExpiryDate
+    );
 
-  //Wyświetlanie opcji w Więcej
-  async presentPopover(event: Event, carObject: any) {
-    const popover = await this.popoverController.create({
-      component: MoreOptionsComponent,
-      event: event,
-      backdropDismiss: true,
-      componentProps: {
-        carProperties: carObject,
-        dismissPopover: async () => {
-          await popover.dismiss();
-        }
-      },
-      translucent: true
-    });
-
-    return await popover.present();
+    const newCar = {
+      user_id: this.userId,
+      vin: vehicleData.vin,
+      mileage: vehicleData.mileage,
+      brand: vehicleData.brand,
+      model: vehicleData.model,
+      year: vehicleData.year,
+      body_type: vehicleData.bodyType,
+      fuel_type: vehicleData.fuelType,
+      color: vehicleData.color,
+      is_heritage_listed: vehicleData.isHeritageListed,
+      technical_inspection_date: technicalInspectionFormattedDate,
+      registration_number: vehicleData.registrationNumber,
+      insurance_expiry_date: insuranceExpiryFormattedDate,
+    };
+    try {
+      await this.fleetService.addVehicle(newCar);
+      this.myFleet.push(newCar);
+      this.fetchFleetData();
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
+    }
   }
 
   //Formatowanie daty np.10/07/2024
@@ -179,13 +211,15 @@ export class CarInfoPage implements OnInit {
 
   handleRemove(carId: string) {
     // Znajdź indeks pojazdu w tablicy myFleet
-    const carIndex = this.myFleet.findIndex(car => car._id === carId);
+    const carIndex = this.myFleet.findIndex((car) => car._id === carId);
     if (carIndex !== -1) {
       // Usuwanie pojazdu z tablicy myFleet
       this.myFleet.splice(carIndex, 1);
 
       // (Opcjonalnie) Znajdź i usuń zdjęcie powiązane z tym pojazdem
-      this.croppedImages = this.croppedImages.filter(image => image.carId !== carId);
+      this.croppedImages = this.croppedImages.filter(
+        (image) => image.carId !== carId
+      );
     }
   }
 }

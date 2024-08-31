@@ -2,9 +2,9 @@
   <ion-grid>
     <ion-row>
       <ng-container *ngFor="let car of myFleet; let i = index">
-        <ion-col size="12" size-md="6">
-          <ion-card>
-            <ion-item lines="none">
+        <ion-col size="12">
+          <ion-card (click)="presentPopover($event, car)">
+            <ion-item>
               <ion-col size="3">
                 <ion-thumbnail class="rounded-thumbnail">
                   <img
@@ -13,11 +13,26 @@
                   />
                 </ion-thumbnail>
               </ion-col>
-              <ion-col size="8">
+              <ion-col size="9">
                 <ion-card-content>
-                  <p>{{ 'MYFLEET.CAR_LABEL' | translate }}: {{ car.brand }} {{ car.model }}</p>
-                  <p>{{ 'MYFLEET.PRODUCTION_YEAR_LABEL' | translate }}: {{ car.year }}</p>
-                  <p>{{ 'MYFLEET.MILEAGE_LABEL' | translate }}: {{ car.mileage }} km</p>
+                  <p>
+                    {{ 'MYFLEET.CAR_LABEL' | translate }}: {{ car.brand }} {{
+                    car.model }}
+                  </p>
+                  <p>
+                    {{ 'MYFLEET.PRODUCTION_YEAR_LABEL' | translate }}: {{
+                    car.year }}
+                  </p>
+                  <p>
+                    {{ 'MYFLEET.MILEAGE_LABEL' | translate }}: {{ car.mileage }}
+                    km
+                  </p>
+                </ion-card-content>
+              </ion-col>
+            </ion-item>
+            <ion-row>
+              <ion-col size="12">
+                <ion-card-content>
                   <p>
                     Status:
                     <ion-progress-bar
@@ -29,22 +44,14 @@
                   </p>
                 </ion-card-content>
               </ion-col>
-              <ion-col size="1" class="flex h-full p-0 justify-content-start align-items-start">
-                <ion-button
-                  (click)="presentPopover($event, car)"
-                  fill="clear"
-                >
-                  <ion-icon slot="icon-only" name="ellipsis-vertical-outline" class="text-xl"></ion-icon>
-                </ion-button>
-              </ion-col>
-            </ion-item>
+            </ion-row>
           </ion-card>
         </ion-col>
       </ng-container>
     </ion-row>
   </ion-grid>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button size="small" id="inputmodal" (click)="openDialog()">
+    <ion-fab-button size="small" (click)="openAddVehicleModal()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

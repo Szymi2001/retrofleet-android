@@ -3,17 +3,14 @@
     <ion-title>Dodaj zdjęcie</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
-      <ion-button (click)="uploadCropperImage()" *ngIf="myImage">
-        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+        <ion-icon name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-button (click)="selectImage()" expand="full" *ngIf="!myImage"
+<ion-content class="ion-padding">
+  <ion-button (click)="selectImage()" expand="block" *ngIf="!myImage"
     >Wybierz zdjęcie</ion-button
   >
  
@@ -28,4 +25,17 @@
     (imageCropped)="imageCropped($event)"
     (imageLoaded)="imageLoaded()"
   ></image-cropper>
+
+  <ion-row *ngIf="myImage">
+    <ion-col>
+      <ion-button (click)="uploadCropperImage()" expand="block" color="primary">
+        Zatwierdź
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button (click)="cancelCropping()" expand="block" color="medium">
+        Anuluj
+      </ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>

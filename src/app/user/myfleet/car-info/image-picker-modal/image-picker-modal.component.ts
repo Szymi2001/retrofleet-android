@@ -1,20 +1,22 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { LoadingController, ModalController } from '@ionic/angular';
+import { LoadingController, ModalController, NavParams } from '@ionic/angular';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { ImageUpdateService } from 'src/services/imageUpdate.service';
 
 @Component({
   selector: 'app-image-picker',
-  templateUrl: './image-picker.component.html',
-  styleUrls: ['./image-picker.component.scss'],
+  templateUrl: './image-picker-modal.component.html',
+  styleUrls: ['./image-picker-modal.component.scss'],
 })
 export class ImagePickerComponent {
   private userId = localStorage.getItem('userId');
-  @Input() carId!: string;
+
   @ViewChild('cropper') cropper!: ImageCropperComponent;
+
+  @Input() carId: any;
   croppedImage: any = '';
   croppedBlob: any = '';
   myImage: any = null;
@@ -38,6 +40,10 @@ export class ImagePickerComponent {
 
     this.myImage = `data:image/${image.format};base64,${image.base64String}`;
     this.croppedImage = null;
+  }
+
+  cancelCropping() {
+    this.myImage = null;
   }
 
   imageLoaded() {

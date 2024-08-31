@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { backend_Url } from 'src/app/app.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FleetService {
-  private baseUrl = 'https://backend-server-rust.vercel.app';
+  private baseUrl = backend_Url;
 
   async getVehicles(userId: string): Promise<any> {
     try {

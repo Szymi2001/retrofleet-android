@@ -72,17 +72,21 @@
                   <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
                 </ion-button>
               </ion-col>
+              <ion-col size="12">
+                <canvas
+                baseChart
+                class="h-25rem"
+                [data]="priceByMonthData"
+                [options]="priceByMonthOptions"
+                [legend]="false"
+                [plugins]="[]"
+                [type]="'bar'"
+              >
+              </canvas>
+              </ion-col>
+                
             </ion-row>
-            <canvas
-              class="h-30rem"
-              baseChart
-              [data]="priceByMonthData"
-              [options]="priceByMonthOptions"
-              [legend]="true"
-              [plugins]="[]"
-              [type]="'bar'"
-            >
-            </canvas>
+            
           </ion-card-content>
         </ion-card>
       </ion-col>

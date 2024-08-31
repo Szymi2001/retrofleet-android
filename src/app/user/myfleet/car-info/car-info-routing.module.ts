@@ -8,10 +8,6 @@ const routes: Routes = [
     path: '',
     component: CarInfoPage
   },
-  {
-    path: 'new-car',
-    loadChildren: () => import('./new-car/new-car.module').then( m => m.NewCarPageModule)
-  }
 ];
 
 @NgModule({

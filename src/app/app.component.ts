@@ -25,7 +25,7 @@ interface Translations {
   [key: string]: string;
 }
 
-export const backend_Url = 'https://backend-server-rust.vercel.app';
+export const backend_Url = 'http://localhost:3000';
 
 @Component({
   selector: 'app-root',

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{carProperties.brand + " " + carProperties.model + " " + carProperties.year}}</ion-title>
+    <ion-title>{{carObject.brand + " " + carObject.model + " " + carObject.year}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
@@ -18,55 +18,55 @@
     <ion-card-content>
       <ion-item>
         <ion-label>VIN:</ion-label>
-        <ion-note slot="end">{{ carProperties.vin }}</ion-note>
+        <ion-note slot="end">{{ carObject.vin }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.MILEAGE_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.mileage }}</ion-note>
+        <ion-note slot="end">{{ carObject.mileage }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.BRAND_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.brand }}</ion-note>
+        <ion-note slot="end">{{ carObject.brand }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.MODEL_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.model }}</ion-note>
+        <ion-note slot="end">{{ carObject.model }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.YEAR_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.year }}</ion-note>
+        <ion-note slot="end">{{ carObject.year }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.BODY_TYPE_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.body_type }}</ion-note>
+        <ion-note slot="end">{{ carObject.body_type }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.FUEL_TYPE_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.fuel_type }}</ion-note>
+        <ion-note slot="end">{{ carObject.fuel_type }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.COLOR_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.color }}</ion-note>
+        <ion-note slot="end">{{ carObject.color }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.HERITAGE_LISTED_LABEL' | translate }}</ion-label>
         <ion-note slot="end">
-          {{ carProperties.is_heritage_listed 
+          {{ carObject.is_heritage_listed 
              ? ('MORE-INFO.HERITAGE_LISTED_YES' | translate) 
              : ('MORE-INFO.HERITAGE_LISTED_NO' | translate) }}
         </ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.TECHNICAL_INSPECTION_DATE_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.technical_inspection_date }}</ion-note>
+        <ion-note slot="end">{{ carObject.technical_inspection_date }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.REGISTRATION_NUMBER_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.registration_number }}</ion-note>
+        <ion-note slot="end">{{ carObject.registration_number }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>{{ 'MORE-INFO.INSURANCE_EXPIRY_DATE_LABEL' | translate }}</ion-label>
-        <ion-note slot="end">{{ carProperties.insurance_expiry_date }}</ion-note>
+        <ion-note slot="end">{{ carObject.insurance_expiry_date }}</ion-note>
       </ion-item>
     </ion-card-content>
   </ion-card>

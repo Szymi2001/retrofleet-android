@@ -65,10 +65,6 @@ export class ServiceSummaryPage implements OnInit {
     ],
     datasets: [
       {
-        label: 'Wydatki [zł]',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
         data: [],
       },
     ],
@@ -83,34 +79,6 @@ export class ServiceSummaryPage implements OnInit {
         labels: {
           color: '#000',
         },
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.raw as number;
-            return `${label}: ${value.toLocaleString()} zł`;
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        ticks: {
-          color: '#000',
-        },
-        grid: {
-          color: 'rgba(0,0,0,0.1)',
-        },
-      },
-      y: {
-        ticks: {
-          color: '#000',
-        },
-        grid: {
-          color: 'rgba(0,0,0,0.1)',
-        },
-        beginAtZero: true,
       },
     },
   };
@@ -135,15 +103,6 @@ export class ServiceSummaryPage implements OnInit {
         display: true,
         labels: {
           color: '#000',
-        },
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const label = context.label || '';
-            const value = context.raw as number;
-            return `${label}: ${value.toLocaleString()} zł`;
-          },
         },
       },
     },
@@ -264,6 +223,7 @@ export class ServiceSummaryPage implements OnInit {
       labels: types,
       datasets: [
         {
+          label: 'Wydatki [zł]',
           data: totalPrice,
           backgroundColor: this.getChartColors('background'),
           hoverBackgroundColor: this.getChartColors('hover'),
@@ -304,9 +264,7 @@ export class ServiceSummaryPage implements OnInit {
           backgroundColor: documentStyle.getPropertyValue(
             '--ion-color-primary'
           ),
-          borderColor: documentStyle.getPropertyValue('--ion-color-primary'),
-          borderWidth: 1,
-          data: totalPrice,
+          data: totalPrice
         },
       ],
     };
