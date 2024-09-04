@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { VehicleMaintenanceService } from 'src/services/endpoints/vehicleMaintenanceEndpoint.service';
-import { NewServiceComponent } from './new-service/new-service.component';
+import { AddServiceModalComponent } from './add-service-modal/add-service-modal.component';
 
 const MONTHS = [
   'styczeń',
@@ -24,8 +24,9 @@ interface Service {
   car_id: string;
   brand: string;
   model: string;
-  insertedPrice: number;
+  price: number;
   date: string;
+  isoDate?: string;
   mileage: number;
   description?: string;
   type: string;
@@ -74,14 +75,15 @@ export class AddServicePage implements OnInit {
     this.loadServices();
   }
 
-  async openDialog() {
+  async openAddServiceModal() {
     const modal = await this.modalController.create({
-      component: NewServiceComponent,
+      component: AddServiceModalComponent,
     });
 
-    modal.onDidDismiss().then((result) => {
-      if (result.data?.serviceAdded) {
-        this.loadServices();
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.addService(data.data);
+        console.log(data.data)
       }
     });
 
@@ -98,6 +100,59 @@ export class AddServicePage implements OnInit {
   clearFilters() {
     this.selectedType = '';
     this.filteredServices = this.myServices;
+  }
+
+  async addService(serviceData: any): Promise<void> {
+    const newService = this.buildNewService(serviceData);
+
+    try {
+      //await this.vehicleMaintenanceService.addService(newService);
+      this.myServices.push(newService);
+      this.filteredServices = [...this.myServices];
+      //await this.updateVehicleMileage(newService.car_id, serviceData);
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
+    }
+  }
+
+  buildNewService(serviceData: any): Service {
+    const selectedCar = serviceData.selectedCar.value;
+    const date = new Date(serviceData.date);
+
+    return {
+      user_id: this.userId,
+      car_id: selectedCar._id,
+      brand: selectedCar.brand,
+      model: selectedCar.model,
+      price: serviceData.price,
+      date: this.formatDate(date),
+      isoDate: date.toISOString(),
+      mileage: serviceData.mileage,
+      description: serviceData.description,
+      type: serviceData.type
+    };
+  }
+
+  formatDate(date: Date): string {
+    const day = date.getDate();
+    const monthName = MONTHS[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${day} ${monthName} ${year}`;
+  }
+
+  async updateVehicleMileage(vehicleId: string, vehicleData: any): Promise<void> {
+    const selectedCar = vehicleData.selectedCar.value;
+    const savedMileage = selectedCar.mileage;
+    const mileage = vehicleData.mileage;
+
+    if (mileage > savedMileage) {
+      try {
+        await this.vehicleMaintenanceService.updateMileage(vehicleId, mileage);
+      } catch (error: any) {
+        console.error('Błąd:', error.response?.data || error.message);
+      }
+    }
   }
 
   async loadServices(): Promise<void> {

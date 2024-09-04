@@ -1,8 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 import { RouteService } from 'src/services/routeService.service';
-import { NewDrivingLogComponent } from './new-driving-log/new-driving-log.component';
+import { AddDrivingLogModal } from './add-driving-log-modal/add-driving-log-modal.component';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+const MONTHS = [
+  'styczeń',
+  'luty',
+  'marzec',
+  'kwiecień',
+  'maj',
+  'czerwiec',
+  'lipiec',
+  'sierpień',
+  'wrzesień',
+  'październik',
+  'listopad',
+  'grudzień',
+];
 
 interface Route {
   user_id: string | null;
@@ -30,16 +45,23 @@ export class DrivingLogPage implements OnInit {
 
   constructor(
     private routeService: RouteService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
     this.loadRoutes();
   }
 
-  async openDialog() {
+  async openAddDrivingLogModal() {
     const modal = await this.modalController.create({
-      component: NewDrivingLogComponent,
+      component: AddDrivingLogModal,
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.addRoute(data.data);
+      }
     });
 
     return await modal.present();
@@ -55,5 +77,45 @@ export class DrivingLogPage implements OnInit {
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
+  }
+
+  async addRoute(routeData: any): Promise<void> {
+    const newRoute = this.buildNewRoute(routeData);
+
+    try {
+      await this.routeService.addRoute(newRoute);
+      this.myRoutes.push(newRoute);
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
+    }
+  }
+
+  buildNewRoute(routeData: any): Route {
+    const selectedCar = routeData.selectedCar.value;
+
+    const date = new Date(routeData.date);
+    const status = routeData.status;
+
+    return {
+      user_id: this.userId,
+      car_id: selectedCar._id,
+      brand: selectedCar.brand,
+      model: selectedCar.model,
+      start_location: routeData.startLocation,
+      end_location: routeData.endLocation,
+      distance: routeData.distance,
+      duration: routeData.duration,
+      status: status.label,
+      date: this.formatDate(date),
+      description: routeData.description,
+    };
+  }
+
+  formatDate(date: Date): string {
+    const day = date.getDate();
+    const monthName = MONTHS[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${day} ${monthName} ${year}`;
   }
 }

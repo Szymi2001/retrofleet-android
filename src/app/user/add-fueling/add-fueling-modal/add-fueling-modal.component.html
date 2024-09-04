@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Nowy serwis</ion-title>
+    <ion-title>Dodaj tankowanie</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon slot="icon-only" name="close-outline"></ion-icon>
@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="fuelReceiptForm" (ngSubmit)="submitForm()">
     <ion-item>
       <ion-input
         label="Koszt"
@@ -45,15 +45,15 @@
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
           <ion-datetime
-          id="date"
-          presentation="date"
-          [max]="maxDate"
-          size="cover"
-          showDefaultButtons="true"
-          cancelText="Anuluj"
-          doneText="Zatwierdź"
-          formControlName="date"
-        ></ion-datetime>
+            id="date"
+            presentation="date"
+            [max]="maxDate"
+            size="cover"
+            showDefaultButtons="true"
+            cancelText="Anuluj"
+            doneText="Zatwierdź"
+            formControlName="date"
+          ></ion-datetime>
         </ng-template>
       </ion-modal>
     </ion-item>
@@ -71,35 +71,73 @@
 
     <ion-item>
       <ion-textarea
-        label="Opis dotyczący serwisu (opcjonalne)"
+        label="Opis dotyczący tankowania (opcjonalne)"
         labelPlacement="floating"
         formControlName="description"
+        autoGrow="true"
         maxlength="100"
         rows="4"
-        auto-grow="true"
       ></ion-textarea>
     </ion-item>
 
     <ion-item>
       <ion-select
-        label="Typ serwisu"
+        label="Rodzaj paliwa"
         labelPlacement="floating"
-        cancelText="Anuluj"
-        interface="action-sheet"
-        formControlName="type"
+        interface="popover"
+        formControlName="fuelType"
       >
-        <ion-select-option
-          *ngFor="let option of serviceOptions"
-          [value]="option.value"
-        >
-          {{ option.value }}
+        <ion-select-option *ngFor="let fuel of fuelTypes" [value]="fuel">
+          {{ fuel }}
         </ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-button class="ion-margin-top" expand="block" (click)="onSubmit()">
-      <ion-icon name="add" slot="start"></ion-icon>
-      Dodaj serwis</ion-button
+    <ion-item>
+      <ion-input
+        label="Ilość paliwa"
+        labelPlacement="floating"
+        type="text"
+        inputmode="numeric"
+        maxlength="6"
+        formControlName="fuelAmount"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Rodzaj płatności"
+        labelPlacement="floating"
+        interface="popover"
+        formControlName="transactionType"
+      >
+        <ion-select-option
+          *ngFor="let transaction of transactionTypes"
+          [value]="transaction"
+        >
+          {{ transaction.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Numer paragonu (opcjonalne)"
+        labelPlacement="floating"
+        interface="action-sheet"
+        type="number"
+        formControlName="receiptNumber"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      type="submit"
+      class="ion-margin-top"
+      color="primary"
     >
+      <ion-icon name="add" slot="start"></ion-icon>
+      Dodaj tankowanie
+    </ion-button>
   </form>
 </ion-content>

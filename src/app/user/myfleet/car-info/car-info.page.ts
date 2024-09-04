@@ -118,7 +118,19 @@ export class CarInfoPage implements OnInit {
     }
   }
 
-  async addVehicle(vehicleData: any) {
+  async addVehicle(vehicleData: any): Promise<void> {
+    const newVehicle = this.buildNewVehicle(vehicleData);
+
+    try {
+      await this.fleetService.addVehicle(newVehicle);
+      this.myFleet.push(newVehicle);
+      this.fetchFleetData();
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
+    }
+  }
+
+  buildNewVehicle(vehicleData: any): Vehicle {
     const technicalInspectionFormattedDate = this.formatDate(
       vehicleData.technicalInspectionDate
     );
@@ -126,7 +138,7 @@ export class CarInfoPage implements OnInit {
       vehicleData.insuranceExpiryDate
     );
 
-    const newCar = {
+    return {
       user_id: this.userId,
       vin: vehicleData.vin,
       mileage: vehicleData.mileage,
@@ -141,13 +153,6 @@ export class CarInfoPage implements OnInit {
       registration_number: vehicleData.registrationNumber,
       insurance_expiry_date: insuranceExpiryFormattedDate,
     };
-    try {
-      await this.fleetService.addVehicle(newCar);
-      this.myFleet.push(newCar);
-      this.fetchFleetData();
-    } catch (error: any) {
-      console.error('Błąd:', error.response?.data || error.message);
-    }
   }
 
   //Formatowanie daty np.10/07/2024

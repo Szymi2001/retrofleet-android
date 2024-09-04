@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { AddServicePageRoutingModule } from './add-service-routing.module';
 
 import { AddServicePage } from './add-service.page';
-import { NewServiceComponent } from './new-service/new-service.component';
+import { AddServiceModalComponent } from './add-service-modal/add-service-modal.component';
+import { OnlyDigitsDirective } from '../../shared/directives/onlyDigits.directive';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { NewServiceComponent } from './new-service/new-service.component';
     IonicModule,
     AddServicePageRoutingModule
   ],
-  declarations: [AddServicePage, NewServiceComponent]
+  declarations: [AddServicePage, AddServiceModalComponent, OnlyDigitsDirective]
 })
 export class AddServicePageModule {}

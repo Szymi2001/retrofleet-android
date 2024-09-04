@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AddFuelingPageRoutingModule } from './add-fueling-routing.module';
 
 import { AddFuelingPage } from './add-fueling.page';
-import { NewFuelingComponent } from './new-fueling/new-fueling.component';
+import { AddFuelingModalComponent } from './add-fueling-modal/add-fueling-modal.component';
 
 @NgModule({
   imports: [
@@ -17,6 +17,6 @@ import { NewFuelingComponent } from './new-fueling/new-fueling.component';
     IonicModule,
     AddFuelingPageRoutingModule
   ],
-  declarations: [AddFuelingPage, NewFuelingComponent]
+  declarations: [AddFuelingPage, AddFuelingModalComponent]
 })
 export class AddFuelingPageModule {}

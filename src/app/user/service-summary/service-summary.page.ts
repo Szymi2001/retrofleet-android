@@ -12,7 +12,7 @@ interface Vehicle {
 interface Service {
   type: string;
   date: string;
-  insertedPrice: number;
+  price: number;
   mileage: number;
   description: string;
 }
@@ -197,7 +197,7 @@ export class ServiceSummaryPage implements OnInit {
       .map((service) => ({
         type: `${service.type}`,
         date: `${service.date}`,
-        cost: `${service.insertedPrice}`,
+        cost: `${service.price}`,
         mileage: `${service.mileage}`,
         desc: `${service.description}`,
       }))

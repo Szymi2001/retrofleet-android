@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="routeForm" (ngSubmit)="submitForm()">
     <ion-item>
       <ion-select
         label="Wybierz pojazd"
@@ -67,18 +67,20 @@
     <ion-item class="ion-padding-top">
       <ion-input
         label="Długość trasy"
-        labelPlacement="floating"
+        labelPlacement="stacked"
         type="text"
         formControlName="distance"
+        [readonly]="true"
       ></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-input
         label="Czas trwania"
-        labelPlacement="floating"
+        labelPlacement="stacked"
         type="text"
         formControlName="duration"
+        [readonly]="true"
       ></ion-input>
     </ion-item>
 
@@ -104,14 +106,14 @@
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
           <ion-datetime
-          id="date"
-          presentation="date"
-          size="cover"
-          showDefaultButtons="true"
-          cancelText="Anuluj"
-          doneText="Zatwierdź"
-          formControlName="date"
-        ></ion-datetime>
+            id="date"
+            presentation="date"
+            size="cover"
+            showDefaultButtons="true"
+            cancelText="Anuluj"
+            doneText="Zatwierdź"
+            formControlName="date"
+          ></ion-datetime>
         </ng-template>
       </ion-modal>
     </ion-item>
@@ -125,7 +127,12 @@
       ></ion-textarea>
     </ion-item>
 
-    <ion-button class="ion-margin-top" expand="block" (click)="onSubmit()">
+    <ion-button
+      class="ion-margin-top"
+      expand="block"
+      type="submit"
+      color="primary"
+    >
       <ion-icon name="add" slot="start"></ion-icon>
       Dodaj trasę</ion-button
     >

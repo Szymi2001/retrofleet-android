@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Nowy serwis</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="serviceForm" (ngSubmit)="submitForm()">
+    <ion-item>
+      <ion-input
+        label="Koszt"
+        labelPlacement="floating"
+        type="text"
+        inputmode="decimal"
+        maxlength="11"
+        formControlName="price"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Wybierz pojazd"
+        labelPlacement="floating"
+        interface="popover"
+        formControlName="selectedCar"
+      >
+        <ion-select-option
+          *ngFor="let vehicle of vehicleStrings"
+          [value]="vehicle"
+        >
+          {{ vehicle.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Data</ion-label>
+      <ion-datetime-button datetime="date"></ion-datetime-button>
+
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
+            id="date"
+            presentation="date"
+            [max]="maxDate"
+            size="cover"
+            showDefaultButtons="true"
+            cancelText="Anuluj"
+            doneText="Zatwierdź"
+            formControlName="date"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Przebieg (km)"
+        labelPlacement="floating"
+        type="number"
+        inputmode="numeric"
+        formControlName="mileage"
+        onlyDigits
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-textarea
+        label="Opis dotyczący serwisu (opcjonalne)"
+        labelPlacement="floating"
+        formControlName="description"
+        maxlength="100"
+        rows="4"
+        auto-grow="true"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-select
+        label="Typ serwisu"
+        labelPlacement="floating"
+        cancelText="Anuluj"
+        interface="action-sheet"
+        formControlName="type"
+      >
+        <ion-select-option
+          *ngFor="let option of serviceOptions"
+          [value]="option.value"
+        >
+          {{ option.value }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label>Dodaj pozycję</ion-label>
+      <ion-button fill="clear" (click)="addRepairItem()">
+        <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+    
+
+    <div formArrayName="repairItems" class="ion-padding-top">
+      <div
+        *ngFor="let item of repairItems.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <ion-item>
+          <ion-input
+            label="Opis usługi"
+            labelPlacement="floating"
+            type="text"
+            formControlName="itemDescription"
+          ></ion-input>
+          
+        </ion-item>
+        <ion-item>
+          <ion-input
+            label="Koszt"
+            labelPlacement="floating"
+            type="text"
+            inputmode="decimal"
+            formControlName="itemCost"
+          ></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="ion-margin-bottom">
+          <ion-button expand="block" color="danger" (click)="removeRepairItem(i)">
+            Usuń
+          </ion-button>
+        </ion-item>
+      </div>
+    </div>
+
+    <ion-button
+      class="ion-margin-top"
+      expand="block"
+      type="submit"
+      color="primary"
+    >
+      <ion-icon name="add"></ion-icon>
+      Dodaj serwis</ion-button
+    >
+  </form>
+</ion-content>

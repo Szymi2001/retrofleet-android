@@ -25,10 +25,10 @@ interface FuelReceipt {
 
 @Component({
   selector: 'app-new-fueling',
-  templateUrl: './new-fueling.component.html',
-  styleUrls: ['./new-fueling.component.scss'],
+  templateUrl: './add-fueling-modal.component.html',
+  styleUrls: ['./add-fueling-modal.component.scss'],
 })
-export class NewFuelingComponent  implements OnInit {
+export class AddFuelingModalComponent  implements OnInit {
   private userId = localStorage.getItem('userId');
 
   submitted = false;
@@ -85,7 +85,6 @@ export class NewFuelingComponent  implements OnInit {
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
-    console.log(this.vehicleStrings)
   }
 
   updateVehicleStrings(): void {
@@ -101,8 +100,10 @@ export class NewFuelingComponent  implements OnInit {
       .map((type) => type.fuel_type);
   }
 
-  async onSubmit(): Promise<void> {
-    console.info(this.fuelReceiptForm.value)
+  submitForm() {
+    if (this.fuelReceiptForm.valid) {
+      this.modalController.dismiss(this.fuelReceiptForm.value);
+    }
   }
 
   dismiss() {

@@ -95,7 +95,7 @@ export class CalendarPage {
         `${this.baseUrl}/event/getEvents/${userId}`
       );
       this.eventSource = response.data;
-      console.log(this.eventSource)
+      console.log(this.eventSource.length)
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }

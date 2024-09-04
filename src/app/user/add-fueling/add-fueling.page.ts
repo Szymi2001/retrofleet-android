@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { NewFuelingComponent } from './new-fueling/new-fueling.component';
+import { AddFuelingModalComponent } from './add-fueling-modal/add-fueling-modal.component';
 
 @Component({
   selector: 'app-add-fueling',
@@ -14,11 +14,21 @@ export class AddFuelingPage implements OnInit {
   ngOnInit() {
   }
 
-  async openDialog() {
+  async openAddFuelingModal() {
     const modal = await this.modalController.create({
-      component: NewFuelingComponent,
+      component: AddFuelingModalComponent,
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.addFueling(data.data);
+      }
     });
     return await modal.present();
+  }
+
+  async addFueling(fuelingData: any): Promise<void> {
+    console.info(fuelingData)
   }
 
 }

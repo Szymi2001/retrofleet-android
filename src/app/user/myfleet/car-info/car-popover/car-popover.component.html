@@ -1,14 +1,14 @@
 <ion-list>
   <ion-item button (click)="openEditInfo(); dismiss()">
-    <ion-icon name="search-outline" slot="start"></ion-icon>
+    <ion-icon aria-hidden="true" name="search-outline" slot="start"></ion-icon>
     <ion-label>{{ 'MYFLEET.MORE_INFO_LABEL' | translate }}</ion-label>
   </ion-item>
   <ion-item button (click)="openImagePicker(); dismiss()">
-    <ion-icon name="camera-outline" slot="start"></ion-icon>
+    <ion-icon aria-hidden="true" name="camera-outline" slot="start"></ion-icon>
     <ion-label>{{ 'MYFLEET.ADD_PICTURE_LABEL' | translate }}</ion-label>
   </ion-item>
   <ion-item button (click)="presentDeleteConfirmation(); dismiss()">
-    <ion-icon name="trash-outline" slot="start"></ion-icon>
+    <ion-icon aria-hidden="true" name="trash-outline" slot="start"></ion-icon>
     <ion-label>{{ 'MYFLEET.DELETE_CAR_LABEL' | translate }}</ion-label>
   </ion-item>
 </ion-list>

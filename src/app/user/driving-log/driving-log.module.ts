@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { DrivingLogPageRoutingModule } from './driving-log-routing.module';
 import { DrivingLogPage } from './driving-log.page';
-import { NewDrivingLogComponent } from './new-driving-log/new-driving-log.component';
+import { AddDrivingLogModal } from './add-driving-log-modal/add-driving-log-modal.component';
 
 @NgModule({
   imports: [
@@ -16,6 +16,6 @@ import { NewDrivingLogComponent } from './new-driving-log/new-driving-log.compon
     IonicModule,
     DrivingLogPageRoutingModule
   ],
-  declarations: [DrivingLogPage, NewDrivingLogComponent]
+  declarations: [DrivingLogPage, AddDrivingLogModal]
 })
 export class DrivingLogPageModule {}

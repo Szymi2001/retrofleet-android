@@ -4,21 +4,6 @@ import { ModalController } from '@ionic/angular';
 import axios from 'axios';
 import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 
-const MONTHS = [
-  'styczeń',
-  'luty',
-  'marzec',
-  'kwiecień',
-  'maj',
-  'czerwiec',
-  'lipiec',
-  'sierpień',
-  'wrzesień',
-  'październik',
-  'listopad',
-  'grudzień',
-];
-
 interface Route {
   user_id: string | null;
   car_id: string;
@@ -35,10 +20,10 @@ interface Route {
 
 @Component({
   selector: 'app-new-driving-log',
-  templateUrl: './new-driving-log.component.html',
-  styleUrls: ['./new-driving-log.component.scss'],
+  templateUrl: './add-driving-log-modal.component.html',
+  styleUrls: ['./add-driving-log-modal.component.scss'],
 })
-export class NewDrivingLogComponent implements OnInit {
+export class AddDrivingLogModal implements OnInit {
   private userId = localStorage.getItem('userId');
 
   vehicleStrings: any[] = [];
@@ -54,6 +39,8 @@ export class NewDrivingLogComponent implements OnInit {
   routeForm!: FormGroup;
 
   myRoutes: Route[] = [];
+
+  maxDate = new Date().toISOString();
 
   statusOptions = [
     { label: 'Zaplanowana', value: 'Planned' },
@@ -72,15 +59,16 @@ export class NewDrivingLogComponent implements OnInit {
     this.loadVehicleData();
   }
 
+  //TODO: Zaplanowana data może być tylko od następnego dnia itp.
   initializeForm(): void {
     this.routeForm = this.formBuilder.group({
       selectedCar: ['', Validators.required],
       startLocation: ['', Validators.required],
       endLocation: ['', Validators.required],
-      distance: [{ value: null, disabled: true }, Validators.required],
-      duration: [{ value: null, disabled: true }, Validators.required],
+      distance: [null, Validators.required],
+      duration: [null, Validators.required],
       status: ['', Validators.required],
-      date: [null, Validators.required],
+      date: [this.maxDate, Validators.required],
       description: [''],
     });
   }
@@ -145,7 +133,6 @@ export class NewDrivingLogComponent implements OnInit {
           },
         }
       );
-      console.log(response);
       return response.data;
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
@@ -183,51 +170,10 @@ export class NewDrivingLogComponent implements OnInit {
     }
   }
 
-  formatDate(date: Date): string {
-    const day = date.getDate();
-    const monthName = MONTHS[date.getMonth()];
-    const year = date.getFullYear();
-
-    return `${day} ${monthName} ${year}`;
-  }
-
-  async onSubmit(): Promise<void> {
-    this.submitted = true;
-
-    if (this.routeForm.invalid) {
-      return;
+  submitForm() {
+    if (this.routeForm.valid) {
+      this.modalController.dismiss(this.routeForm.value);
     }
-
-    const newRoute = this.buildNewRoute();
-
-    try {
-      //await this.routeService.addRoute(newRoute);
-      this.myRoutes.push(newRoute);
-      console.log(newRoute);
-    } catch (error: any) {
-      console.error('Błąd:', error.response?.data || error.message);
-    }
-  }
-
-  buildNewRoute(): Route {
-    const selectedCar = this.routeForm.get('selectedCar')?.value;
-
-    const date = new Date(this.routeForm.get('date')?.value);
-    const status = this.routeForm.get('status')?.value;
-
-    return {
-      user_id: this.userId,
-      car_id: selectedCar.value._id,
-      brand: selectedCar.value.brand,
-      model: selectedCar.value.model,
-      start_location: this.routeForm.get('startLocation')?.value,
-      end_location: this.routeForm.get('endLocation')?.value,
-      distance: this.routeForm.get('distance')?.value,
-      duration: this.routeForm.get('duration')?.value,
-      status: status.label,
-      date: this.formatDate(date),
-      description: this.routeForm.get('description')?.value,
-    };
   }
 
   dismiss() {
