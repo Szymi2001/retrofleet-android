@@ -9,32 +9,20 @@
             >
           </ion-card-header>
           <ion-card-content>
-            <ion-grid>
-              <ion-row>
-                <ion-col size="6">
-                  <strong>{{ 'PROFILE.LOGIN_LABEL' | translate }}:</strong>
-                </ion-col>
-                <ion-col size="6"> {{ userInfo.login }} </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="6">
-                  <strong>{{ 'PROFILE.NAME_LABEL' | translate }}:</strong>
-                </ion-col>
-                <ion-col size="6"> {{ userInfo.name }} </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="6">
-                  <strong>{{ 'PROFILE.SURNAME_LABEL' | translate }}:</strong>
-                </ion-col>
-                <ion-col size="6"> {{ userInfo.surname }} </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="6">
-                  <strong>Email:</strong>
-                </ion-col>
-                <ion-col size="6"> {{ userInfo.email }} </ion-col>
-              </ion-row>
-            </ion-grid>
+            <ion-item lines="none">
+                <ion-thumbnail slot="start" (click)="openImagePicker()">
+                  <img [src]="profileImage[0] || '/assets/images/profile_icon.png'" alt="Zdjęcie profilowe" />
+                </ion-thumbnail>
+              <ion-label>
+                <ion-note>
+                  {{ 'PROFILE.LOGIN_LABEL' | translate }}: {{ userInfo.login }} <br />
+                  {{ 'PROFILE.NAME_LABEL' | translate }}: {{ userInfo.name }} <br />
+                  {{ 'PROFILE.SURNAME_LABEL' | translate }}: {{ userInfo.surname }} <br />
+                  Email: {{ userInfo.email }}
+                </ion-note>
+              </ion-label>
+            </ion-item>
+            
             <ion-button
               expand="block"
               color="primary"

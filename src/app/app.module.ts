@@ -11,7 +11,6 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 //Tłumaczenie
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { SettingsComponent } from './tabs/settings/settings.component';
 import { FormsModule } from '@angular/forms';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,7 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  declarations: [AppComponent, SettingsComponent],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [
     provideCharts(withDefaultRegisterables()),

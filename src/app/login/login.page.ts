@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,13 +12,14 @@ import { backend_Url } from '../app.component';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
   //adres backendu
   private baseUrl = backend_Url;
   private subscription!: Subscription;
 
   loginForm!: FormGroup;
   submitted = false;
+  validationMessages: any = [];
 
   isLoggedInSubject: any;
 
@@ -27,13 +28,25 @@ export class LoginPage implements OnInit {
     private translate: TranslateService,
     private router: Router,
     private authService: AuthService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      login: ['', Validators.required],
-      password: ['', Validators.required],
+      login: ['', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(25)
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8)
+      ]]
+    });
+
+    this.setValidationMessages();
+
+    this.subscription = this.translate.onLangChange.subscribe(() => {
+      this.setValidationMessages();
     });
   }
 
@@ -41,6 +54,22 @@ export class LoginPage implements OnInit {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  setValidationMessages() {
+    this.translate.get('LOGIN.ERRORS').subscribe((translations) => {
+      this.validationMessages = {
+        login: [
+          { type: 'required', message: translations.USERNAME_REQUIRED },
+          { type: 'minlength', message: translations.USERNAME_MINLENGTH },
+          { type: 'maxlength', message: translations.USERNAME_MAXLENGTH },
+        ],
+        password: [
+          { type: 'required', message: translations.PASSWORD_REQUIRED },
+          { type: 'minlength', message: translations.PASSWORD_MINLENGTH },
+        ],
+      };
+    });
   }
 
   async onSubmit() {
@@ -63,7 +92,8 @@ export class LoginPage implements OnInit {
 
       //Id użytkownika do localStorage
       localStorage.setItem('userId', id);
-      this.authService.setLoggedIn(true);
+      this.authService.setLoggedIn(true, id);
+      this.loginForm.reset();
       this.router.navigateByUrl('myfleet');
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);

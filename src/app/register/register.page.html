@@ -17,11 +17,15 @@
                   placeholder="{{ 'REGISTER.LOGIN_PLACEHOLDER' | translate }}"
                   type="text"
                   formControlName="username"
-                  clearInput
-                  required
                 >
                 </ion-input>
               </ion-item>
+              <ion-text color="danger" *ngFor="let validation of validationMessages.username">
+                <div *ngIf="registerForm.controls['username'].hasError(validation.type) && registerForm.controls['username'].touched" class="error-message">
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  <span>{{ validation.message }}</span>
+                </div>
+              </ion-text>
 
               <ion-item class="ion-margin-top">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
@@ -32,6 +36,12 @@
                 >
                 </ion-input>
               </ion-item>
+              <ion-text color="danger" *ngFor="let validation of validationMessages.password">
+                <div *ngIf="registerForm.controls['password'].hasError(validation.type) && registerForm.controls['password'].touched" class="error-message">
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  <span>{{ validation.message }}</span>
+                </div>
+              </ion-text>
 
               <ion-item class="ion-margin-top">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
@@ -42,6 +52,28 @@
                 >
                 </ion-input>
               </ion-item>
+              <ion-text color="danger" *ngFor="let validation of validationMessages.repeatPassword">
+                <div *ngIf="registerForm.controls['repeatPassword'].hasError(validation.type) && registerForm.controls['repeatPassword'].touched" class="error-message">
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  <span>{{ validation.message }}</span>
+                </div>
+              </ion-text>
+
+              <ion-item class="ion-margin-top">
+                <ion-icon name="mail-outline" slot="start"></ion-icon>
+                <ion-input
+                  placeholder="Email"
+                  type="email"
+                  formControlName="email"
+                >
+                </ion-input>
+              </ion-item>
+              <ion-text color="danger" *ngFor="let validation of validationMessages.email">
+                <div *ngIf="registerForm.controls['email'].hasError(validation.type) && registerForm.controls['email'].touched" class="error-message">
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  <span>{{ validation.message }}</span>
+                </div>
+              </ion-text>
 
               <ion-button expand="block" type="submit" class="ion-margin-top">
                 {{ 'REGISTER.BUTTON_LABEL' | translate }}

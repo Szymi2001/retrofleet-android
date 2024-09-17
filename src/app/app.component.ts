@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { MenuController, ModalController } from '@ionic/angular';
+import { LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { AppSettingsService } from 'src/services/appSettings.service';
 import { AuthService } from 'src/services/auth.service';
-import { SettingsComponent } from './tabs/settings/settings.component';
+import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 
 interface MenuItem {
   title: string;
@@ -14,12 +14,13 @@ interface MenuItem {
   action?: () => void;
 }
 
-interface MenuGroup {
-  groupTitle: string;
-  items: MenuItem[];
+interface MenuDivider {
+  isDivider: true;
 }
 
-type MenuItems = MenuItem | MenuGroup;
+type MenuItemOrDivider = MenuItem | MenuDivider;
+
+type MenuItems = MenuItemOrDivider[];
 
 interface Translations {
   [key: string]: string;
@@ -34,15 +35,21 @@ export const backend_Url = 'http://localhost:3000';
   providers: [],
 })
 export class AppComponent {
-  menuItems: MenuItems[] = [];
+  private userId = localStorage.getItem('userId');
+
+  mainMenuItems: MenuItemOrDivider[] = [];
+  profileMenuItems: MenuItemOrDivider[] = [];
+
   isLoggedIn: boolean = true;
   pageTitle: string = 'RetroFleet';
 
+  profileImage: any[] = [];
+
   constructor(
     private menuController: MenuController,
-    private modalController: ModalController,
     private authService: AuthService,
     private appSettings: AppSettingsService,
+    private imageService: ImageService,
     private translate: TranslateService,
     private router: Router
   ) {
@@ -51,11 +58,15 @@ export class AppComponent {
     this.translate.use(settings.language);
   }
 
-  ngOnInit(): void {
+  //TODO: Anomalia po zalogowaniu następnego użytkownika
+  async ngOnInit() {
     this.authService.isLoggedIn().subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
-      this.updateMenuItems();
+      this.updateMainMenuItems();
+      this.updateProfileMenuItems();
     });
+
+    await this.downloadPhotos(this.userId!);
 
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -64,19 +75,13 @@ export class AppComponent {
       });
 
     this.translate.onLangChange.subscribe(() => {
-      this.updateMenuItems();
+      this.updateMainMenuItems();
+      this.updateProfileMenuItems();
       this.updatePageTitle();
     });
 
-    this.updateMenuItems();
-  }
-
-  async openSettingsModal() {
-    const modal = await this.modalController.create({
-      component: SettingsComponent
-    });
-
-    return await modal.present();
+    this.updateMainMenuItems();
+    this.updateProfileMenuItems();
   }
 
   updatePageTitle() {
@@ -96,45 +101,60 @@ export class AppComponent {
       return;
     }
 
-    const menuItem = this.menuItems.find((item) =>
-      this.isMenuGroup(item)
-        ? item.items.some((subItem) => subItem.path === `/${activeRoute}`)
-        : item.path === `/${activeRoute}`
-    );
+    const menuItem = this.mainMenuItems.find((item): item is MenuItem => {
+      return (item as MenuItem).path === `/${activeRoute}`;
+    });
 
     if (menuItem) {
-      if (this.isMenuGroup(menuItem)) {
-        const subItem = menuItem.items.find(
-          (subItem) => subItem.path === `/${activeRoute}`
-        );
-        this.pageTitle = subItem?.title || 'RetroFleet';
-      } else {
-        this.pageTitle = menuItem.title || 'RetroFleet';
-      }
+      this.pageTitle = menuItem.title || 'RetroFleet';
     } else {
       this.pageTitle = 'RetroFleet';
     }
   }
 
-  goToPage(path: string, action?: () => void) {
+  isDivider(item: MenuItemOrDivider): item is MenuDivider {
+    return (item as MenuDivider).isDivider === true;
+  }
+
+  openMainMenu() {
+    this.menuController.open('main-menu');
+  }
+
+  openProfileMenu() {
+    this.menuController.open('profile-menu');
+  }
+
+  goToProfile() {
+    this.router.navigate(['/profile']);
+    this.menuController.close('profile-menu');
+  }
+
+  goToPage(path: string, action?: () => void, closeMenuId?: string) {
     this.router.navigateByUrl(path);
-    this.menuController.toggle();
+    if (closeMenuId) {
+      this.menuController.close(closeMenuId);
+    }
 
     if (action) {
       action();
     }
   }
 
-  isMenuGroup(item: MenuItems | undefined): item is MenuGroup {
-    return (item as MenuGroup).items !== undefined;
+  //Funkcja asynchroniczna pobierająca wszystkie zdjęcia pojazdów użytkownika
+  async downloadPhotos(userId: string) {
+    try {
+      this.profileImage = await this.imageService.downloadProfileImage(userId);
+    } catch (error) {
+      console.error('Błąd podczas pobierania zdjęcia:', error);
+    }
   }
 
-  updateMenuItems() {
+  updateMainMenuItems() {
     if (!this.isLoggedIn) {
       this.translate
         .get(['LOGIN.TITLE', 'REGISTER.TITLE'])
         .subscribe((translations: Translations) => {
-          this.menuItems = [
+          this.mainMenuItems = [
             {
               title: translations['LOGIN.TITLE'],
               icon: 'log-in-outline',
@@ -144,6 +164,12 @@ export class AppComponent {
               title: translations['REGISTER.TITLE'],
               icon: 'person-add-outline',
               path: '/register',
+            },
+            { isDivider: true },
+            {
+              title: 'Wyświetlanie',
+              icon: 'settings-outline',
+              path: '/settings',
             },
           ];
         });
@@ -160,65 +186,79 @@ export class AppComponent {
           'MENU.FUELING_SUMMARY_TITLE',
           'MENU.LOGOUT_TITLE',
           'MENU.REPORTS_TITLE',
-          'MENU.SETTINGS_TITLE'
+          'MENU.SETTINGS_TITLE',
         ])
         .subscribe((translations) => {
-          this.menuItems = [
+          this.mainMenuItems = [
             {
-              groupTitle: translations['MENU.MANAGEMENT_TITLE'],
-              items: [
-                {
-                  title: translations['MENU.MYFLEET_TITLE'],
-                  icon: 'car-outline',
-                  path: '/myfleet',
-                },
-                {
-                  title: translations['MENU.CALENDAR_TITLE'],
-                  icon: 'calendar-outline',
-                  path: '/calendar',
-                },
-                {
-                  title: translations['MENU.LOGBOOK_TITLE'],
-                  icon: 'document-text-outline',
-                  path: '/driving-log',
-                },
-                {
-                  title: translations['MENU.SERVICES_TITLE'],
-                  icon: 'construct-outline',
-                  path: '/add-service',
-                },
-                {
-                  title: translations['MENU.FUELING_TITLE'],
-                  icon: 'speedometer-outline',
-                  path: '/add-fueling',
-                },
-              ],
+              title: translations['MENU.MYFLEET_TITLE'],
+              icon: 'car-outline',
+              path: '/myfleet',
             },
             {
-              groupTitle: translations['MENU.REPORTS_TITLE'],
-              items: [
-                {
-                  title: translations['MENU.SERVICE_SUMMARY_TITLE'],
-                  icon: 'clipboard-outline',
-                  path: '/service-summary',
-                },
-                {
-                  title: translations['MENU.FUELING_SUMMARY_TITLE'],
-                  icon: 'stats-chart-outline',
-                  path: '/fueling-summary',
-                },
-              ],
+              title: translations['MENU.CALENDAR_TITLE'],
+              icon: 'calendar-outline',
+              path: '/calendar',
             },
             {
-              groupTitle: translations['MENU.SETTINGS_TITLE'],
-              items: [
-                {
-                  title: translations['MENU.LOGOUT_TITLE'],
-                  icon: 'log-out-outline',
-                  path: '/login',
-                  action: () => this.logout(),
-                },
-              ],
+              title: translations['MENU.LOGBOOK_TITLE'],
+              icon: 'document-text-outline',
+              path: '/driving-log',
+            },
+            {
+              title: translations['MENU.SERVICES_TITLE'],
+              icon: 'construct-outline',
+              path: '/add-service',
+            },
+            {
+              title: translations['MENU.FUELING_TITLE'],
+              icon: 'speedometer-outline',
+              path: '/add-fueling',
+            },
+            { isDivider: true },
+            {
+              title: translations['MENU.SERVICE_SUMMARY_TITLE'],
+              icon: 'clipboard-outline',
+              path: '/service-summary',
+            },
+            {
+              title: translations['MENU.FUELING_SUMMARY_TITLE'],
+              icon: 'stats-chart-outline',
+              path: '/fueling-summary',
+            },
+          ];
+        });
+    }
+  }
+
+  updateProfileMenuItems() {
+    if (this.isLoggedIn) {
+      this.translate
+        .get([
+          'MENU.MANAGEMENT_TITLE',
+          'MENU.MYFLEET_TITLE',
+          'MENU.CALENDAR_TITLE',
+          'MENU.LOGBOOK_TITLE',
+          'MENU.SERVICES_TITLE',
+          'MENU.FUELING_TITLE',
+          'MENU.SERVICE_SUMMARY_TITLE',
+          'MENU.FUELING_SUMMARY_TITLE',
+          'MENU.LOGOUT_TITLE',
+          'MENU.REPORTS_TITLE',
+          'MENU.SETTINGS_TITLE',
+        ])
+        .subscribe((translations) => {
+          this.profileMenuItems = [
+            {
+              title: 'Wyświetlanie',
+              icon: 'settings-outline',
+              path: '/settings',
+            },
+            {
+              title: translations['MENU.LOGOUT_TITLE'],
+              icon: 'log-out-outline',
+              path: '/login',
+              action: () => this.logout(),
             },
           ];
         });
@@ -230,6 +270,7 @@ export class AppComponent {
   }
 
   logout() {
+    this.menuController.toggle('profile-menu');
     this.authService.logout();
   }
 }

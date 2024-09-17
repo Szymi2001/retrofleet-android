@@ -1,16 +1,19 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+  AlertController,
+  IonItemSliding,
+  LoadingController,
   ModalController,
-  PopoverController,
 } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
-import { ImageUpdateService } from 'src/services/imageUpdate.service';
-import { CarService } from 'src/services/carService.service';
 import { AddVehicleModalComponent } from './add-vehicle-modal/add-vehicle-modal.component';
-import { CarPopoverComponent } from './car-popover/car-popover.component';
+import { EditInfoModalComponent } from './edit-info/edit-info-modal.component';
+import { ImagePickerComponent } from './image-picker-modal/image-picker-modal.component';
+import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from 'src/services/auth.service';
 
 export interface Vehicle {
   _id?: string;
@@ -35,46 +38,49 @@ export interface Vehicle {
   styleUrls: ['./car-info.page.scss'],
 })
 export class CarInfoPage implements OnInit {
-  @ViewChild('popover') popover: any;
+  @ViewChild('slidingItem', { static: false }) slidingItem!: IonItemSliding;
 
   private subscription!: Subscription;
-  private userId = localStorage.getItem('userId');
+  private userId!: string | null;
 
   //ImagePicker
   croppedImages: any[] = [];
 
   myFleet: Vehicle[] = [];
-  selectedCar: any = [];
 
   constructor(
     private modalController: ModalController,
-    private popoverController: PopoverController,
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+    private authService: AuthService,
     private fleetService: FleetService,
     private imageService: ImageService,
-    private imageUpdateService: ImageUpdateService,
-    private carService: CarService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private translate: TranslateService
   ) {}
-
+//TODO: Dodać komunikat w sytuacji gdy użytkownik nie posiada pojazdów
+//TODO: Dodanie nowego pojazdu, walidacja zdjęcia
   async ngOnInit() {
-    this.fetchFleetData();
-
-    this.imageUpdateService.photoUpdate$.subscribe(() => {
-      this.downloadPhotos(this.userId!);
-    });
-
-    this.carService.carToRemove$.subscribe((carId) => {
-      if (carId) {
-        this.handleRemove(carId);
-        this.carService.clearCarToRemove();
+    this.authService.isLoggedIn().subscribe(async isLoggedIn => {
+      if (isLoggedIn) {
+        this.userId = localStorage.getItem('userId');
+        await this.fetchFleetData();
+      } else {
+        this.clearFleetData();
       }
     });
+  
+    await this.presentLoading();
+    await this.downloadPhotos(this.userId!);
+    this.loadingController.dismiss();
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Ładowanie modułu...',
+    });
+    await loading.present();
+    return loading;
   }
 
   async openAddVehicleModal() {
@@ -91,15 +97,68 @@ export class CarInfoPage implements OnInit {
     return await modal.present();
   }
 
-  async presentPopover(event: Event, carObject: any) {
-    const popover = await this.popoverController.create({
-      component: CarPopoverComponent,
-      event: event,
-      translucent: true,
-      componentProps: { carObject: carObject },
+  async openImagePicker(selectedCarData: any) {
+    const modal = await this.modalController.create({
+      component: ImagePickerComponent,
+      componentProps: {
+        carId: selectedCarData._id,
+      },
     });
+    await this.slidingItem.closeOpened();
+    return await modal.present();
+  }
 
-    return await popover.present();
+  async openEditInfo(selectedCarData: any) {
+    const modal = await this.modalController.create({
+      component: EditInfoModalComponent,
+      componentProps: {
+        carData: selectedCarData,
+      },
+    });
+    await this.slidingItem.closeOpened();
+    return await modal.present();
+  }
+
+  async presentDeleteConfirmation(selectedCarData: any) {
+    this.translate
+      .get([
+        'DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER',
+        'DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE',
+        'DELETECAR-ALERT.CANCEL',
+        'DELETECAR-ALERT.DELETE',
+      ])
+      .subscribe(async (translations) => {
+        const header =
+          translations['DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER'];
+        const message =
+          translations['DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE'];
+        const cancelText = translations['DELETECAR-ALERT.CANCEL'];
+        const deleteText = translations['DELETECAR-ALERT.DELETE'];
+
+        const alert = await this.alertController.create({
+          header: header,
+          message: message,
+          buttons: [
+            {
+              text: cancelText,
+              role: 'cancel',
+              handler: async () => {
+                await this.slidingItem.closeOpened();
+              },
+            },
+            {
+              text: deleteText,
+              role: 'confirm',
+              handler: async () => {
+                await this.deleteCar(selectedCarData._id);
+                this.alertController.dismiss();
+              },
+            },
+          ],
+        });
+
+        await alert.present();
+      });
   }
 
   //Pobieranie pojazdów z serwera
@@ -116,6 +175,10 @@ export class CarInfoPage implements OnInit {
     } catch (error) {
       console.error('Błąd podczas pobierania pojazdów:', error);
     }
+  }
+
+  clearFleetData() {
+    this.myFleet = [];
   }
 
   async addVehicle(vehicleData: any): Promise<void> {
@@ -160,71 +223,38 @@ export class CarInfoPage implements OnInit {
     return this.datePipe.transform(date, 'dd/MM/yyyy');
   }
 
-  //Dane do progressbar
-  getCarStatus(index: number): number {
-    const isHeritageListed = this.myFleet[index].is_heritage_listed;
-    const technicalInspectionDate =
-      this.myFleet[index].technical_inspection_date;
-    const registrationNumber = this.myFleet[index].registration_number;
-    const insuranceExpiryDate = this.myFleet[index].insurance_expiry_date;
-
-    function calculatePercentage(
-      isHeritageListed: boolean,
-      technicalInspectionDate: any,
-      insuranceExpiryDate: any,
-      registrationNumber: string
-    ): number {
-      let percentage = 0;
-
-      if (isHeritageListed) {
-        percentage += 25;
-      }
-
-      if (technicalInspectionDate !== null) {
-        percentage += 25;
-      }
-
-      if (insuranceExpiryDate !== null) {
-        percentage += 25;
-      }
-
-      if (registrationNumber !== null && registrationNumber !== '') {
-        percentage += 25;
-      }
-
-      return percentage;
-    }
-
-    const calculatedPercentage = calculatePercentage(
-      isHeritageListed,
-      technicalInspectionDate,
-      insuranceExpiryDate,
-      registrationNumber
-    );
-
-    return calculatedPercentage;
-  }
-
   //Funkcja asynchroniczna pobierająca wszystkie zdjęcia pojazdów użytkownika
   async downloadPhotos(userId: string) {
     try {
-      this.croppedImages = await this.imageService.downloadPhotos(userId);
+      this.croppedImages = await this.imageService.downloadCarPhotos(userId);
     } catch (error) {
       console.error('Błąd podczas pobierania zdjęcia:', error);
     }
   }
 
-  handleRemove(carId: string) {
-    // Znajdź indeks pojazdu w tablicy myFleet
-    const carIndex = this.myFleet.findIndex((car) => car._id === carId);
-    if (carIndex !== -1) {
-      // Usuwanie pojazdu z tablicy myFleet
-      this.myFleet.splice(carIndex, 1);
+  async deleteCar(carId: string) {
+    try {
+      const carIndex = this.myFleet.findIndex((car) => car._id === carId);
+      if (carIndex !== -1) {
+        // Usuwanie pojazdu z tablicy myFleet
+        this.myFleet.splice(carIndex, 1);
 
-      // (Opcjonalnie) Znajdź i usuń zdjęcie powiązane z tym pojazdem
-      this.croppedImages = this.croppedImages.filter(
-        (image) => image.carId !== carId
-      );
+        // Usunięcie pojazdu z bazy danych
+        await this.fleetService.deleteVehicle(carId);
+
+        // (Opcjonalnie) Znajdź i usuń zdjęcie powiązane z tym pojazdem
+        this.croppedImages = this.croppedImages.filter(
+          (image) => image.carId !== carId
+        );
+
+        // Usunięcie zdjęć z bazy danych
+        await this.imageService.deletePhoto(this.userId!, carId);
+
+        //Zamknięcie ion-item-sliding
+        await this.slidingItem.closeOpened();
+      }
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
     }
   }
 }

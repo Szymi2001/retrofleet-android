@@ -1,4 +1,4 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 registerLocaleData(localePL, 'pl');
@@ -21,6 +21,6 @@ import { NgCalendarModule } from 'ionic8-calendar';
     NgCalendarModule
   ],
   declarations: [CalendarPage],
-  providers: [{ provide: LOCALE_ID, useValue: 'pl'}]
+  providers: []
 })
 export class CalendarPageModule {}

@@ -38,10 +38,24 @@
 //Biblioteka swiper do obsługi przewijania kalendarza
 @import "swiper/css";
 
-ion-router-outlet ion-content {
-    --padding-top: 3.5rem;
-}
-
 body {
     font-size: var(--ion-font-size, var(--font-size-medium));
+}
+
+.error-message {
+    display: flex;
+    align-items: flex-start;
+}
+
+.error-message ion-icon {
+    align-self: flex-start;
+    width: 21px;
+    height: 21px;
+    min-width: 21px;
+    min-height: 21px;
+    margin-right: 5px;
+}
+
+.error-message span {
+    text-align: start;
 }

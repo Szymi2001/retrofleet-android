@@ -3,14 +3,35 @@
     "TITLE": "Login in",
     "LOGIN_PLACEHOLDER": "Username",
     "PASSWORD_PLACEHOLDER": "Password",
-    "BUTTON_LABEL": "Login in"
+    "BUTTON_LABEL": "Login in",
+    "ERRORS": {
+      "USERNAME_REQUIRED": "Username is required.",
+      "USERNAME_MINLENGTH": "Username must be at least 5 characters long.",
+      "USERNAME_MAXLENGTH": "Username cannot be more than 25 characters long.",
+      "PASSWORD_REQUIRED": "Password is required.",
+      "PASSWORD_MINLENGTH": "Password must be at least 8 characters long."
+    }
   },
   "REGISTER": {
     "TITLE": "Create account",
     "LOGIN_PLACEHOLDER": "Username",
     "PASSWORD_PLACEHOLDER": "Password",
     "REPEAT_PASSWORD_PLACEHOLDER": "Repeat password",
-    "BUTTON_LABEL": "Create account"
+    "BUTTON_LABEL": "Create account",
+    "ERRORS": {
+      "USERNAME_REQUIRED": "Username is required.",
+      "USERNAME_MINLENGTH": "Username must be at least 5 characters long.",
+      "USERNAME_MAXLENGTH": "Username cannot be more than 25 characters long.",
+      "USERNAME_PATTERN": "Username must contain only letters and numbers.",
+      "PASSWORD_REQUIRED": "Password is required.",
+      "PASSWORD_MINLENGTH": "Password must be at least 8 characters long.",
+      "PASSWORD_MAXLENGTH": "Password cannot be more than 20 characters long.",
+      "PASSWORD_PATTERN": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      "REPEAT_PASSWORD_REQUIRED": "Please repeat your password.",
+      "EMAIL_REQUIRED": "Email is required.",
+      "EMAIL_INVALID": "Please enter a valid email address.",
+      "PASSWORD_MISMATCH": "Passwords must match."
+    }
   },
   "SETTINGS": {
     "TITLE": "Settings",
@@ -56,12 +77,47 @@
     "SETTINGS_TITLE": "Settings"
   },
   "MYFLEET": {
-    "CAR_LABEL": "Vehicle",
+    "REGISTRATION_NUMBER_LABEL": "Registration Number",
     "PRODUCTION_YEAR_LABEL": "Production year",
     "MILEAGE_LABEL": "Mileage",
+    "FUEL_TYPE_LABEL":"Fuel Type",
+    "BODY_TYPE_LABEL":"Body Type",
     "MORE_INFO_LABEL": "More information",
     "ADD_PICTURE_LABEL": "Add picture",
-    "DELETE_CAR_LABEL": "Delete vehicle"
+    "DELETE_CAR_LABEL": "Delete vehicle",
+    "MODAL": {
+      "TITLE": "Add vehicle",
+      "VIN": "VIN",
+      "REGISTRATION_NUMBER": "Registration number",
+      "MILEAGE": "Mileage (km)",
+      "BRAND": "Brand",
+      "MODEL": "Model",
+      "PRODUCTION_YEAR": "Production year",
+      "COLOR": "Color",
+      "BODY_TYPE": "Body type",
+      "FUEL_TYPE": "Fuel type",
+      "TECHNICAL_INSPECTION_DATE": "Technical inspection date",
+      "INSURANCE_EXPIRY_DATE": "Insurance expiry date",
+      "IS_HERITAGE_LISTED": "Heritage listed",
+      "SUBMIT_BUTTON": "ADD VEHICLE"
+    },
+    "ERRORS": {
+      "VIN_REQUIRED": "VIN is required.",
+      "VIN_EXACT_LENGTH": "VIN must be exactly 17 characters long",
+      "VIN_INVALID": "VIN must not include I, O, Q.",
+      "REGISTRATION_NUMBER_REQUIRED": "Registration number is required.",
+      "REGISTRATION_NUMBER_INVALID": "Numer rejestracyjny jest nieprawidłowy",
+      "MILEAGE_REQUIRED": "Mileage is required.",
+      "BRAND_REQUIRED": "Vehicle brand is required.",
+      "MODEL_REQUIRED": "Vehicle model is required.",
+      "YEAR_REQUIRED": "Production year is required.",
+      "COLOR_REQUIRED": "Vehicle color is required.",
+      "BODY_TYPE_REQUIRED": "Body type is required.",
+      "FUEL_TYPE_REQUIRED": "Fuel type is required.",
+      "TECHNICAL_INSPECTION_DATE_REQUIRED": "Technical inspection date is required.",
+      "INSURANCE_EXPIRY_DATE_REQUIRED": "Insurance expiry date is required.",
+      "IS_HERITAGE_LISTED_REQUIRED": "Heritage listing is required."
+    }
   },
   "DELETECAR-ALERT": {
     "DELETE_CONFIRMATION_HEADER": "Confirmation of Deletion",

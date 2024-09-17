@@ -31,8 +31,10 @@
     "@ionic/angular": "^8.0.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "angular-calendar": "^0.31.1",
     "axios": "^1.7.3",
     "chart.js": "^4.4.3",
+    "date-fns": "^3.6.0",
     "ionic8-calendar": "^1.0.0",
     "ionicons": "^7.0.0",
     "ng2-charts": "^6.0.1",
@@ -71,6 +73,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.4.0"
+    "typescript": "^5.2.2"
   }
 }

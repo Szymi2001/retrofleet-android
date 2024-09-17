@@ -38,6 +38,8 @@ interface Route {
   templateUrl: './driving-log.page.html',
   styleUrls: ['./driving-log.page.scss'],
 })
+
+//TODO: Usuwanie tras dla usuniętego pojazdu
 export class DrivingLogPage implements OnInit {
   private userId = localStorage.getItem('userId');
 

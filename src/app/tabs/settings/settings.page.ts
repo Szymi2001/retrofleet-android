@@ -5,10 +5,10 @@ import { AuthService } from 'src/services/auth.service';
 
 @Component({
   selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
+  templateUrl: './settings.page.html',
+  styleUrls: ['./settings.page.scss'],
 })
-export class SettingsComponent implements OnInit {
+export class SettingsPage implements OnInit {
   isLoggedIn: boolean = true;
 
   paletteToggle = false;
@@ -28,12 +28,7 @@ export class SettingsComponent implements OnInit {
     const settings = this.appSettings.loadSettings();
     this.selectedLanguage = settings.language;
 
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    this.initializeDarkPalette(prefersDark.matches);
-
-    prefersDark.addEventListener('change', (mediaQuery) =>
-      this.initializeDarkPalette(mediaQuery.matches)
-    );
+    this.initializeDarkPalette(settings.isDark);
   }
 
   initializeDarkPalette(isDark: boolean) {

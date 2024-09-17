@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { LoadingController, ModalController } from '@ionic/angular';
@@ -7,21 +7,21 @@ import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { ImageUpdateService } from 'src/services/imageUpdate.service';
 
 @Component({
-  selector: 'app-image-picker',
-  templateUrl: './image-picker-modal.component.html',
-  styleUrls: ['./image-picker-modal.component.scss'],
+  selector: 'app-profile-picker-modal',
+  templateUrl: './profile-picker-modal.component.html',
+  styleUrls: ['./profile-picker-modal.component.scss'],
 })
-export class ImagePickerComponent {
+export class ProfilePickerModalComponent {
   private userId = localStorage.getItem('userId');
 
   @ViewChild('cropper') cropper!: ImageCropperComponent;
 
-  @Input() carId: any;
   croppedImage: any = '';
   croppedBlob: any = '';
   myImage: any = null;
 
-  constructor(private modalController: ModalController,
+  constructor(
+    private modalController: ModalController,
     private imageService: ImageService,
     private imageUpdateService: ImageUpdateService,
     private sanitizer: DomSanitizer,
@@ -49,19 +49,23 @@ export class ImagePickerComponent {
   imageLoaded() {
     this.loadingCtrl.dismiss();
   }
-  
+
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl || event.base64 || '');
+    this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(
+      event.objectUrl || event.base64 || ''
+    );
     this.croppedBlob = event.blob;
   }
 
   async uploadCropperImage() {
-
     const formData = new FormData();
     formData.append('image', this.croppedBlob, `${this.userId}.png`);
 
     try {
-      await this.imageService.uploadCarImage(this.userId!, this.carId, formData);
+      await this.imageService.uploadProfileImage(
+        this.userId!,
+        formData
+      );
       this.imageUpdateService.notifyPhotoUpdate();
       this.dismiss();
     } catch (error: any) {
@@ -72,5 +76,4 @@ export class ImagePickerComponent {
   dismiss() {
     this.modalController.dismiss();
   }
-
 }

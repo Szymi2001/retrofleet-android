@@ -3,14 +3,35 @@
     "TITLE": "Zaloguj się",
     "LOGIN_PLACEHOLDER": "Nazwa użytkownika",
     "PASSWORD_PLACEHOLDER": "Hasło",
-    "BUTTON_LABEL": "Zaloguj się"
+    "BUTTON_LABEL": "Zaloguj się",
+    "ERRORS": {
+      "USERNAME_REQUIRED": "Nazwa użytkownika jest wymagana.",
+      "USERNAME_MINLENGTH": "Nazwa użytkownika musi mieć co najmniej 5 znaków.",
+      "USERNAME_MAXLENGTH": "Nazwa użytkownika nie może mieć więcej niż 25 znaków.",
+      "PASSWORD_REQUIRED": "Hasło jest wymagane.",
+      "PASSWORD_MINLENGTH": "Hasło musi mieć co najmniej 8 znaków."
+    }
   },
   "REGISTER": {
     "TITLE": "Załóż konto",
     "LOGIN_PLACEHOLDER": "Nazwa użytkownika",
     "PASSWORD_PLACEHOLDER": "Hasło",
     "REPEAT_PASSWORD_PLACEHOLDER": "Powtórz hasło",
-    "BUTTON_LABEL": "Stwórz konto"
+    "BUTTON_LABEL": "Stwórz konto",
+    "ERRORS": {
+      "USERNAME_REQUIRED": "Nazwa użytkownika jest wymagana.",
+      "USERNAME_MINLENGTH": "Nazwa użytkownika musi mieć co najmniej 5 znaków.",
+      "USERNAME_MAXLENGTH": "Nazwa użytkownika nie może mieć więcej niż 25 znaków.",
+      "USERNAME_PATTERN": "Nazwa użytkownika może zawierać tylko litery i cyfry.",
+      "PASSWORD_REQUIRED": "Hasło jest wymagane.",
+      "PASSWORD_MINLENGTH": "Hasło musi mieć co najmniej 8 znaków.",
+      "PASSWORD_MAXLENGTH": "Hasło nie może mieć więcej niż 20 znaków.",
+      "PASSWORD_PATTERN": "Hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę, jedną cyfrę i jeden znak specjalny.",
+      "REPEAT_PASSWORD_REQUIRED": "Proszę powtórzyć hasło.",
+      "EMAIL_REQUIRED": "Email jest wymagany.",
+      "EMAIL_INVALID": "Proszę wpisać poprawny adres email.",
+      "PASSWORD_MISMATCH": "Hasła muszą się zgadzać."
+    }
   },
   "SETTINGS": {
     "TITLE": "Ustawienia",
@@ -57,12 +78,47 @@
     "SETTINGS_TITLE": "Ustawienia"
   },
   "MYFLEET": {
-    "CAR_LABEL": "Pojazd",
+    "REGISTRATION_NUMBER_LABEL": "Numery rejestracyjne",
     "PRODUCTION_YEAR_LABEL": "Rok produkcji",
     "MILEAGE_LABEL": "Przebieg",
+    "FUEL_TYPE_LABEL": "Typ paliwa",
+    "BODY_TYPE_LABEL": "Typ nadwozia",
     "MORE_INFO_LABEL": "Więcej informacji",
     "ADD_PICTURE_LABEL": "Dodaj zdjęcie",
-    "DELETE_CAR_LABEL": "Usuń pojazd"
+    "DELETE_CAR_LABEL": "Usuń pojazd",
+    "MODAL": {
+      "LABEL":"Dodaj pojazd",
+      "VIN": "VIN",
+      "REGISTRATION_NUMBER": "Numer rejestracyjny",
+      "MILEAGE": "Przebieg (km)",
+      "BRAND": "Marka",
+      "MODEL": "Model",
+      "PRODUCTION_YEAR": "Rok produkcji",
+      "COLOR": "Kolor",
+      "BODY_TYPE": "Rodzaj nadwozia",
+      "FUEL_TYPE": "Rodzaj paliwa",
+      "TECHNICAL_INSPECTION_DATE": "Data badania technicznego",
+      "INSURANCE_EXPIRY_DATE": "Data ważności ubezpieczenia",
+      "IS_HERITAGE_LISTED": "Wpis do rejestru zabytków",
+      "SUBMIT_BUTTON": "DODAJ POJAZD"
+    },
+    "ERRORS": {
+      "VIN_REQUIRED": "VIN jest wymagany.",
+      "VIN_EXACT_LENGTH": "Numer VIN musi mieć dokładnie 17 znaków",
+      "VIN_INVALID": "Numer VIN nie może zawierać liter I, O, Q",
+      "REGISTRATION_NUMBER_REQUIRED": "Numer rejestracyjny jest wymagany.",
+      "REGISTRATION_NUMBER_INVALID": "Registration number is invalid",
+      "MILEAGE_REQUIRED": "Przebieg jest wymagany.",
+      "BRAND_REQUIRED": "Marka pojazdu jest wymagana.",
+      "MODEL_REQUIRED": "Model pojazdu jest wymagany.",
+      "YEAR_REQUIRED": "Rok produkcji jest wymagany.",
+      "COLOR_REQUIRED": "Kolor pojazdu jest wymagany.",
+      "BODY_TYPE_REQUIRED": "Rodzaj nadwozia jest wymagany.",
+      "FUEL_TYPE_REQUIRED": "Rodzaj paliwa jest wymagany.",
+      "TECHNICAL_INSPECTION_DATE_REQUIRED": "Data badania technicznego jest wymagana.",
+      "INSURANCE_EXPIRY_DATE_REQUIRED": "Data ważności ubezpieczenia jest wymagana.",
+      "IS_HERITAGE_LISTED_REQUIRED": "Wpis do rejestru zabytków jest wymagany."
+    }
   },
   "DELETECAR-ALERT": {
     "DELETE_CONFIRMATION_HEADER": "Potwierdzenie usunięcia",

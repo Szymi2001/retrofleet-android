@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Dodaj pojazd</ion-title>
+    <ion-title>{{ 'MYFLEET.MODAL.TITLE' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon slot="icon-only" name="close-outline"></ion-icon>
@@ -13,37 +13,53 @@
     <!-- VIN -->
     <ion-item>
       <ion-input
-        label="VIN"
+        label="{{ 'MYFLEET.MODAL.VIN' | translate }}"
         labelPlacement="floating"
         formControlName="vin"
-        type="text"
-        maxlength="17"
       ></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.vin">
+      <div *ngIf="vehicleForm.controls['vin'].hasError(validation.type) && vehicleForm.controls['vin'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Zarejestrowany -->
     <ion-item>
       <ion-input
-        label="Numer rejestracyjny"
+        label="{{ 'MYFLEET.MODAL.REGISTRATION_NUMBER' | translate }}"
         labelPlacement="floating"
         formControlName="registrationNumber"
       ></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.registrationNumber">
+      <div *ngIf="vehicleForm.controls['registrationNumber'].hasError(validation.type) && vehicleForm.controls['registrationNumber'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Aktualny przebieg -->
     <ion-item>
       <ion-input
-        label="Wprowadź przebieg (km)"
+        label="{{ 'MYFLEET.MODAL.MILEAGE' | translate }}"
         labelPlacement="floating"
         type="number"
         formControlName="mileage"
       ></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.mileage">
+      <div *ngIf="vehicleForm.controls['mileage'].hasError(validation.type) && vehicleForm.controls['mileage'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Marka -->
     <ion-item>
       <ion-select
-        label="Marka pojazdu"
+        label="{{ 'MYFLEET.MODAL.BRAND' | translate }}"
         labelPlacement="floating"
         interface="popover"
         formControlName="brand"
@@ -54,11 +70,17 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.brand">
+      <div *ngIf="vehicleForm.controls['brand'].hasError(validation.type) && vehicleForm.controls['brand'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Model -->
     <ion-item>
       <ion-select
-        label="Model pojazdu"
+        label="{{ 'MYFLEET.MODAL.MODEL' | translate }}"
         labelPlacement="floating"
         interface="popover"
         formControlName="model"
@@ -68,11 +90,17 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.model">
+      <div *ngIf="vehicleForm.controls['model'].hasError(validation.type) && vehicleForm.controls['model'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Rok -->
     <ion-item>
       <ion-select
-        label="Rok produkcji"
+        label="{{ 'MYFLEET.MODAL.PRODUCTION_YEAR' | translate }}"
         labelPlacement="floating"
         interface="popover"
         formControlName="year"
@@ -85,11 +113,17 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.year">
+      <div *ngIf="vehicleForm.controls['year'].hasError(validation.type) && vehicleForm.controls['year'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Kolor -->
     <ion-item>
       <ion-select
-        label="Wybierz kolor"
+        label="{{ 'MYFLEET.MODAL.COLOR' | translate }}"
         labelPlacement="floating"
         formControlName="color"
         interface="popover"
@@ -99,11 +133,17 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.color">
+      <div *ngIf="vehicleForm.controls['color'].hasError(validation.type) && vehicleForm.controls['color'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Nadwozie -->
     <ion-item>
       <ion-select
-        label="Rodzaj nadwozia"
+        label="{{ 'MYFLEET.MODAL.BODY_TYPE' | translate }}"
         labelPlacement="floating"
         interface="popover"
         formControlName="bodyType"
@@ -116,11 +156,16 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
-
+    <ion-text color="danger" *ngFor="let validation of validationMessages.bodyType">
+      <div *ngIf="vehicleForm.controls['bodyType'].hasError(validation.type) && vehicleForm.controls['bodyType'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
     <!-- Rodzaj paliwa -->
     <ion-item>
       <ion-select
-        label="Rodzaj paliwa"
+        label="{{ 'MYFLEET.MODAL.FUEL_TYPE' | translate }}"
         labelPlacement="floating"
         interface="popover"
         formControlName="fuelType"
@@ -134,10 +179,16 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-text color="danger" *ngFor="let validation of validationMessages.fuelType">
+      <div *ngIf="vehicleForm.controls['fuelType'].hasError(validation.type) && vehicleForm.controls['fuelType'].touched" class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>{{ validation.message }}</span>
+      </div>
+    </ion-text>
 
     <!-- Badanie techniczne -->
     <ion-item>
-      <ion-label>Data badania technicznego</ion-label>
+      <ion-label>{{ 'MYFLEET.MODAL.TECHNICAL_INSPECTION_DATE' | translate }}</ion-label>
       <ion-datetime-button
         datetime="technicalInspectionDate"
       ></ion-datetime-button>
@@ -157,7 +208,7 @@
 
     <!-- Ubezpieczenie -->
     <ion-item>
-      <ion-label>Ubezpieczenie (data ważności)</ion-label>
+      <ion-label>{{ 'MYFLEET.MODAL.INSURANCE_EXPIRY_DATE' | translate }}</ion-label>
       <ion-datetime-button
         datetime="insuranceExpiryDate"
       ></ion-datetime-button>
@@ -176,7 +227,7 @@
 
     <!-- Wpis do rejestru zabytków -->
     <ion-item>
-      <ion-label>Wpis do rejestru zabytków</ion-label>
+      <ion-label>{{ 'MYFLEET.MODAL.IS_HERITAGE_LISTED' | translate }}</ion-label>
       <ion-checkbox formControlName="isHeritageListed"></ion-checkbox>
     </ion-item>
 
@@ -186,7 +237,7 @@
       type="submit"
       color="primary"
       class="ion-margin-top"
-      ><ion-icon name="add" slot="start"></ion-icon>Dodaj pojazd</ion-button
+      ><ion-icon name="add" slot="start"></ion-icon>{{ 'MYFLEET.MODAL.SUBMIT_BUTTON' | translate }}</ion-button
     >
   </form>
 </ion-content>

@@ -1,55 +1,54 @@
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ng-container *ngFor="let car of myFleet; let i = index">
-        <ion-col size="12">
-          <ion-card (click)="presentPopover($event, car)">
-            <ion-item>
-              <ion-col size="3">
-                <ion-thumbnail class="rounded-thumbnail">
-                  <img
-                    [src]="croppedImages[i] || '/assets/images/car-icon.png'"
-                    alt="Zdjęcie pojazdu"
-                  />
-                </ion-thumbnail>
-              </ion-col>
-              <ion-col size="9">
-                <ion-card-content>
-                  <p>
-                    {{ 'MYFLEET.CAR_LABEL' | translate }}: {{ car.brand }} {{
-                    car.model }}
-                  </p>
-                  <p>
-                    {{ 'MYFLEET.PRODUCTION_YEAR_LABEL' | translate }}: {{
-                    car.year }}
-                  </p>
-                  <p>
-                    {{ 'MYFLEET.MILEAGE_LABEL' | translate }}: {{ car.mileage }}
-                    km
-                  </p>
-                </ion-card-content>
-              </ion-col>
-            </ion-item>
-            <ion-row>
-              <ion-col size="12">
-                <ion-card-content>
-                  <p>
-                    Status:
-                    <ion-progress-bar
-                      [value]="getCarStatus(i)"
-                    ></ion-progress-bar>
-                    <span class="progress-text">
-                      {{ (getCarStatus(i)).toFixed(0) }}%
-                    </span>
-                  </p>
-                </ion-card-content>
-              </ion-col>
-            </ion-row>
-          </ion-card>
-        </ion-col>
-      </ng-container>
-    </ion-row>
-  </ion-grid>
+  <ng-container *ngFor="let car of myFleet; let i = index">
+    <ion-card>
+      <ion-card-content>
+        <ion-item-sliding #slidingItem>
+          <ion-item detail lines="none">
+            <ion-thumbnail slot="start">
+              <img
+                [src]="croppedImages[i] || '/assets/images/car-icon.png'"
+                alt="Zdjęcie pojazdu"
+              />
+            </ion-thumbnail>
+            <ion-label>
+              <ion-note class="registration-number">
+                {{ car.registration_number }}
+              </ion-note>
+              <ion-text>
+                <h2>{{ car.brand }} {{ car.model }}</h2>
+              </ion-text>
+              <ion-text>
+                <h3>
+                  {{ 'MYFLEET.PRODUCTION_YEAR_LABEL' | translate }}: {{ car.year }}
+                </h3>
+              </ion-text>
+              <ion-note color="medium" class="ion-text-wrap">
+                {{ 'MYFLEET.MILEAGE_LABEL' | translate }}: {{ car.mileage }}
+                <br />
+                {{ 'MYFLEET.FUEL_TYPE_LABEL' | translate }}: {{ car.fuel_type }}
+                <br />
+                {{ 'MYFLEET.BODY_TYPE_LABEL' | translate }}: {{ car.body_type }}
+              </ion-note>
+            </ion-label>
+          </ion-item>
+  
+          <ion-item-options side="end">
+            <ion-item-option color="secondary" (click)="openEditInfo(car)">
+              <ion-icon slot="icon-only" name="help-circle"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="success" (click)="openImagePicker(car)">
+              <ion-icon slot="icon-only" name="camera"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="presentDeleteConfirmation(car)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+  
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button size="small" (click)="openAddVehicleModal()">
       <ion-icon name="add"></ion-icon>

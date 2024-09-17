@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileService } from 'src/services/endpoints/profileEndpoint.service';
-import { IonModal } from '@ionic/angular';
+import { IonModal, LoadingController, ModalController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { ProfilePickerModalComponent } from './profile-picker-modal/profile-picker-modal.component';
+import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 
 export interface UserInfo {
   login: string;
@@ -23,6 +25,8 @@ export interface UserInfo {
 })
 export class ProfilePage implements OnInit {
   private userId = localStorage.getItem('userId');
+
+  profileImage: any[] = [];
 
   //Sekcja informacje
   changeUserInfo!: FormGroup;
@@ -56,13 +60,37 @@ export class ProfilePage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private imageService: ImageService,
+    private modalController: ModalController,
+    private loadingController: LoadingController
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.initializeForms();
     this.initializeQuestions();
     this.loadUserInfo();
+
+    await this.presentLoading();
+    await this.downloadPhotos(this.userId!);
+    this.loadingController.dismiss();
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Ładowanie modułu...',
+      spinner: 'circles'
+    });
+    await loading.present();
+    return loading;
+  }
+
+  async openImagePicker() {
+    const modal = await this.modalController.create({
+      component: ProfilePickerModalComponent,
+    });
+
+    return await modal.present();
   }
 
   initializeForms(): void {
@@ -198,5 +226,14 @@ export class ProfilePage implements OnInit {
 
   onDeleteAccountSubmit(): void {
 
+  }
+
+  //Funkcja asynchroniczna pobierająca wszystkie zdjęcia pojazdów użytkownika
+  async downloadPhotos(userId: string) {
+    try {
+      this.profileImage = await this.imageService.downloadProfileImage(userId);
+    } catch (error) {
+      console.error('Błąd podczas pobierania zdjęcia:', error);
+    }
   }
 }

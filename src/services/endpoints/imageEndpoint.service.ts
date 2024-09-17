@@ -8,10 +8,10 @@ import { backend_Url } from 'src/app/app.component';
 export class ImageService {
   private baseUrl = backend_Url;
 
-  async uploadImage(userId: any, carId: any, formData: FormData): Promise<any> {
+  async uploadCarImage(userId: any, carId: any, formData: FormData): Promise<any> {
     try {
       const response = await axios.post(
-        `${this.baseUrl}/image/upload`,
+        `${this.baseUrl}/carImage/upload`,
         formData,
         {
           headers: {
@@ -28,10 +28,41 @@ export class ImageService {
     }
   }
 
-  async downloadPhotos(userId: string): Promise<any[]> {
+  async uploadProfileImage(userId: any, formData: FormData): Promise<any> {
+    try {
+      const response = await axios.post(
+        `${this.baseUrl}/profileImage/upload`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'user-id': userId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+
+  async downloadCarPhotos(userId: string): Promise<any[]> {
     try {
       const response = await axios.get(
-        `${this.baseUrl}/image/download/${userId}`
+        `${this.baseUrl}/carImage/download/${userId}`
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+
+  async downloadProfileImage(userId: string): Promise<any[]> {
+    try {
+      const response = await axios.get(
+        `${this.baseUrl}/carImage/download/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -43,7 +74,7 @@ export class ImageService {
   async deletePhoto(userId: any, carId: any): Promise<any> {
     try {
         const response = await axios.delete(
-            `${this.baseUrl}/image/delete/${userId}/${carId}`
+            `${this.baseUrl}/carImage/delete/${userId}/${carId}`
         );
         return response.data;
     } catch (error) {

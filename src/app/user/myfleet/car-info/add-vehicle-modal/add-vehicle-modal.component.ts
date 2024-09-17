@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { vinValidator } from 'src/app/shared/validators/formValidators';
 import { fleetDataService } from 'src/services/fleetData.service';
 
 @Component({
@@ -9,8 +12,11 @@ import { fleetDataService } from 'src/services/fleetData.service';
   styleUrls: ['./add-vehicle-modal.component.scss'],
 })
 export class AddVehicleModalComponent implements OnInit {
+  private subscription!: Subscription;
+
   vehicleForm!: FormGroup;
   submitted: boolean = false;
+  validationMessages: any = [];
 
   carBrands: string[] = [];
   carModels: string[] = [];
@@ -25,6 +31,7 @@ export class AddVehicleModalComponent implements OnInit {
     private modalController: ModalController,
     private formBuilder: FormBuilder,
     private fleetDataService: fleetDataService,
+    private translate: TranslateService
   ) {
     this.setMaxDate();
   }
@@ -32,11 +39,86 @@ export class AddVehicleModalComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.populateDropdowns();
+    this.setValidationMessages();
+
+    this.subscription = this.translate.onLangChange.subscribe(() => {
+      this.setValidationMessages();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  setValidationMessages() {
+    this.translate.get('MYFLEET.ERRORS').subscribe((translations) => {
+      this.validationMessages = {
+        vin: [
+          { type: 'required', message: translations.VIN_REQUIRED },
+          { type: 'exactLength', message: translations.VIN_EXACT_LENGTH },
+          { type: 'pattern', message: translations.VIN_INVALID },
+        ],
+        registrationNumber: [
+          {
+            type: 'required',
+            message: translations.REGISTRATION_NUMBER_REQUIRED,
+          },
+          {
+            type: 'pattern',
+            message: translations.REGISTRATION_NUMBER_INVALID,
+          },
+        ],
+        mileage: [{ type: 'required', message: translations.MILEAGE_REQUIRED }],
+        brand: [{ type: 'required', message: translations.BRAND_REQUIRED }],
+        model: [{ type: 'required', message: translations.MODEL_REQUIRED }],
+        year: [{ type: 'required', message: translations.YEAR_REQUIRED }],
+        color: [{ type: 'required', message: translations.COLOR_REQUIRED }],
+        bodyType: [
+          { type: 'required', message: translations.BODY_TYPE_REQUIRED },
+        ],
+        fuelType: [
+          { type: 'required', message: translations.FUEL_TYPE_REQUIRED },
+        ],
+        technicalInspectionDate: [
+          {
+            type: 'required',
+            message: translations.TECHNICAL_INSPECTION_DATE_REQUIRED,
+          },
+        ],
+        insuranceExpiryDate: [
+          {
+            type: 'required',
+            message: translations.INSURANCE_EXPIRY_DATE_REQUIRED,
+          },
+        ],
+        isHeritageListed: [
+          {
+            type: 'required',
+            message: translations.IS_HERITAGE_LISTED_REQUIRED,
+          },
+        ],
+      };
+    });
   }
 
   initializeForm() {
     this.vehicleForm = this.formBuilder.group({
-      vin: ['', Validators.required],
+      vin: [
+        '',
+        [
+          Validators.required,
+          vinValidator(17),
+          Validators.pattern(/^(?!.*[IOQ]).*$/),
+        ],
+      ],
+      registrationNumber: [
+        '',
+        [
+          Validators.required
+        ],
+      ],
       mileage: ['', Validators.required],
       brand: [null, Validators.required],
       model: [{ value: null, disabled: true }, Validators.required],
@@ -45,9 +127,8 @@ export class AddVehicleModalComponent implements OnInit {
       year: ['', Validators.required],
       color: ['', Validators.required],
       isHeritageListed: [false, Validators.required],
-      technicalInspectionDate: [this.maxDate, Validators.required],
-      registrationNumber: [''],
-      insuranceExpiryDate: [this.maxDate, Validators.required],
+      technicalInspectionDate: [this.maxDate],
+      insuranceExpiryDate: [this.maxDate],
     });
 
     this.vehicleForm.get('brand')?.valueChanges.subscribe((value) => {
@@ -78,7 +159,9 @@ export class AddVehicleModalComponent implements OnInit {
     this.carFuelTypes = this.fleetDataService
       .getFuelTypes()
       .map((type) => type.fuel_type);
-    this.carColors = this.fleetDataService.getColors().map((color) => color.color);
+    this.carColors = this.fleetDataService
+      .getColors()
+      .map((color) => color.color);
 
     const currentYear = new Date().getFullYear();
     const oldestYear = currentYear - 30 - 50;

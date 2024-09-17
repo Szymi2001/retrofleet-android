@@ -1,4 +1,9 @@
 <ion-content>
+  <ion-segment [(ngModel)]="calendar.mode">
+    <ion-segment-button value="month"> Month </ion-segment-button>
+    <ion-segment-button value="week"> Week </ion-segment-button>
+    <ion-segment-button value="day"> Day </ion-segment-button>
+  </ion-segment>
   <ion-row class="ion-align-items-center">
     <ion-col size="2">
       <ion-button fill="clear" (click)="calendarBack()">
@@ -14,27 +19,37 @@
       </ion-button>
     </ion-col>
   </ion-row>
+
   <calendar
+    [monthviewDisplayEventTemplate]="template"
     [eventSource]="eventSource"
     [dateFormatter]="calendar.dateFormatter"
     [calendarMode]="calendar.mode"
     [currentDate]="calendar.currentDate"
     (onTitleChanged)="viewTitle = $event"
+    (onTimeSelected)="onTimeSelected($event)"
+    (onEventSelected)="onEventSelected($event)"
     [locale]="calendar.locale"
     [startingDayWeek]="1"
     [startingDayMonth]="1"
+    [startHour]="8"
+    [endHour]="20"
+    [lockSwipes]="true"
     allDayLabel="Cały dzień"
     noEventsLabel="Brak wydarzeń"
     formatDayHeader="EEEEEE"
   >
   </calendar>
 
-  <div *ngIf="eventSource.length === 0" class="no-events-message">
-    <ion-text color="medium">
-      <h2>Brak wydarzeń</h2>
-      <p>Nie masz jeszcze żadnych wydarzeń. Dodaj nowe wydarzenie, aby je zobaczyć tutaj.</p>
-    </ion-text>
-  </div>
+  <ng-template #template let-view="view" let-row="row" let-col="col">
+    {{ view.dates[row*7+col].label }}
+    <div class="indicator-container">
+      <div
+        class="event-indicator"
+        *ngFor="let e of view.dates[row*7+col].events"
+      ></div>
+    </div>
+  </ng-template>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button size="small" id="inputmodal">
@@ -42,74 +57,64 @@
     </ion-fab-button>
   </ion-fab>
 
-  <ion-modal trigger="inputmodal" [initialBreakpoint]="0.5">
+  <ion-modal #modal trigger="inputmodal">
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Dodaj wydarzenie</ion-title>
+          <ion-buttons slot="start">
+            <ion-button (click)="modal.dismiss(); this.addEvent.reset();"
+              >Anuluj</ion-button
+            >
+          </ion-buttons>
+          <ion-title>Nowe wydarzenie</ion-title>
+          <ion-buttons slot="end">
+            <ion-button color="primary" strong (click)="submitForm()"
+              >Dodaj</ion-button
+            >
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content>
-        <form [formGroup]="addEvent" (ngSubmit)="onSubmit()" class="ion-padding">
+      <ion-content class="ion-padding">
+        <form [formGroup]="addEvent" (ngSubmit)="submitForm()">
           <ion-item>
-            <ion-textarea
-              placeholder="Tytuł wydarzenia"
+            <ion-input
+              type="text"
               formControlName="title"
-              autoGrow
-              maxlength="100"
-            ></ion-textarea>
+              placeholder="Tytuł"
+            />
           </ion-item>
-      
           <ion-item>
             <ion-label>Cały dzień</ion-label>
-            <ion-checkbox
-              formControlName="allDay"
-            ></ion-checkbox>
+            <ion-toggle formControlName="allDay" />
           </ion-item>
-      
-          <ion-item id="startTime" [ngClass]="{ 'disabled-item': addEvent.get('allDay')?.value }">
-            <ion-label>Od:</ion-label>
-            <ion-note slot="end">{{
-              addEvent.get("startTime")?.value | date : "dd/MM/yyyy HH:mm"
-            }}</ion-note>
+          <ion-item (click)="showStart = !showStart">
+            <ion-label>Od</ion-label>
+            <ion-text slot="end">{{ formattedStart }}</ion-text>
           </ion-item>
-          <ion-modal trigger="startTime" [cssClass]="'bottom-end'">
-            <ng-template>
-              <ion-datetime
-                id="date"
-                presentation="date-time"
-                size="cover"
-                showDefaultButtons="true"
-                cancelText="Anuluj"
-                doneText="Zatwierdź"
-                formControlName="startTime"
-              ></ion-datetime>
-            </ng-template>
-          </ion-modal>
+          <ion-datetime
+            #start
+            *ngIf="showStart"
+            formControlName="startTime"
+            [presentation]="addEvent.get('allDay')?.value ? 'date' : 'time-date'"
+            (ionChange)="startChanged(start.value)"
+          >
+            <span slot="time-label"> Godzina </span>
+          </ion-datetime>
 
-          <ion-item id="endTime" [ngClass]="{ 'disabled-item': addEvent.get('allDay')?.value }">
-            <ion-label>Do:</ion-label>
-            <ion-note slot="end">{{
-              addEvent.get("endTime")?.value | date : "dd/MM/yyyy HH:mm"
-            }}</ion-note>
+          <ion-item (click)="showEnd = !showEnd">
+            <ion-label>Do</ion-label>
+            <ion-text slot="end">{{ formattedEnd }}</ion-text>
           </ion-item>
-          <ion-modal trigger="endTime" [cssClass]="'bottom-end'">
-            <ng-template>
-              <ion-datetime
-                id="date"
-                presentation="date-time"
-                size="cover"
-                showDefaultButtons="true"
-                cancelText="Anuluj"
-                doneText="Zatwierdź"
-                formControlName="endTime"
-              ></ion-datetime>
-            </ng-template>
-          </ion-modal>
-      
-          <ion-button expand="full" type="submit">
-            Zapisz
-          </ion-button>
+          <ion-datetime
+            #end
+            *ngIf="showEnd"
+            [min]="todayDate"
+            formControlName="endTime"
+            [presentation]="addEvent.get('allDay')?.value ? 'date' : 'time-date'"
+            (ionChange)="endChanged(end.value)"
+          >
+            <span slot="time-label"> Godzina </span></ion-datetime
+          >
         </form>
       </ion-content>
     </ng-template>

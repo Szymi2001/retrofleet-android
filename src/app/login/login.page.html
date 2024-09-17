@@ -16,20 +16,30 @@
                 <ion-input
                   placeholder="{{ 'LOGIN.LOGIN_PLACEHOLDER' | translate }}"
                   type="text"
-                  formControlName="login"
-                  [class.invalid]="submitted && !loginForm.get('login')?.valid">
+                  formControlName="login">
                 </ion-input>
               </ion-item>
+              <ion-text color="danger" *ngFor="let validation of validationMessages.login">
+                <div *ngIf="loginForm.controls['login'].hasError(validation.type) && loginForm.controls['login'].touched" class="error-message">
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  <span>{{ validation.message }}</span>
+                </div>
+              </ion-text>
 
               <ion-item class="ion-margin-top">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
                 <ion-input
                   placeholder="{{ 'LOGIN.PASSWORD_PLACEHOLDER' | translate }}"
                   type="password"
-                  formControlName="password"
-                  [class.invalid]="submitted && !loginForm.get('password')?.valid">
+                  formControlName="password">
                 </ion-input>
               </ion-item>
+              <ion-text color="danger" *ngFor="let validation of validationMessages.password">
+                <div *ngIf="loginForm.controls['password'].hasError(validation.type) && loginForm.controls['password'].touched" class="error-message">
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  <span>{{ validation.message }}</span>
+                </div>
+              </ion-text>
 
               <ion-button 
                 expand="block" 
