@@ -5,18 +5,7 @@ import { IonModal, LoadingController, ModalController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ProfilePickerModalComponent } from './profile-picker-modal/profile-picker-modal.component';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
-
-export interface UserInfo {
-  login: string;
-  password: string;
-  email: string;
-  name: string;
-  surname: string;
-  first_question: string;
-  first_answer: string;
-  second_question: string;
-  second_answer: string;
-}
+import { UserInfo } from 'src/app/shared/interfaces/user.interface';
 
 @Component({
   selector: 'app-profile',

@@ -12,6 +12,8 @@ import { backend_Url } from '../app.component';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
+
+//TODO: Przypomnienie hasła za pomocą loginu
 export class LoginPage implements OnInit, OnDestroy {
   //adres backendu
   private baseUrl = backend_Url;

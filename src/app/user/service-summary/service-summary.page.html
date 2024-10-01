@@ -41,6 +41,11 @@
             <ion-card-title>Wydatki według kategorii</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <p>Liczba serwisów: {{ serviceData.length }}</p>
+            <p>
+              Najdroższy serwis: {{ mostExpensiveService?.price || 'Brak danych'
+              }} zł
+            </p>
             <canvas
               baseChart
               [data]="priceByTypeData"
@@ -65,7 +70,9 @@
                 </ion-button>
               </ion-col>
               <ion-col size="8">
-                <h2 class="ion-text-center ion-no-margin">{{ 'Rok ' + currentYear }}</h2>
+                <h2 class="ion-text-center ion-no-margin">
+                  {{ 'Rok ' + currentYear }}
+                </h2>
               </ion-col>
               <ion-col size="2">
                 <ion-button fill="clear" (click)="nextYear()">
@@ -74,19 +81,17 @@
               </ion-col>
               <ion-col size="12">
                 <canvas
-                baseChart
-                class="h-25rem"
-                [data]="priceByMonthData"
-                [options]="priceByMonthOptions"
-                [legend]="false"
-                [plugins]="[]"
-                [type]="'bar'"
-              >
-              </canvas>
+                  baseChart
+                  class="monthChart"
+                  [data]="priceByMonthData"
+                  [options]="priceByMonthOptions"
+                  [legend]="false"
+                  [plugins]="[]"
+                  [type]="'bar'"
+                >
+                </canvas>
               </ion-col>
-                
             </ion-row>
-            
           </ion-card-content>
         </ion-card>
       </ion-col>

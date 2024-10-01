@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
-import localePL from '@angular/common/locales/pl';
 registerLocaleData(localePL, 'pl');
+registerLocaleData(localeEN, 'en');
+import localeEN from '@angular/common/locales/en';
+import localePL from '@angular/common/locales/pl';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-
+import { IonCalendarModule } from '@heliomarpm/ion-calendar';
 import { CalendarPageRoutingModule } from './calendar-routing.module';
-
 import { CalendarPage } from './calendar.page';
-import { NgCalendarModule } from 'ionic8-calendar';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -17,10 +18,10 @@ import { NgCalendarModule } from 'ionic8-calendar';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+    IonCalendarModule,
+    TranslateModule,
     CalendarPageRoutingModule,
-    NgCalendarModule
   ],
   declarations: [CalendarPage],
-  providers: []
 })
 export class CalendarPageModule {}

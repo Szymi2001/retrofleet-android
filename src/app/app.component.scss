@@ -14,3 +14,17 @@ ion-item-divider {
     background: none;
     border-bottom: 0;
 }
+
+ion-menu ion-list.list-md {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.active-item {
+    border-left: 8px solid var(--ion-color-primary);
+}
+
+.divider {
+    margin-top: auto;
+}

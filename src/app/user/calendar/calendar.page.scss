@@ -1,40 +1,17 @@
-// .monthview-selected{
-//     font-weight: bold;
-//     background-color: var(--ion-color-primary) !important;
-//     color: var(--ion-text-color) !important;
-// }
-
-.monthview-current[_ngcontent-ng-c2432111789] {
-    color: var(--color) !important;
-    background-color: var(--ion-color-light-tint) !important;
+ion-calendar {
+    padding: 0 !important;
 }
 
-.monthview-selected[_ngcontent-ng-c2432111789] {
-    
+ion-button.forward {
+    margin-left: -42px !important;
 }
 
-.indicator-container {
-    padding-right: 0.4rem;
-    padding-left: 0.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
+.list-md.list-inset {
+    margin-inline-start: 10px;
+    margin-inline-end: 10px;
+    border-radius: 4px;
 }
 
-.event-indicator {
-    background: var(--ion-color-primary);
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-}
-
-:host ::ng-deep {
-    .monthview-container {
-        height: auto !important;
-    }
-
-    .event-detail-container {
-        display: none;
-    }
+button.days-btn ion-note {
+    bottom: 0px !important;
 }

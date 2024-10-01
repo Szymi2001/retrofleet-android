@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
 
 import { DrivingLogPageRoutingModule } from './driving-log-routing.module';
@@ -16,6 +15,6 @@ import { AddDrivingLogModal } from './add-driving-log-modal/add-driving-log-moda
     IonicModule,
     DrivingLogPageRoutingModule
   ],
-  declarations: [DrivingLogPage, AddDrivingLogModal]
+  declarations: [DrivingLogPage, AddDrivingLogModal],
 })
 export class DrivingLogPageModule {}

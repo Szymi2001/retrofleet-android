@@ -75,7 +75,7 @@
     "FUELING_SUMMARY_TITLE": "Podsumowanie tankowań",
     "LOGOUT_TITLE": "Wyloguj się",
     "REPORTS_TITLE": "Raporty",
-    "SETTINGS_TITLE": "Ustawienia"
+    "DISPLAY_TITLE":"Wygląd i wyświetlanie"
   },
   "MYFLEET": {
     "REGISTRATION_NUMBER_LABEL": "Numery rejestracyjne",
@@ -87,7 +87,7 @@
     "ADD_PICTURE_LABEL": "Dodaj zdjęcie",
     "DELETE_CAR_LABEL": "Usuń pojazd",
     "MODAL": {
-      "LABEL":"Dodaj pojazd",
+      "TITLE":"Dodaj pojazd",
       "VIN": "VIN",
       "REGISTRATION_NUMBER": "Numer rejestracyjny",
       "MILEAGE": "Przebieg (km)",
@@ -141,5 +141,14 @@
     "TECHNICAL_INSPECTION_DATE_LABEL": "Przegląd techniczny",
     "REGISTRATION_NUMBER_LABEL": "Numery rejestracyjne",
     "INSURANCE_EXPIRY_DATE_LABEL": "Ubezpieczenie"
+  },
+  "CALENDAR": {
+    "MONTH_LABEL": "Miesiąc",
+    "WEEK_LABEL": "Tydzień",
+    "DAY_LABEL": "Dzień",
+    "ERRORS": {
+      "TITLE_REQUIRED": "Tytuł jest wymagany",
+      "DATE_RANGE_INVALID": "Data końcowa nie może być wcześniejsza niż data początkowa"
+    }
   }
 }

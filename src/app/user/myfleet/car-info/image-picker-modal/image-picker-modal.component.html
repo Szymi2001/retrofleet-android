@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Dodaj obraz</ion-title>
+    <ion-title>Zdjęcie poglądowe</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon name="close-outline"></ion-icon>
@@ -10,6 +10,10 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-button class="ion-margin-bottom" (click)="selectImage()" expand="block" *ngIf="!myImage"
+    >Domyślne zdjęcie</ion-button
+  >
+
   <ion-button (click)="selectImage()" expand="block" *ngIf="!myImage"
     >Wybierz zdjęcie</ion-button
   >

@@ -56,15 +56,20 @@ const routes: Routes = [
     loadChildren: () => import('./user/add-fueling/add-fueling.module').then( m => m.AddFuelingPageModule)
   },
   {
-    path: 'service-summary',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('./user/service-summary/service-summary.module').then( m => m.ServiceSummaryPageModule)
+    path: 'services',
+    loadChildren: () => import('./user/services/services.module').then( m => m.ServicesPageModule),
   },
-  {
-    path: 'fueling-summary',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('./user/fueling-summary/fueling-summary.module').then( m => m.FuelingSummaryPageModule)
-  }
+
+  // {
+  //   path: 'service-summary',
+  //   canActivate: [AuthGuard],
+  //   loadChildren: () => import('./user/service-summary/service-summary.module').then( m => m.ServiceSummaryPageModule)
+  // },
+  // {
+  //   path: 'fueling-summary',
+  //   canActivate: [AuthGuard],
+  //   loadChildren: () => import('./user/fueling-summary/fueling-summary.module').then( m => m.FuelingSummaryPageModule)
+  // }
 
 ];
 

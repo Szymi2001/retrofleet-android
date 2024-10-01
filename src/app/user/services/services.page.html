@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-segment value="list" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="list">
+        <ion-label>Lista Serwisów</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="summary">
+        <ion-label>Podsumowanie</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-router-outlet></ion-router-outlet>
+</ion-content>

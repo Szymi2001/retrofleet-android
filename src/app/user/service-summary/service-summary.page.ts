@@ -40,6 +40,8 @@ export class ServiceSummaryPage implements OnInit {
   totalPriceByType: TotalPriceByType = {};
   totalPriceByMonth: TotalPriceByMonth = {};
   serviceDataMapped: any[] = [];
+  totalServices: number = 0;
+  mostExpensiveService: Service | null = null;
 
   error: string | null = null;
   selectedCar: any;
@@ -163,7 +165,10 @@ export class ServiceSummaryPage implements OnInit {
   async getServices(carId: any) {
     try {
       this.serviceData = await this.vehicleMaintenanceService.getService(carId);
+      this.calculateSummary();
+      this.findMostExpensiveService();
       this.updateServiceData();
+      console.log(this.serviceData);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
@@ -264,7 +269,7 @@ export class ServiceSummaryPage implements OnInit {
           backgroundColor: documentStyle.getPropertyValue(
             '--ion-color-primary'
           ),
-          data: totalPrice
+          data: totalPrice,
         },
       ],
     };
@@ -377,6 +382,21 @@ export class ServiceSummaryPage implements OnInit {
       }
       return color;
     });
+  }
+
+  calculateSummary(): void {
+    this.totalServices = this.serviceData.length;
+    console.log(this.totalServices);
+  }
+
+  findMostExpensiveService(): void {
+    if (this.serviceData.length > 0) {
+      this.mostExpensiveService = this.serviceData.reduce((prev, current) =>
+        current.price > prev.price ? current : prev
+      );
+    } else {
+      this.mostExpensiveService = null;
+    }
   }
 
   async getBillHistory(carId: any) {

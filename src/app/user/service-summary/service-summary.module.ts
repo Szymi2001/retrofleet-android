@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ServiceSummaryPageRoutingModule } from './service-summary-routing.module';
 
 import { ServiceSummaryPage } from './service-summary.page';
-import { BaseChartDirective } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import { BaseChartDirective } from 'ng2-charts';
     FormsModule,
     IonicModule,
     ServiceSummaryPageRoutingModule,
-    BaseChartDirective
+    NgChartsModule
   ],
   declarations: [ServiceSummaryPage]
 })

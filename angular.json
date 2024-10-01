@@ -33,8 +33,7 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss",
-              "node_modules/primeflex/primeflex.css"
+              "src/theme/variables.scss"
             ],
             "scripts": []
           },
@@ -76,15 +75,16 @@
         },
         "serve": {
           "options": {
-            "port": 4200
+            "port": 4200,
+            "browserTarget": "app:build"
           },
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "app:build:production"
+              "browserTarget": "app:build:production"
             },
             "development": {
-              "buildTarget": "app:build:development"
+              "browserTarget": "app:build:development"
             },
             "ci": {
               "progress": false

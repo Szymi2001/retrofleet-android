@@ -74,7 +74,7 @@
     "FUELING_SUMMARY_TITLE": "Fueling summary",
     "LOGOUT_TITLE": "Log out",
     "REPORTS_TITLE": "Reports",
-    "SETTINGS_TITLE": "Settings"
+    "DISPLAY_TITLE":"Appearance & Display"
   },
   "MYFLEET": {
     "REGISTRATION_NUMBER_LABEL": "Registration Number",
@@ -140,5 +140,14 @@
     "TECHNICAL_INSPECTION_DATE_LABEL": "Technical Inspection Date",
     "REGISTRATION_NUMBER_LABEL": "Registration Number",
     "INSURANCE_EXPIRY_DATE_LABEL": "Insurance Expiry Date"
+  },
+  "CALENDAR": {
+    "MONTH_LABEL": "Month",
+    "WEEK_LABEL": "Week",
+    "DAY_LABEL": "Day",
+    "ERRORS": {
+      "TITLE_REQUIRED": "Title is required.",
+      "DATE_RANGE_INVALID": "The end date cannot be earlier than the start date."
+    }
   }
 }

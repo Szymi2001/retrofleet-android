@@ -1,18 +1,34 @@
-import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import axios from 'axios';
-import { CalendarComponent, CalendarMode } from 'ionic8-calendar';
 import { backend_Url } from 'src/app/app.component';
-import { eachDayOfInterval, endOfDay, endOfMonth, format, isSameDay as isSameDayFns, parseISO, startOfDay, startOfMonth } from 'date-fns';
+import {
+  addYears,
+  eachDayOfInterval,
+  format,
+  isAfter,
+  isBefore,
+  isEqual,
+  parseISO,
+} from 'date-fns';
 import { ModalController } from '@ionic/angular';
-import { CalendarEvent } from 'calendar-utils';
+import { TranslateService } from '@ngx-translate/core';
+import {
+  CalendarComponent,
+  ICalendarComponentOptions,
+  IDayConfig,
+} from '@heliomarpm/ion-calendar';
+import { AppSettingsService } from 'src/services/appSettings.service';
+import { EventService } from 'src/services/endpoints/eventEndpoint.service';
+import { dateRangeValidator } from 'src/app/shared/validators/formValidators';
 
 interface Event {
   user_id: string | null;
   title: string;
-  allDay: boolean;
-  startTime: Date;
-  endTime: Date;
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
 }
 
 @Component({
@@ -21,117 +37,146 @@ interface Event {
   templateUrl: './calendar.page.html',
   styleUrls: ['./calendar.page.scss'],
 })
-
-//TODO: Zmiana języka
-export class CalendarPage {
+export class CalendarPage implements OnInit {
   //Adres backendu
   private baseUrl = backend_Url;
-  @ViewChild(CalendarComponent) myCalendar!: CalendarComponent;
 
-  submitted = false;
-  eventSource: Array<any> = [];
+  @ViewChild(CalendarComponent) calendarRef!: CalendarComponent;
+
   addEvent!: FormGroup;
-  todayDate = new Date().toISOString();
-  showStart = false;
-  showEnd = false;
-  formattedStart = '';
-  formattedEnd = '';
-  
-  viewTitle = '';
-  calendar = {
-    eventSource: this.eventSource,
-    mode: 'month' as CalendarMode,
-    currentDate: new Date(),
-    locale: 'pl',
-    dateFormatter: {
-    //   formatMonthViewDayHeader: function (date: Date) {
-    //     const weeks = ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So'];
-    //     return weeks[date.getDay()];
-    //   },
-    //   formatMonthViewTitle: function (date: Date) {
-    //     const months = [
-    //       'Styczeń',
-    //       'Luty',
-    //       'Marzec',
-    //       'Kwiecień',
-    //       'Maj',
-    //       'Czerwiec',
-    //       'Lipiec',
-    //       'Sierpień',
-    //       'Wrzesień',
-    //       'Październik',
-    //       'Listopad',
-    //       'Grudzień',
-    //     ];
-    //     return `${months[date.getMonth()]} ${date.getFullYear()}`;
-    //   },
-     },
+  validationMessages: any = [];
+  submitted = false;
+
+  events: Event[] = [];
+  selectedDate!: Date | Date[];
+  selectedDateEvents: any[] = [];
+  currentEvent: Event | null = null;
+  date!: string;
+  format = 'yyyy-MM-dd';
+  options: ICalendarComponentOptions = {
+    pickMode: 'single',
+    locale: { locale: 'pl', weekdays: 'short' },
+    showToggleButtons: true,
+    color: 'primary',
+    showAdjacentMonthDay: false,
+    showMonthPicker: true,
+    showYearPicker: true,
+    displayMode: 'month',
+    from: new Date(1900, 0, 1),
+    to: addYears(new Date(), 1),
   };
 
+  settings = this.appSettings.loadSettings();
+  todayDate = new Date().toISOString();
+
   constructor(
-    private formBuilder: FormBuilder, private modalController: ModalController
-  ) {}
+    private formBuilder: FormBuilder,
+    private eventService: EventService,
+    private modalController: ModalController,
+    private appSettings: AppSettingsService,
+    private translate: TranslateService
+  ) {
+    this.setLocale(this.settings.language);
+    this.setDayToday();
+  }
 
   ngOnInit(): void {
     this.getEvents();
+    this.setValidationMessages();
     this.initializeForm();
+
+    this.translate.onLangChange.subscribe(() => {
+      this.setLocale(this.translate.currentLang);
+    });
+  }
+
+  setValidationMessages() {
+    this.translate.get('CALENDAR.ERRORS').subscribe((translations) => {
+      this.validationMessages = {
+        title: [{ type: 'required', message: translations.TITLE_REQUIRED }],
+        endDate: [
+          {
+            type: 'dateRangeInvalid',
+            message: translations.DATE_RANGE_INVALID,
+          },
+        ],
+      };
+    });
   }
 
   initializeForm(): void {
-    this.addEvent = this.formBuilder.group({
-      title: ['', Validators.required],
-      allDay: [false],
-      startTime: [this.todayDate, [Validators.required]],
-      endTime: [this.todayDate, Validators.required],
-    });
+    this.addEvent = this.formBuilder.group(
+      {
+        title: ['', [Validators.required]],
+        startDate: [this.todayDate, [Validators.required]],
+        endDate: [this.todayDate, [Validators.required]],
+      },
+      {
+        validators: [dateRangeValidator()],
+      }
+    );
   }
 
-  setToday(): void {
-    this.myCalendar.currentDate = new Date();
+  setDayToday() {
+    this.date = new Date().toISOString().substring(0, 10);
   }
 
-  calendarBack(): void {
-    this.myCalendar.slidePrev();
-  }
+  onChange(event: any) {
+    this.date = event;
+    const now = new Date();
+    const formattedStartDate = this.formatDateTime(this.date, now);
 
-  calendarForward(): void {
-    this.myCalendar.slideNext();
-  }
-
-  onTimeSelected(event: { selectedTime: Date; events: any[]}) {
-    const baseTime = new Date(event.selectedTime);
-
-    const startTime = new Date(baseTime);
-    startTime.setHours(8,0,0,0);
-
-    const endTime = new Date(startTime);
-    endTime.setMinutes(startTime.getMinutes() + 30);
-
-    this.formattedStart = format(startTime, 'HH:mm, MMM d, yyyy');
-    this.formattedEnd = format(endTime, 'HH:mm, MMM d, yyyy');
+    now.setHours(now.getHours() + 1);
+    const formattedEndDate = this.formatDateTime(this.date, now);
 
     this.addEvent.patchValue({
-      startTime: format(startTime, "yyyy-MM-dd'T'HH:mm:ss"),
-      endTime: format(endTime, "yyyy-MM-dd'T'HH:mm:ss")
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    });
+    this.loadEventsForSelectedDate(this.date);
+  }
+
+  private formatDateTime(date: string, time: Date): string {
+    return `${date}T${time.getHours().toString().padStart(2, '0')}:${time
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}`;
+  }
+
+  loadEventsForSelectedDate(date: string) {
+    const selectedDate = parseISO(date);
+
+    // Filtrowanie wydarzeń
+    this.selectedDateEvents = this.events.filter((event) => {
+      const startDate = parseISO(event.startDate);
+      const endDate = parseISO(event.endDate);
+
+      return (
+        (isEqual(selectedDate, startDate) ||
+          isAfter(selectedDate, startDate)) &&
+        (isEqual(selectedDate, endDate) || isBefore(selectedDate, endDate))
+      );
     });
   }
 
-  onEventSelected(event: any) {
-    console.log(event)
-  }
-  
-  startChanged(value: any) {
-    this.addEvent.patchValue({
-      startTime: value
-    });
-    this.formattedStart = format(parseISO(value), 'HH:mm, MMM d, yyyy');
+  setLocale(lang: string) {
+    this.options = {
+      ...this.options,
+      locale: { locale: lang, weekdays: 'short' },
+    };
   }
 
-  endChanged(value: any) {
-    this.addEvent.patchValue({
-      endTime: value
-    });
-    this.formattedEnd = format(parseISO(value), 'HH:mm, MMM d, yyyy');
+  formatDate(date: string): string {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+
+    // Dynamiczne ustawienie języka
+    return new Intl.DateTimeFormat(this.settings.language, options).format(
+      new Date(date)
+    );
   }
 
   async getEvents() {
@@ -141,36 +186,67 @@ export class CalendarPage {
       const response = await axios.get(
         `${this.baseUrl}/event/getEvents/${userId}`
       );
-      this.eventSource = response.data;
+      this.events = response.data;
+      this.updateCalendarDays();
+      this.loadEventsForSelectedDate(this.date);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
   }
 
+  updateCalendarDays() {
+    const daysConfig: IDayConfig[] = [];
+
+    this.events.forEach((event) => {
+      const startDate = parseISO(event.startDate);
+      const endDate = parseISO(event.endDate);
+
+      const daysInRange = eachDayOfInterval({ start: startDate, end: endDate });
+
+      daysInRange.forEach((date) => {
+        daysConfig.push({
+          date: date,
+          subTitle: '●',
+        });
+      });
+    });
+
+    this.options = {
+      ...this.options,
+      daysConfig,
+    };
+  }
+
   async submitForm() {
     this.submitted = true;
+    if (this.addEvent.invalid) {
+      return;
+    }
 
     const newEvent = this.buildNewEvent();
 
-    console.log(newEvent)
-    this.modalController.dismiss();
-    this.addEvent.reset();
-    this.eventSource.push(newEvent);
-    this.myCalendar.eventSource = [...this.eventSource];
-
-    //TODO: Dodać wysyłanie na serwer
+    try {
+      //await this.eventService.addEvent(newEvent);
+      this.modalController.dismiss();
+      this.events.push(newEvent);
+      this.loadEventsForSelectedDate(this.date);
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
+    }
   }
 
   buildNewEvent(): Event {
     const userId = localStorage.getItem('userId');
-    
+    const startDate = new Date(this.addEvent.get('startDate')?.value);
+    const endDate = new Date(this.addEvent.get('endDate')?.value);
 
     return {
       user_id: userId,
       title: this.addEvent.get('title')?.value,
-      allDay: this.addEvent.get('allDay')?.value,
-      startTime: new Date(this.addEvent.get('startTime')?.value),
-      endTime: new Date(this.addEvent.get('endTime')?.value),
+      startDate: format(startDate, 'yyyy-MM-dd'),
+      endDate: format(endDate, 'yyyy-MM-dd'),
+      startTime: format(startDate, 'HH:mm'),
+      endTime: format(endDate, 'HH:mm'),
     };
   }
 }

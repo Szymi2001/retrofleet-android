@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { RouteService } from 'src/services/routeService.service';
 import { AddDrivingLogModal } from './add-driving-log-modal/add-driving-log-modal.component';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 const MONTHS = [
   'styczeń',

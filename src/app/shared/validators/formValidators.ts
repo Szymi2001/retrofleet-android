@@ -22,10 +22,25 @@ export function minLengthValidator(minLength: number): ValidatorFn {
 
 export function vinValidator(length: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
+    console.log('test')
     const value = control.value;
     if (value && value.length !== length) {
       return { 'exactLength': true };
     }
     return null;
   };
+}
+
+export function dateRangeValidator(): ValidatorFn {
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    
+    const startDate = formGroup.get('startDate')?.value;
+    const endDate = formGroup.get('endDate')?.value;
+
+    if (endDate < startDate) {
+      console.log(endDate < startDate)
+      return { 'dateRangeInvalid': true };
+    }
+    return null;
+  }
 }

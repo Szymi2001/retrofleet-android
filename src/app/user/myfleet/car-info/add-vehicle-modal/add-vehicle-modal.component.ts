@@ -140,7 +140,7 @@ export class AddVehicleModalComponent implements OnInit {
     });
   }
 
-  setMaxDate() {
+  setMaxDate(): void {
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -171,7 +171,7 @@ export class AddVehicleModalComponent implements OnInit {
   }
 
   //Filtrowanie modeli wg marki
-  filterModels() {
+  filterModels(): void {
     if (!this.vehicleForm.get('brand')) {
       this.carModels = [];
       this.vehicleForm.get('model')?.setValue(null);
@@ -183,12 +183,16 @@ export class AddVehicleModalComponent implements OnInit {
     this.vehicleForm.get('model')?.setValue(null);
   }
 
-  dismiss() {
+  dismiss(): void {
     this.modalController.dismiss();
   }
 
   //Wyślij formularz
-  submitForm() {
+  submitForm(): void {
+    this.submitted = true;
+
+    this.vehicleForm.markAllAsTouched();
+
     if (this.vehicleForm.valid) {
       this.modalController.dismiss(this.vehicleForm.value);
     }

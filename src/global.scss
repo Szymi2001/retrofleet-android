@@ -38,10 +38,6 @@
 //Biblioteka swiper do obsługi przewijania kalendarza
 @import "swiper/css";
 
-body {
-    font-size: var(--ion-font-size, var(--font-size-medium));
-}
-
 .error-message {
     display: flex;
     align-items: flex-start;

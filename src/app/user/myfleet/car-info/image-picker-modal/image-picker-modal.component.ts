@@ -11,6 +11,7 @@ import { ImageUpdateService } from 'src/services/imageUpdate.service';
   templateUrl: './image-picker-modal.component.html',
   styleUrls: ['./image-picker-modal.component.scss'],
 })
+//TODO: Ustawienie domyślnego zdjęcia
 export class ImagePickerComponent {
   private userId = localStorage.getItem('userId');
 

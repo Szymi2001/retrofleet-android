@@ -90,6 +90,7 @@
         labelPlacement="floating"
         interface="popover"
         formControlName="status"
+        (ionChange)="isRoutePlanned()"
       >
         <ion-select-option
           *ngFor="let status of statusOptions"
@@ -113,6 +114,8 @@
             cancelText="Anuluj"
             doneText="Zatwierdź"
             formControlName="date"
+            [min]="minDate"
+            [max]="maxDate"
           ></ion-datetime>
         </ng-template>
       </ion-modal>

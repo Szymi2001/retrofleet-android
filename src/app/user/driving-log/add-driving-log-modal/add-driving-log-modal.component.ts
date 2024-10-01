@@ -40,6 +40,7 @@ export class AddDrivingLogModal implements OnInit {
 
   myRoutes: Route[] = [];
 
+  minDate = new Date().toISOString();
   maxDate = new Date().toISOString();
 
   statusOptions = [
@@ -68,8 +69,16 @@ export class AddDrivingLogModal implements OnInit {
       distance: [null, Validators.required],
       duration: [null, Validators.required],
       status: ['', Validators.required],
-      date: [this.maxDate, Validators.required],
+      date: [{ value: this.maxDate, disabled: true } , Validators.required],
       description: [''],
+    });
+
+    this.routeForm.get('status')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.routeForm.get('date')?.enable();
+      } else {
+        this.routeForm.get('date')?.disable();
+      }
     });
   }
 
@@ -104,6 +113,7 @@ export class AddDrivingLogModal implements OnInit {
     const query = event.detail.value;
     if (query.length > 2) {
       this.filteredEndCities = await this.getCities(query);
+      console.log(this.filteredEndCities)
     } else {
       this.filteredEndCities = [];
     }
@@ -133,6 +143,7 @@ export class AddDrivingLogModal implements OnInit {
           },
         }
       );
+      console.log(response)
       return response.data;
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
@@ -170,7 +181,36 @@ export class AddDrivingLogModal implements OnInit {
     }
   }
 
+  isRoutePlanned(): void {
+    const status = this.routeForm.get('status')?.value;
+
+    const todayISO = new Date().toISOString();
+    const futureISO = new Date(new Date().setFullYear(new Date().getFullYear() + 100)).toISOString();
+
+    switch(status.value) {
+      case 'Planned':
+        this.minDate = todayISO;
+        this.maxDate = futureISO;
+        break;
+      case 'InProgress':
+        this.minDate = todayISO;
+        this.maxDate = todayISO;
+        break;
+      case 'Ended':
+        this.minDate = '1900-01-01';
+        this.maxDate = todayISO;
+        break;
+      default:
+        this.minDate = todayISO;
+        this.maxDate = futureISO;
+    }
+  }
+
   submitForm() {
+    this.submitted = true;
+
+    this.routeForm.markAllAsTouched();
+    
     if (this.routeForm.valid) {
       this.modalController.dismiss(this.routeForm.value);
     }

@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { LoadingController, MenuController, ModalController } from '@ionic/angular';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { AppSettingsService } from 'src/services/appSettings.service';
 import { AuthService } from 'src/services/auth.service';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
+import { UserInfo } from './shared/interfaces/user.interface';
+import { ProfileService } from 'src/services/endpoints/profileEndpoint.service';
 
 interface MenuItem {
   title: string;
@@ -13,14 +15,6 @@ interface MenuItem {
   path: string;
   action?: () => void;
 }
-
-interface MenuDivider {
-  isDivider: true;
-}
-
-type MenuItemOrDivider = MenuItem | MenuDivider;
-
-type MenuItems = MenuItemOrDivider[];
 
 interface Translations {
   [key: string]: string;
@@ -31,18 +25,30 @@ export const backend_Url = 'http://localhost:3000';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  styleUrls: ['./app.component.scss'],
   providers: [],
 })
 export class AppComponent {
-  private userId = localStorage.getItem('userId');
-
-  mainMenuItems: MenuItemOrDivider[] = [];
-  profileMenuItems: MenuItemOrDivider[] = [];
+  private userId!: string | null;
 
   isLoggedIn: boolean = true;
+  mainMenuItems: any[] = [];
+  profileMenuItems: any[] = [];
+  selectedPath = '';
+  previousPath!: string | undefined;
   pageTitle: string = 'RetroFleet';
 
+  userInfo: UserInfo = {
+    login: '',
+    password: '',
+    email: '',
+    name: '',
+    surname: '',
+    first_question: '',
+    first_answer: '',
+    second_question: '',
+    second_answer: '',
+  };
   profileImage: any[] = [];
 
   constructor(
@@ -51,6 +57,7 @@ export class AppComponent {
     private appSettings: AppSettingsService,
     private imageService: ImageService,
     private translate: TranslateService,
+    private profileService: ProfileService,
     private router: Router
   ) {
     const settings = this.appSettings.loadSettings();
@@ -58,15 +65,16 @@ export class AppComponent {
     this.translate.use(settings.language);
   }
 
-  //TODO: Anomalia po zalogowaniu następnego użytkownika
   async ngOnInit() {
-    this.authService.isLoggedIn().subscribe((loggedIn) => {
-      this.isLoggedIn = loggedIn;
+    this.authService.isLoggedIn().subscribe(async (isLoggedIn) => {
+      if (isLoggedIn) {
+        this.userId = localStorage.getItem('userId');
+        //Załaduj zdjęcie profilowe
+        this.downloadPhotos(this.userId!);
+        this.loadUserInfo();
+      }
       this.updateMainMenuItems();
-      this.updateProfileMenuItems();
     });
-
-    await this.downloadPhotos(this.userId!);
 
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -74,14 +82,20 @@ export class AppComponent {
         this.updatePageTitle();
       });
 
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.selectedPath = event.url;
+      });
+
     this.translate.onLangChange.subscribe(() => {
       this.updateMainMenuItems();
-      this.updateProfileMenuItems();
       this.updatePageTitle();
     });
-
-    this.updateMainMenuItems();
-    this.updateProfileMenuItems();
   }
 
   updatePageTitle() {
@@ -112,31 +126,36 @@ export class AppComponent {
     }
   }
 
-  isDivider(item: MenuItemOrDivider): item is MenuDivider {
-    return (item as MenuDivider).isDivider === true;
+  mainMenu(action: string) {
+    if (action === 'open' || action === 'close') {
+      this.menuController[action]('main-menu');
+    }
   }
 
-  openMainMenu() {
-    this.menuController.open('main-menu');
+  navigateToPage(path: string) {
+    this.router.navigate([path], { replaceUrl: true });
+    this.previousPath = this.selectedPath;
   }
 
-  openProfileMenu() {
-    this.menuController.open('profile-menu');
+  goBack() {
+    if (this.previousPath) {
+      this.router.navigate([this.previousPath]);
+    }
+    this.previousPath = '';
   }
 
   goToProfile() {
     this.router.navigate(['/profile']);
-    this.menuController.close('profile-menu');
+    this.menuController.close('main-menu');
   }
 
-  goToPage(path: string, action?: () => void, closeMenuId?: string) {
-    this.router.navigateByUrl(path);
-    if (closeMenuId) {
-      this.menuController.close(closeMenuId);
-    }
+  private async loadUserInfo(): Promise<void> {
+    if (!this.userId) return;
 
-    if (action) {
-      action();
+    try {
+      this.userInfo = await this.profileService.getUserInfo(this.userId);
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
     }
   }
 
@@ -152,8 +171,8 @@ export class AppComponent {
   updateMainMenuItems() {
     if (!this.isLoggedIn) {
       this.translate
-        .get(['LOGIN.TITLE', 'REGISTER.TITLE'])
-        .subscribe((translations: Translations) => {
+        .get(['LOGIN.TITLE', 'REGISTER.TITLE', 'MENU.DISPLAY_TITLE'])
+        .subscribe((translations) => {
           this.mainMenuItems = [
             {
               title: translations['LOGIN.TITLE'],
@@ -165,92 +184,24 @@ export class AppComponent {
               icon: 'person-add-outline',
               path: '/register',
             },
-            { isDivider: true },
             {
-              title: 'Wyświetlanie',
+              title: translations['MENU.DISPLAY_TITLE'],
               icon: 'settings-outline',
               path: '/settings',
             },
           ];
+          console.log(translations)
         });
     } else {
       this.translate
         .get([
-          'MENU.MANAGEMENT_TITLE',
-          'MENU.MYFLEET_TITLE',
-          'MENU.CALENDAR_TITLE',
-          'MENU.LOGBOOK_TITLE',
-          'MENU.SERVICES_TITLE',
-          'MENU.FUELING_TITLE',
-          'MENU.SERVICE_SUMMARY_TITLE',
-          'MENU.FUELING_SUMMARY_TITLE',
           'MENU.LOGOUT_TITLE',
-          'MENU.REPORTS_TITLE',
-          'MENU.SETTINGS_TITLE',
+          'MENU.DISPLAY_TITLE',
         ])
         .subscribe((translations) => {
           this.mainMenuItems = [
             {
-              title: translations['MENU.MYFLEET_TITLE'],
-              icon: 'car-outline',
-              path: '/myfleet',
-            },
-            {
-              title: translations['MENU.CALENDAR_TITLE'],
-              icon: 'calendar-outline',
-              path: '/calendar',
-            },
-            {
-              title: translations['MENU.LOGBOOK_TITLE'],
-              icon: 'document-text-outline',
-              path: '/driving-log',
-            },
-            {
-              title: translations['MENU.SERVICES_TITLE'],
-              icon: 'construct-outline',
-              path: '/add-service',
-            },
-            {
-              title: translations['MENU.FUELING_TITLE'],
-              icon: 'speedometer-outline',
-              path: '/add-fueling',
-            },
-            { isDivider: true },
-            {
-              title: translations['MENU.SERVICE_SUMMARY_TITLE'],
-              icon: 'clipboard-outline',
-              path: '/service-summary',
-            },
-            {
-              title: translations['MENU.FUELING_SUMMARY_TITLE'],
-              icon: 'stats-chart-outline',
-              path: '/fueling-summary',
-            },
-          ];
-        });
-    }
-  }
-
-  updateProfileMenuItems() {
-    if (this.isLoggedIn) {
-      this.translate
-        .get([
-          'MENU.MANAGEMENT_TITLE',
-          'MENU.MYFLEET_TITLE',
-          'MENU.CALENDAR_TITLE',
-          'MENU.LOGBOOK_TITLE',
-          'MENU.SERVICES_TITLE',
-          'MENU.FUELING_TITLE',
-          'MENU.SERVICE_SUMMARY_TITLE',
-          'MENU.FUELING_SUMMARY_TITLE',
-          'MENU.LOGOUT_TITLE',
-          'MENU.REPORTS_TITLE',
-          'MENU.SETTINGS_TITLE',
-        ])
-        .subscribe((translations) => {
-          this.profileMenuItems = [
-            {
-              title: 'Wyświetlanie',
+              title: translations['MENU.DISPLAY_TITLE'],
               icon: 'settings-outline',
               path: '/settings',
             },
@@ -261,16 +212,13 @@ export class AppComponent {
               action: () => this.logout(),
             },
           ];
+          console.log(translations)
         });
     }
   }
 
-  dismiss() {
-    this.menuController.close();
-  }
-
   logout() {
-    this.menuController.toggle('profile-menu');
+    this.menuController.close('profile-menu');
     this.authService.logout();
   }
 }
