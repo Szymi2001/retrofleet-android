@@ -84,6 +84,7 @@ export class LoginPage implements OnInit, OnDestroy {
     const login = this.loginForm.get('login')?.value;
     const password = this.loginForm.get('password')?.value;
 
+    console.log(login, password)
     //TODO: Haszowanie hasła
     try {
       const response = await axios.post(`${this.baseUrl}/users/login`, {

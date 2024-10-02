@@ -8,6 +8,8 @@ import { AuthService } from 'src/services/auth.service';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
 })
+
+//TODO: Zmiana palety koloru wiodącego (niebieski, zielony)
 export class SettingsPage implements OnInit {
   isLoggedIn: boolean = true;
 

@@ -3,20 +3,14 @@
   <ion-header>
     <ion-toolbar>
       <ion-title>{{ pageTitle }}</ion-title>
-      <ion-buttons slot="start">
-        <ion-button (click)="goBack()" *ngIf="previousPath">
-          <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
       <ion-buttons slot="end" *ngIf="isLoggedIn">
-        <ion-button (click)="mainMenu('open')">
+        <ion-button (click)="profileMenu('open')">
           <ion-avatar>
             <img
               [src]="profileImage[0] || '/assets/images/profile_icon.png'"
               alt="Zdjęcie profilowe"
             />
           </ion-avatar>
-          <ion-label class="ion-margin-start">{{ userInfo.login }}</ion-label>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -27,7 +21,7 @@
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-content>
 
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" *ngIf="isLoggedIn">
     <ion-tab-button routerLink="/myfleet" routerDirection="root">
       <ion-icon name="car-outline"></ion-icon>
       Flota
@@ -44,6 +38,17 @@
       <ion-icon name="speedometer-outline"></ion-icon>
       Tankowania
     </ion-tab-button>
+  </ion-tab-bar>
+
+  <ion-tab-bar slot="bottom" *ngIf="!isLoggedIn">
+    <ion-tab-button routerLink="/login" routerDirection="root">
+      <ion-icon name="log-in-outline"></ion-icon>
+      Zaloguj się
+    </ion-tab-button>
+    <ion-tab-button routerLink="/register" routerDirection="root">
+      <ion-icon name="person-add-outline"></ion-icon>
+      Załóż konto
+    </ion-tab-button>
     <ion-tab-button routerLink="/settings" routerDirection="root">
       <ion-icon name="settings-outline"></ion-icon>
       Ustawienia
@@ -51,7 +56,7 @@
   </ion-tab-bar>
 
   <!-- Menus -->
-  <ion-menu side="end" menuId="main-menu" contentId="main-content" class="menu">
+  <ion-menu side="end" menuId="profile-menu" contentId="main-content" class="menu">
     <ion-header>
       <ion-toolbar>
         <ion-title>
@@ -59,7 +64,7 @@
             lines="none"
             class="ion-no-padding"
             button
-            (click)="goToProfile()"
+            (click)="navigateTo('/profile')"
           >
             <ion-avatar>
               <img
@@ -71,7 +76,7 @@
           </ion-item>
         </ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="mainMenu('close')">
+          <ion-button (click)="profileMenu('close')">
             <ion-icon slot="icon-only" name="close"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -79,11 +84,10 @@
     </ion-header>
     <ion-content>
       <ion-list lines="full">
-        <ion-menu-toggle auto-hide="false" *ngFor="let item of mainMenuItems">
+        <ion-menu-toggle auto-hide="false" *ngFor="let item of profileMenuItems">
           <ion-item
-            (click)="item.action ? item.action() : navigateToPage(item.path)"
+            (click)="item.action ? item.action() : navigateTo(item.path)"
             routerDirection="root"
-            [class.active-item]="selectedPath === item.path"
           >
             <ion-icon [name]="item.icon" class="ion-margin-end"></ion-icon>
             {{ item.title }}

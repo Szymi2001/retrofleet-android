@@ -64,8 +64,8 @@
     "QUESTIONS_INPUT_PLACEHOLDER": "Wpisz odpowiedź",
     "CONFIRM_BUTTON": "ZATWIERDŹ"
   },
-  "MENU": {
-    "MANAGEMENT_TITLE": "Zarządzanie",
+  "TABS": {
+    "LOGIN_TITLE": "Zaloguj się",
     "MYFLEET_TITLE": "Moja flota",
     "CALENDAR_TITLE": "Kalendarz",
     "LOGBOOK_TITLE": "Dziennik jazd",
@@ -75,7 +75,7 @@
     "FUELING_SUMMARY_TITLE": "Podsumowanie tankowań",
     "LOGOUT_TITLE": "Wyloguj się",
     "REPORTS_TITLE": "Raporty",
-    "DISPLAY_TITLE":"Wygląd i wyświetlanie"
+    "SETTINGS_TITLE":"Ustawienia"
   },
   "MYFLEET": {
     "REGISTRATION_NUMBER_LABEL": "Numery rejestracyjne",

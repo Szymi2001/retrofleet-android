@@ -63,8 +63,8 @@
     "QUESTIONS_INPUT_PLACEHOLDER": "Enter answer",
     "CONFIRM_BUTTON": "CONFIRM"
   },
-  "MENU": {
-    "MANAGEMENT_TITLE": "Management",
+  "TABS": {
+    "LOGIN_TITLE": "Log in",
     "MYFLEET_TITLE": "My fleet",
     "CALENDAR_TITLE": "Calendar",
     "LOGBOOK_TITLE": "Logbook",
@@ -74,7 +74,7 @@
     "FUELING_SUMMARY_TITLE": "Fueling summary",
     "LOGOUT_TITLE": "Log out",
     "REPORTS_TITLE": "Reports",
-    "DISPLAY_TITLE":"Appearance & Display"
+    "SETTINGS_TITLE":"Settings"
   },
   "MYFLEET": {
     "REGISTRATION_NUMBER_LABEL": "Registration Number",

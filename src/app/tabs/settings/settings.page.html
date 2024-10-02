@@ -1,15 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>{{ 'SETTINGS.TITLE' | translate }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
- -->
-
 <ion-content padding>
   <ion-card>
     <ion-card-header>
@@ -27,6 +15,14 @@
           (ionChange)="toggleDarkModeChange($event)"
           >{{ 'SETTINGS.DARK_MODE_TITLE' | translate }}</ion-toggle
         >
+      </ion-item>
+
+      <ion-item>
+        <ion-icon slot="start" name="color-palette-outline"></ion-icon>
+        <ion-label>Kolor wiodący</ion-label>
+        <ion-select slot="end">
+          <ion-select-option value="default">Domyślny</ion-select-option>
+        </ion-select>
       </ion-item>
 
       <ion-item>

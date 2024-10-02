@@ -31,11 +31,9 @@ export const backend_Url = 'http://localhost:3000';
 export class AppComponent {
   private userId!: string | null;
 
-  isLoggedIn: boolean = true;
-  mainMenuItems: any[] = [];
+  isLoggedIn: boolean = false;
   profileMenuItems: any[] = [];
-  selectedPath = '';
-  previousPath!: string | undefined;
+  titleNames: any[] = [];
   pageTitle: string = 'RetroFleet';
 
   userInfo: UserInfo = {
@@ -66,21 +64,15 @@ export class AppComponent {
   }
 
   async ngOnInit() {
-    this.authService.isLoggedIn().subscribe(async (isLoggedIn) => {
+    this.authService.isLoggedIn().subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
       if (isLoggedIn) {
         this.userId = localStorage.getItem('userId');
         //Załaduj zdjęcie profilowe
         this.downloadPhotos(this.userId!);
         this.loadUserInfo();
       }
-      this.updateMainMenuItems();
     });
-
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.updatePageTitle();
-      });
 
     this.router.events
       .pipe(
@@ -89,17 +81,18 @@ export class AppComponent {
         )
       )
       .subscribe((event: NavigationEnd) => {
-        this.selectedPath = event.url;
+        this.updatePageTitle();
       });
 
     this.translate.onLangChange.subscribe(() => {
-      this.updateMainMenuItems();
+      this.setProfileMenuItems();
       this.updatePageTitle();
     });
+    this.setProfileMenuItems();
   }
 
   updatePageTitle() {
-    const activeRoute = this.router.url.split('/').pop();
+    const activeRoute = this.router.url;
 
     if (!activeRoute) {
       this.pageTitle = 'RetroFleet';
@@ -115,8 +108,49 @@ export class AppComponent {
       return;
     }
 
-    const menuItem = this.mainMenuItems.find((item): item is MenuItem => {
-      return (item as MenuItem).path === `/${activeRoute}`;
+    this.translate
+      .get([
+        'TABS.LOGIN_TITLE',
+        'TABS.CALENDAR_TITLE',
+        'TABS.MYFLEET_TITLE',
+        'TABS.LOGBOOK_TITLE',
+        'TABS.SERVICES_TITLE',
+        'TABS.SERVICE_SUMMARY_TITLE',
+        'TABS.FUELING_TITLE',
+        'TABS.FUELING_SUMMARY_TITLE',
+        'TABS.SETTINGS_TITLE',
+      ])
+      .subscribe((translations) => {
+        this.titleNames = [
+          {
+            title: translations['TABS.MYFLEET_TITLE'],
+            path: '/myfleet',
+          },
+          {
+            title: translations['TABS.CALENDAR_TITLE'],
+            path: '/calendar',
+          },
+          {
+            title: translations['TABS.SERVICES_TITLE'],
+            path: '/services/list',
+          },
+          {
+            title: translations['TABS.SERVICES_TITLE'],
+            path: '/services/summary',
+          },
+          {
+            title: translations['TABS.FUELING_TITLE'],
+            path: '/add-fueling',
+          },
+          {
+            title: translations['TABS.SETTINGS_TITLE'],
+            path: '/settings',
+          },
+        ];
+      });
+
+    const menuItem = this.titleNames.find((item) => {
+      return item.path === `${activeRoute}`;
     });
 
     if (menuItem) {
@@ -126,27 +160,18 @@ export class AppComponent {
     }
   }
 
-  mainMenu(action: string) {
-    if (action === 'open' || action === 'close') {
-      this.menuController[action]('main-menu');
+  async profileMenu(action: string) {
+    const isOpen = await this.menuController.isOpen('profile-menu');
+    if (isOpen) {
+      this.menuController.close('profile-menu');
+    } else {
+      this.menuController.open('profile-menu');
     }
   }
 
-  navigateToPage(path: string) {
-    this.router.navigate([path], { replaceUrl: true });
-    this.previousPath = this.selectedPath;
-  }
-
-  goBack() {
-    if (this.previousPath) {
-      this.router.navigate([this.previousPath]);
-    }
-    this.previousPath = '';
-  }
-
-  goToProfile() {
-    this.router.navigate(['/profile']);
-    this.menuController.close('main-menu');
+  navigateTo(path: string) {
+    this.router.navigate([path]);
+    this.profileMenu('close');
   }
 
   private async loadUserInfo(): Promise<void> {
@@ -168,57 +193,31 @@ export class AppComponent {
     }
   }
 
-  updateMainMenuItems() {
-    if (!this.isLoggedIn) {
+  setProfileMenuItems() {
+    if (this.isLoggedIn) {
       this.translate
-        .get(['LOGIN.TITLE', 'REGISTER.TITLE', 'MENU.DISPLAY_TITLE'])
+        .get(['TABS.LOGOUT_TITLE', 'TABS.SETTINGS_TITLE'])
         .subscribe((translations) => {
-          this.mainMenuItems = [
+          this.profileMenuItems = [
             {
-              title: translations['LOGIN.TITLE'],
-              icon: 'log-in-outline',
-              path: '/login',
-            },
-            {
-              title: translations['REGISTER.TITLE'],
-              icon: 'person-add-outline',
-              path: '/register',
-            },
-            {
-              title: translations['MENU.DISPLAY_TITLE'],
-              icon: 'settings-outline',
-              path: '/settings',
-            },
-          ];
-          console.log(translations)
-        });
-    } else {
-      this.translate
-        .get([
-          'MENU.LOGOUT_TITLE',
-          'MENU.DISPLAY_TITLE',
-        ])
-        .subscribe((translations) => {
-          this.mainMenuItems = [
-            {
-              title: translations['MENU.DISPLAY_TITLE'],
+              title: translations['TABS.SETTINGS_TITLE'],
               icon: 'settings-outline',
               path: '/settings',
             },
             {
-              title: translations['MENU.LOGOUT_TITLE'],
+              title: translations['TABS.LOGOUT_TITLE'],
               icon: 'log-out-outline',
               path: '/login',
               action: () => this.logout(),
             },
           ];
-          console.log(translations)
         });
     }
   }
 
   logout() {
-    this.menuController.close('profile-menu');
+    this.menuController.close('main-menu');
+    this.router.navigate(['/login']);
     this.authService.logout();
   }
 }
