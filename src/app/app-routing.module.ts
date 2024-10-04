@@ -57,20 +57,14 @@ const routes: Routes = [
   },
   {
     path: 'services',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./user/services/services.module').then( m => m.ServicesPageModule),
   },
-
-  // {
-  //   path: 'service-summary',
-  //   canActivate: [AuthGuard],
-  //   loadChildren: () => import('./user/service-summary/service-summary.module').then( m => m.ServiceSummaryPageModule)
-  // },
-  // {
-  //   path: 'fueling-summary',
-  //   canActivate: [AuthGuard],
-  //   loadChildren: () => import('./user/fueling-summary/fueling-summary.module').then( m => m.FuelingSummaryPageModule)
-  // }
-
+  {
+    path: 'fuelings',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./user/fuelings/fuelings.module').then( m => m.FuelingsPageModule)
+  },
 ];
 
 @NgModule({

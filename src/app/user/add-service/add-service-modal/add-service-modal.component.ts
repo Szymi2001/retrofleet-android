@@ -53,8 +53,6 @@ export class AddServiceModalComponent implements OnInit {
   //Maksymalna data w kalendarzu
   maxDate = new Date().toISOString();
 
-  myServices: Service[] = [];
-
   //TODO: Zmienić na wyświetlanie <interface>
   serviceOptions = [
     { name: 'Silnik', value: 'Silnik' },

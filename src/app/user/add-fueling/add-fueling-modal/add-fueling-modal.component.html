@@ -113,7 +113,7 @@
       >
         <ion-select-option
           *ngFor="let transaction of transactionTypes"
-          [value]="transaction"
+          [value]="transaction.value"
         >
           {{ transaction.label }}
         </ion-select-option>

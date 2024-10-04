@@ -42,8 +42,6 @@ export class AddFuelingModalComponent  implements OnInit {
   //Maksymalna data w kalendarzu
   maxDate = new Date().toISOString();
 
-  myReceipts: FuelReceipt[] = [];
-
   transactionTypes = [
     { label: 'Karta', value: 'Card' },
     { label: 'Gotówka', value: 'Cash' }
@@ -68,7 +66,7 @@ export class AddFuelingModalComponent  implements OnInit {
       selectedCar: ['', Validators.required],
       date: [this.maxDate, Validators.required],
       mileage: [null, Validators.required],
-      description: [''],
+      description: [null],
       fuelType: [null, Validators.required],
       fuelAmount: [null, Validators.required],
       transactionType: ['', Validators.required],
@@ -102,6 +100,7 @@ export class AddFuelingModalComponent  implements OnInit {
 
   submitForm() {
     if (this.fuelReceiptForm.valid) {
+      console.log(this.fuelReceiptForm.value)
       this.modalController.dismiss(this.fuelReceiptForm.value);
     }
   }
