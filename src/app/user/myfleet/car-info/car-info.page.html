@@ -19,7 +19,8 @@
               </ion-text>
               <ion-text>
                 <h3>
-                  {{ 'MYFLEET.PRODUCTION_YEAR_LABEL' | translate }}: {{ car.year }}
+                  {{ 'MYFLEET.PRODUCTION_YEAR_LABEL' | translate }}: {{ car.year
+                  }}
                 </h3>
               </ion-text>
               <ion-note color="medium" class="ion-text-wrap">
@@ -31,15 +32,22 @@
               </ion-note>
             </ion-label>
           </ion-item>
-  
+
           <ion-item-options side="end">
             <ion-item-option color="secondary" (click)="openEditInfo(car)">
-              <ion-icon slot="icon-only" color="light" name="help-circle"></ion-icon>
+              <ion-icon
+                slot="icon-only"
+                color="light"
+                name="help-circle"
+              ></ion-icon>
             </ion-item-option>
             <ion-item-option color="success" (click)="openImagePicker(car)">
               <ion-icon slot="icon-only" color="light" name="camera"></ion-icon>
             </ion-item-option>
-            <ion-item-option color="danger" (click)="presentDeleteConfirmation(car)">
+            <ion-item-option
+              color="danger"
+              (click)="presentDeleteConfirmation(car)"
+            >
               <ion-icon slot="icon-only" color="light" name="trash"></ion-icon>
             </ion-item-option>
           </ion-item-options>
@@ -47,7 +55,15 @@
       </ion-card-content>
     </ion-card>
   </ng-container>
-  
+
+  <ion-card *ngIf="myFleet.length === 0">
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+        <ion-label> Nie posiadasz żadnych pojazdów w swojej flocie. </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button size="small" (click)="openAddVehicleModal()">

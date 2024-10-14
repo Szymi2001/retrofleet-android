@@ -5,7 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import axios from 'axios';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/services/auth.service';
-import { backend_Url } from '../app.component';
+import { environment } from 'src/environments/environment';
+import { StorageService } from 'src/services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -15,12 +16,11 @@ import { backend_Url } from '../app.component';
 
 //TODO: Przypomnienie hasła za pomocą loginu
 export class LoginPage implements OnInit, OnDestroy {
-  //adres backendu
-  private baseUrl = backend_Url;
+  //Backend address
+  private baseUrl = environment.backendUrl;
   private subscription!: Subscription;
 
   loginForm!: FormGroup;
-  submitted = false;
   validationMessages: any = [];
 
   isLoggedInSubject: any;
@@ -29,10 +29,11 @@ export class LoginPage implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private translate: TranslateService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private storageService: StorageService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.loginForm = this.formBuilder.group({
       login: ['', [
         Validators.required,
@@ -44,6 +45,9 @@ export class LoginPage implements OnInit, OnDestroy {
         Validators.minLength(8)
       ]]
     });
+
+    //Init Ionic Storage
+    await this.storageService.init();
 
     this.setValidationMessages();
 
@@ -75,8 +79,6 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   async onSubmit() {
-    this.submitted = true;
-
     if (this.loginForm.invalid) {
       return;
     }
@@ -84,7 +86,6 @@ export class LoginPage implements OnInit, OnDestroy {
     const login = this.loginForm.get('login')?.value;
     const password = this.loginForm.get('password')?.value;
 
-    console.log(login, password)
     //TODO: Haszowanie hasła
     try {
       const response = await axios.post(`${this.baseUrl}/users/login`, {
@@ -93,10 +94,17 @@ export class LoginPage implements OnInit, OnDestroy {
       });
       const { id } = response.data;
 
-      //Id użytkownika do localStorage
-      localStorage.setItem('userId', id);
+      //UserId to Ionic Storage
+      await this.storageService.set('userId', id);
       this.authService.setLoggedIn(true, id);
+
+      //Form reset
       this.loginForm.reset();
+
+      //Validators reset
+      this.loginForm.setErrors(null);
+
+      //Navigate to myfleet
       this.router.navigateByUrl('myfleet');
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);

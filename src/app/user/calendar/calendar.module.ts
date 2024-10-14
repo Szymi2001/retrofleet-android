@@ -11,6 +11,7 @@ import { IonCalendarModule } from '@heliomarpm/ion-calendar';
 import { CalendarPageRoutingModule } from './calendar-routing.module';
 import { CalendarPage } from './calendar.page';
 import { TranslateModule } from '@ngx-translate/core';
+import { AddEventModalComponent } from './add-event-modal/add-event-modal.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule,
     CalendarPageRoutingModule,
   ],
-  declarations: [CalendarPage],
+  declarations: [CalendarPage, AddEventModalComponent],
 })
 export class CalendarPageModule {}

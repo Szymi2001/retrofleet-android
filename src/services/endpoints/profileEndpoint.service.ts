@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { backend_Url } from 'src/app/app.component';
+import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private baseUrl = backend_Url;
+  private baseUrl = environment.backendUrl;
+
+  private userInfoSubject = new BehaviorSubject<any>(null);
+  public userInfo$ = this.userInfoSubject.asObservable();
 
   async updateUserInfo(userId: any, name: string, surname: string): Promise<any> {
     try {
         const response = await axios.post(`${this.baseUrl}/profile/updateUserInfo`, { userId, name, surname });
+        await this.fetchUserInfo(userId);
       } catch (error: any) {
         this.handleError(error);
         throw error;
@@ -27,6 +32,15 @@ export class ProfileService {
         this.handleError(error);
         throw error;
       }
+  }
+
+  async fetchUserInfo(userId: any): Promise<void> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/profile/getUserInfo/${userId}`);
+      this.userInfoSubject.next(response.data);
+    } catch (error: any) {
+      this.handleError(error);
+    }
   }
 
   async updatePassword(userId: any, old_password: string, new_password: string): Promise<any> {

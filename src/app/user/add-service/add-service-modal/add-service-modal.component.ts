@@ -139,6 +139,7 @@ export class AddServiceModalComponent implements OnInit {
   }
 
   submitForm() {
+    console.log('test')
     if (this.serviceForm.valid) {
       this.modalController.dismiss(this.serviceForm.value);
     }

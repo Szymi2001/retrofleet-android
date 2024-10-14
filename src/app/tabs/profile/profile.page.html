@@ -1,4 +1,4 @@
-<ion-content padding>
+<ion-content>
   <ion-grid>
     <ion-row>
       <ion-col size="12">
@@ -14,7 +14,7 @@
                   <img [src]="profileImage[0] || '/assets/images/profile_icon.png'" alt="Zdjęcie profilowe" />
                 </ion-thumbnail>
               <ion-label>
-                <ion-note>
+                <ion-note *ngIf="userInfo?.login">
                   {{ 'PROFILE.LOGIN_LABEL' | translate }}: {{ userInfo.login }} <br />
                   {{ 'PROFILE.NAME_LABEL' | translate }}: {{ userInfo.name }} <br />
                   {{ 'PROFILE.SURNAME_LABEL' | translate }}: {{ userInfo.surname }} <br />

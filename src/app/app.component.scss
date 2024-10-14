@@ -1,26 +1,30 @@
 ion-button ion-avatar {
-    height: 2.5rem;
-    width: 2.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
 }
 
 ion-title {
-    ion-avatar {
-        height: 2.5rem;
-        width: 2.5rem;
-    }
+  ion-avatar {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
 }
 
 ion-item-divider {
-    background: none;
-    border-bottom: 0;
+  background: none;
+  border-bottom: 0;
 }
 
 ion-menu ion-list.list-md {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .divider {
-    margin-top: auto;
+  margin-top: auto;
+}
+
+ion-tab-button.active {
+  color: var(--ion-color-primary);
 }

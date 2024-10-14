@@ -56,7 +56,6 @@ export class AddFuelingPage implements OnInit {
     try {
       await this.fuelingService.addFueling(newFueling);
       this.myFuelings.push(newFueling);
-      console.log(this.myFuelings)
       //await this.updateVehicleMileage(newService.car_id, serviceData);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
@@ -89,7 +88,6 @@ export class AddFuelingPage implements OnInit {
         this.myFuelings = await this.fuelingService.getFuelings(
           this.userId
         );
-        console.log(this.myFuelings)
         //this.filteredServices = [...this.myServices];
       }
     } catch (error: any) {

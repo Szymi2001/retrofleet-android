@@ -60,6 +60,10 @@ export class ProfilePage implements OnInit {
     this.initializeQuestions();
     this.loadUserInfo();
 
+    this.profileService.userInfo$.subscribe(data => {
+        this.userInfo = data;
+      });
+
     await this.presentLoading();
     await this.downloadPhotos(this.userId!);
     this.loadingController.dismiss();

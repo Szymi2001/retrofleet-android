@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { backend_Url } from 'src/app/app.component';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ImageService {
-  private baseUrl = backend_Url;
+  private baseUrl = environment.backendUrl;
 
   async uploadCarImage(userId: any, carId: any, formData: FormData): Promise<any> {
     try {

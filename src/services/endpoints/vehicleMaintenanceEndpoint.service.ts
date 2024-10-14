@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { backend_Url } from 'src/app/app.component';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VehicleMaintenanceService {
-  private baseUrl = backend_Url;
+  private baseUrl = environment.backendUrl;
 
   async addService(newService: any): Promise<any> {
     try {

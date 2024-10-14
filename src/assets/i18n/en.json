@@ -34,7 +34,6 @@
     }
   },
   "SETTINGS": {
-    "TITLE": "Settings",
     "DISPLAY_TITLE": "Appearance & Display",
     "DARK_MODE_TITLE": "Dark mode",
     "LANGUAGE_TITLE": "Select language",
@@ -42,7 +41,6 @@
     "BUTTON_PL": "Polish"
   },
   "PROFILE": {
-    "TITLE": "My profile",
     "USER_DATA_LABEL": "User data",
     "LOGIN_LABEL": "Login",
     "NAME_LABEL": "Name",
@@ -65,6 +63,7 @@
   },
   "TABS": {
     "LOGIN_TITLE": "Log in",
+    "REGISTER_TITLE": "Create account",
     "MYFLEET_TITLE": "My fleet",
     "CALENDAR_TITLE": "Calendar",
     "LOGBOOK_TITLE": "Logbook",
@@ -74,7 +73,8 @@
     "FUELING_SUMMARY_TITLE": "Fueling summary",
     "LOGOUT_TITLE": "Log out",
     "REPORTS_TITLE": "Reports",
-    "SETTINGS_TITLE":"Settings"
+    "SETTINGS_TITLE":"Settings",
+    "PROFILE_TITLE": "Profile"
   },
   "MYFLEET": {
     "REGISTRATION_NUMBER_LABEL": "Registration Number",
@@ -86,7 +86,9 @@
     "ADD_PICTURE_LABEL": "Add picture",
     "DELETE_CAR_LABEL": "Delete vehicle",
     "MODAL": {
-      "TITLE": "Add vehicle",
+      "TITLE": "New vehicle",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Contirm",
       "VIN": "VIN",
       "REGISTRATION_NUMBER": "Registration number",
       "MILEAGE": "Mileage (km)",
@@ -142,9 +144,15 @@
     "INSURANCE_EXPIRY_DATE_LABEL": "Insurance Expiry Date"
   },
   "CALENDAR": {
-    "MONTH_LABEL": "Month",
-    "WEEK_LABEL": "Week",
-    "DAY_LABEL": "Day",
+    "NO_EVENTS": "No events for the selected date.",
+    "MODAL": {
+      "TITLE": "New event",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Confirm",
+      "TITLE_INPUT": "Title",
+      "FROM": "From",
+      "TO": "To"
+    },
     "ERRORS": {
       "TITLE_REQUIRED": "Title is required.",
       "DATE_RANGE_INVALID": "The end date cannot be earlier than the start date."

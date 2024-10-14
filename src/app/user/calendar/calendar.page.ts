@@ -1,7 +1,4 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import axios from 'axios';
-import { backend_Url } from 'src/app/app.component';
 import {
   addYears,
   eachDayOfInterval,
@@ -20,7 +17,8 @@ import {
 } from '@heliomarpm/ion-calendar';
 import { AppSettingsService } from 'src/services/appSettings.service';
 import { EventService } from 'src/services/endpoints/eventEndpoint.service';
-import { dateRangeValidator } from 'src/app/shared/validators/formValidators';
+import { AddEventModalComponent } from './add-event-modal/add-event-modal.component';
+import { StorageService } from 'src/services/storage.service';
 
 interface Event {
   user_id: string | null;
@@ -37,15 +35,10 @@ interface Event {
   templateUrl: './calendar.page.html',
   styleUrls: ['./calendar.page.scss'],
 })
+
+//TODO: Po zmienie godziny na 00:00 ustaw następny dzień
 export class CalendarPage implements OnInit {
-  //Adres backendu
-  private baseUrl = backend_Url;
-
   @ViewChild(CalendarComponent) calendarRef!: CalendarComponent;
-
-  addEvent!: FormGroup;
-  validationMessages: any = [];
-  submitted = false;
 
   events: Event[] = [];
   selectedDate!: Date | Date[];
@@ -53,117 +46,87 @@ export class CalendarPage implements OnInit {
   currentEvent: Event | null = null;
   date!: string;
   format = 'yyyy-MM-dd';
-  options: ICalendarComponentOptions = {
-    pickMode: 'single',
-    locale: { locale: 'pl', weekdays: 'short' },
-    showToggleButtons: true,
-    color: 'primary',
-    showAdjacentMonthDay: false,
-    showMonthPicker: true,
-    showYearPicker: true,
-    displayMode: 'month',
-    from: new Date(1900, 0, 1),
-    to: addYears(new Date(), 1),
-  };
-
-  settings = this.appSettings.loadSettings();
-  todayDate = new Date().toISOString();
+  options!: ICalendarComponentOptions;
+  userId!: string;
 
   constructor(
-    private formBuilder: FormBuilder,
     private eventService: EventService,
     private modalController: ModalController,
     private appSettings: AppSettingsService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private storageService: StorageService
   ) {
-    this.setLocale(this.settings.language);
+    const settings = this.appSettings.loadSettings();
+    this.options = this.initializeCalendarOptions(settings.language);
     this.setDayToday();
   }
 
-  ngOnInit(): void {
-    this.getEvents();
-    this.setValidationMessages();
-    this.initializeForm();
+  async ngOnInit(): Promise<void> {
+    await this.storageService.init();
+    this.userId = await this.storageService.get('userId');
+    this.loadEvents();
 
     this.translate.onLangChange.subscribe(() => {
       this.setLocale(this.translate.currentLang);
     });
   }
 
-  setValidationMessages() {
-    this.translate.get('CALENDAR.ERRORS').subscribe((translations) => {
-      this.validationMessages = {
-        title: [{ type: 'required', message: translations.TITLE_REQUIRED }],
-        endDate: [
-          {
-            type: 'dateRangeInvalid',
-            message: translations.DATE_RANGE_INVALID,
-          },
-        ],
-      };
+  private initializeCalendarOptions(lang: string): ICalendarComponentOptions {
+    return {
+      pickMode: 'single',
+      locale: { locale: lang, weekdays: 'short' },
+      showToggleButtons: true,
+      color: 'primary',
+      showAdjacentMonthDay: false,
+      showMonthPicker: true,
+      showYearPicker: true,
+      displayMode: 'month',
+      from: new Date(1900, 0, 1),
+      to: addYears(new Date(), 1)
+    };
+  }
+
+  async openAddEventModal() {
+    const modal = await this.modalController.create({
+      component: AddEventModalComponent,
+      componentProps: { selectedDate: this.date }
     });
-  }
 
-  initializeForm(): void {
-    this.addEvent = this.formBuilder.group(
-      {
-        title: ['', [Validators.required]],
-        startDate: [this.todayDate, [Validators.required]],
-        endDate: [this.todayDate, [Validators.required]],
-      },
-      {
-        validators: [dateRangeValidator()],
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.addEvent(data.data);
       }
-    );
+    });
+
+    return await modal.present();
   }
 
-  setDayToday() {
+  private setDayToday() {
     this.date = new Date().toISOString().substring(0, 10);
   }
 
   onChange(event: any) {
     this.date = event;
-    const now = new Date();
-    const formattedStartDate = this.formatDateTime(this.date, now);
-
-    now.setHours(now.getHours() + 1);
-    const formattedEndDate = this.formatDateTime(this.date, now);
-
-    this.addEvent.patchValue({
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
-    });
     this.loadEventsForSelectedDate(this.date);
   }
 
-  private formatDateTime(date: string, time: Date): string {
-    return `${date}T${time.getHours().toString().padStart(2, '0')}:${time
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}`;
-  }
-
-  loadEventsForSelectedDate(date: string) {
+  private loadEventsForSelectedDate(date: string) {
     const selectedDate = parseISO(date);
-
-    // Filtrowanie wydarzeń
-    this.selectedDateEvents = this.events.filter((event) => {
-      const startDate = parseISO(event.startDate);
-      const endDate = parseISO(event.endDate);
-
-      return (
-        (isEqual(selectedDate, startDate) ||
-          isAfter(selectedDate, startDate)) &&
-        (isEqual(selectedDate, endDate) || isBefore(selectedDate, endDate))
-      );
-    });
+    this.selectedDateEvents = this.events.filter(event => this.isDateInRange(selectedDate, event));
   }
 
-  setLocale(lang: string) {
-    this.options = {
-      ...this.options,
-      locale: { locale: lang, weekdays: 'short' },
-    };
+  private isDateInRange(selectedDate: Date, event: Event): boolean {
+    const startDate = parseISO(event.startDate);
+    const endDate = parseISO(event.endDate);
+
+    return (
+      (isEqual(selectedDate, startDate) || isAfter(selectedDate, startDate)) &&
+      (isEqual(selectedDate, endDate) || isBefore(selectedDate, endDate))
+    );
+  }
+
+  private setLocale(lang: string) {
+    this.options.locale = { locale: lang, weekdays: 'short' };
   }
 
   formatDate(date: string): string {
@@ -174,19 +137,16 @@ export class CalendarPage implements OnInit {
     };
 
     // Dynamiczne ustawienie języka
-    return new Intl.DateTimeFormat(this.settings.language, options).format(
+    return new Intl.DateTimeFormat(this.options.locale?.locale, options).format(
       new Date(date)
     );
   }
 
-  async getEvents() {
-    const userId = localStorage.getItem('userId');
+  private async loadEvents() {
+    if (!this.userId) return;
 
     try {
-      const response = await axios.get(
-        `${this.baseUrl}/event/getEvents/${userId}`
-      );
-      this.events = response.data;
+      this.events = await this.eventService.getEvents(this.userId);
       this.updateCalendarDays();
       this.loadEventsForSelectedDate(this.date);
     } catch (error: any) {
@@ -194,21 +154,17 @@ export class CalendarPage implements OnInit {
     }
   }
 
-  updateCalendarDays() {
-    const daysConfig: IDayConfig[] = [];
-
-    this.events.forEach((event) => {
+  private updateCalendarDays() {
+    const daysConfig: IDayConfig[] = this.events.flatMap(event => {
       const startDate = parseISO(event.startDate);
       const endDate = parseISO(event.endDate);
 
       const daysInRange = eachDayOfInterval({ start: startDate, end: endDate });
 
-      daysInRange.forEach((date) => {
-        daysConfig.push({
-          date: date,
-          subTitle: '●',
-        });
-      });
+      return daysInRange.map(date => ({
+        date: date,
+        subTitle: '●',
+      }));
     });
 
     this.options = {
@@ -217,36 +173,27 @@ export class CalendarPage implements OnInit {
     };
   }
 
-  async submitForm() {
-    this.submitted = true;
-    if (this.addEvent.invalid) {
-      return;
-    }
-
-    const newEvent = this.buildNewEvent();
+  private async addEvent(eventData: any): Promise<void> {
+    const newEvent = this.buildNewEvent(eventData);
 
     try {
-      //await this.eventService.addEvent(newEvent);
-      this.modalController.dismiss();
+      await this.eventService.addEvent(newEvent);
       this.events.push(newEvent);
       this.loadEventsForSelectedDate(this.date);
+      this.updateCalendarDays();
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
   }
 
-  buildNewEvent(): Event {
-    const userId = localStorage.getItem('userId');
-    const startDate = new Date(this.addEvent.get('startDate')?.value);
-    const endDate = new Date(this.addEvent.get('endDate')?.value);
-
+  private buildNewEvent(eventData: any): Event {
     return {
-      user_id: userId,
-      title: this.addEvent.get('title')?.value,
-      startDate: format(startDate, 'yyyy-MM-dd'),
-      endDate: format(endDate, 'yyyy-MM-dd'),
-      startTime: format(startDate, 'HH:mm'),
-      endTime: format(endDate, 'HH:mm'),
+      user_id: this.userId,
+      title: eventData.title,
+      startDate: format(eventData.startDate, 'yyyy-MM-dd'),
+      endDate: format(eventData.endDate, 'yyyy-MM-dd'),
+      startTime: format(eventData.startDate, 'HH:mm'),
+      endTime: format(eventData.endDate, 'HH:mm'),
     };
   }
 }

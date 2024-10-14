@@ -14,6 +14,7 @@ import { EditInfoModalComponent } from './edit-info/edit-info-modal.component';
 import { ImagePickerComponent } from './image-picker-modal/image-picker-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/services/auth.service';
+import { StorageService } from 'src/services/storage.service';
 
 export interface Vehicle {
   _id?: string;
@@ -56,14 +57,14 @@ export class CarInfoPage implements OnInit {
     private fleetService: FleetService,
     private imageService: ImageService,
     private datePipe: DatePipe,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private storageService: StorageService
   ) {}
-//TODO: Dodać komunikat w sytuacji gdy użytkownik nie posiada pojazdów
 //TODO: Dodanie nowego pojazdu, walidacja zdjęcia
   async ngOnInit() {
-    this.authService.isLoggedIn().subscribe(async isLoggedIn => {
+    this.authService.isLoggedIn().subscribe(async (isLoggedIn) => {
       if (isLoggedIn) {
-        this.userId = localStorage.getItem('userId');
+        this.userId = await this.storageService.get('userId');
         await this.fetchFleetData();
       } else {
         this.clearFleetData();

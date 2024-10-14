@@ -168,7 +168,6 @@ export class ServiceSummaryPage implements OnInit {
       this.calculateSummary();
       this.findMostExpensiveService();
       this.updateServiceData();
-      console.log(this.serviceData);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
@@ -386,7 +385,6 @@ export class ServiceSummaryPage implements OnInit {
 
   calculateSummary(): void {
     this.totalServices = this.serviceData.length;
-    console.log(this.totalServices);
   }
 
   findMostExpensiveService(): void {

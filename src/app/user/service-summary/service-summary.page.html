@@ -2,37 +2,43 @@
   <ion-grid>
     <ion-row class="ion-margin-top">
       <ion-col size="12" size-md="6" class="ion-margin-bottom">
-        <ion-item>
-          <ion-label>Pojazd</ion-label>
-          <ion-select
-            interface="action-sheet"
-            cancelText="Anuluj"
-            [(ngModel)]="selectedCar"
-            (ionChange)="getBillHistory(selectedCar._id)"
-          >
-            <ion-select-option
-              *ngFor="let vehicle of vehicleStrings"
-              [value]="vehicle.value"
+        <ion-card>
+          <ion-card-content>
+            <ion-item>
+              <ion-label>Pojazd</ion-label>
+              <ion-select
+                interface="action-sheet"
+                cancelText="Anuluj"
+                [(ngModel)]="selectedCar"
+                (ionChange)="getBillHistory(selectedCar._id)"
+              >
+                <ion-select-option
+                  *ngFor="let vehicle of vehicleStrings"
+                  [value]="vehicle.value"
+                >
+                  {{ vehicle.label }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-list class="scrollable-list">
+              <ion-item *ngFor="let service of serviceDataMapped">
+                <ion-label>
+                  <h2>{{ service.date }}</h2>
+                  <p>Koszt usługi: {{ service.cost }} zł</p>
+                  <p>Przebieg: {{ service.mileage }} km</p>
+                  <p>Opis: {{ service.desc || 'Brak opisu' }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+
+            <ion-item
+              *ngIf="serviceData.length == 0 && selectedCar != undefined"
             >
-              {{ vehicle.label }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-list class="scrollable-list">
-          <ion-item *ngFor="let service of serviceDataMapped">
-            <ion-label>
-              <h2>{{ service.date }}</h2>
-              <p>Koszt usługi: {{ service.cost }} zł</p>
-              <p>Przebieg: {{ service.mileage }} km</p>
-              <p>Opis: {{ service.desc || 'Brak opisu' }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-
-        <ion-item *ngIf="serviceData.length == 0 && selectedCar != undefined">
-          <ion-label>Pojazd nie posiada przypisanych serwisów.</ion-label>
-        </ion-item>
+              <ion-label>Pojazd nie posiada przypisanych serwisów.</ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
 
       <ion-col size="12" size-md="6">

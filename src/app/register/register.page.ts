@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { backend_Url } from '../app.component';
 import axios from 'axios';
-import { maxLengthValidator } from '../shared/validators/formValidators';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class RegisterPage implements OnInit, OnDestroy {
   //adres backendu
-  private baseUrl = backend_Url;
+  private baseUrl = environment.backendUrl;
   private subscription!: Subscription;
   
   registerForm!: FormGroup;
