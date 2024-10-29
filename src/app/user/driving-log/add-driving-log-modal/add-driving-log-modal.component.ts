@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import axios from 'axios';
 import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
+import { environment } from 'src/environments/environment';
 
 interface Route {
   user_id: string | null;
@@ -24,6 +25,7 @@ interface Route {
   styleUrls: ['./add-driving-log-modal.component.scss'],
 })
 export class AddDrivingLogModal implements OnInit {
+  private baseUrl = environment.backendUrl;
   private userId = localStorage.getItem('userId');
 
   vehicleStrings: any[] = [];
@@ -113,7 +115,6 @@ export class AddDrivingLogModal implements OnInit {
     const query = event.detail.value;
     if (query.length > 2) {
       this.filteredEndCities = await this.getCities(query);
-      console.log(this.filteredEndCities)
     } else {
       this.filteredEndCities = [];
     }
@@ -136,14 +137,13 @@ export class AddDrivingLogModal implements OnInit {
   async getCities(query: string): Promise<any[]> {
     try {
       const response = await axios.get(
-        'http://localhost:3000/googlePlaces/getCities',
+        `${this.baseUrl}/googlePlaces/getCities`,
         {
           params: {
             query: query,
           },
         }
       );
-      console.log(response)
       return response.data;
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
@@ -161,7 +161,7 @@ export class AddDrivingLogModal implements OnInit {
 
     try {
       const response = await axios.get(
-        'http://localhost:3000/googlePlaces/getDistance',
+        `${this.baseUrl}/googlePlaces/getDistance`,
         {
           params: {
             startLocation: startLocation,

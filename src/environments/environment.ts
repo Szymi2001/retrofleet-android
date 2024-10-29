@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'https://retrofleet-4b52e8cd8f2d.herokuapp.com'
+  backendUrl: 'https://backend-server-git-master-szymi2001s-projects.vercel.app'
 };
 
 /*

@@ -6,7 +6,6 @@ import {
   LoadingController,
   ModalController,
 } from '@ionic/angular';
-import { Subscription } from 'rxjs';
 import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { AddVehicleModalComponent } from './add-vehicle-modal/add-vehicle-modal.component';
@@ -41,7 +40,6 @@ export interface Vehicle {
 export class CarInfoPage implements OnInit {
   @ViewChild('slidingItem', { static: false }) slidingItem!: IonItemSliding;
 
-  private subscription!: Subscription;
   private userId!: string | null;
 
   //ImagePicker
@@ -59,20 +57,24 @@ export class CarInfoPage implements OnInit {
     private datePipe: DatePipe,
     private translate: TranslateService,
     private storageService: StorageService
-  ) {}
+  ) {
+    console.log(this.myFleet)
+  }
 //TODO: Dodanie nowego pojazdu, walidacja zdjęcia
+//TODO: Zapisywanie pobranych pojazdów i zdjęć w serwisie aby uniknąć ponownego pobierania z bazy
   async ngOnInit() {
     this.authService.isLoggedIn().subscribe(async (isLoggedIn) => {
       if (isLoggedIn) {
         this.userId = await this.storageService.get('userId');
         await this.fetchFleetData();
+        
       } else {
         this.clearFleetData();
       }
     });
   
     await this.presentLoading();
-    await this.downloadPhotos(this.userId!);
+    // await this.downloadPhotos(this.userId!);
     this.loadingController.dismiss();
   }
 
@@ -170,7 +172,9 @@ export class CarInfoPage implements OnInit {
 
     try {
       this.myFleet = await this.fleetService.getVehicles(this.userId);
+
       if (this.myFleet.length > 0) {
+        console.log("Pobrano zdjęcia z bazy!");
         this.downloadPhotos(this.userId);
       }
     } catch (error) {
