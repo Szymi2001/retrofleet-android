@@ -8,10 +8,10 @@ import { environment } from 'src/environments/environment';
 export class ImageService {
   private baseUrl = environment.backendUrl;
 
-  async uploadCarImage(userId: any, carId: any, formData: FormData): Promise<any> {
+  async uploadImage(userId: any, carId: any, formData: FormData): Promise<any> {
     try {
       const response = await axios.post(
-        `${this.baseUrl}/carImage/upload`,
+        `${this.baseUrl}/image/upload`,
         formData,
         {
           headers: {
@@ -28,53 +28,22 @@ export class ImageService {
     }
   }
 
-  async uploadProfileImage(userId: any, formData: FormData): Promise<any> {
-    try {
-      const response = await axios.post(
-        `${this.baseUrl}/profileImage/upload`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'user-id': userId,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-      throw error;
-    }
-  }
-
-  async downloadCarPhotos(userId: string): Promise<any[]> {
+  async downloadImages(userId: string): Promise<any[]> {
     try {
       const response = await axios.get(
-        `${this.baseUrl}/carImage/download/${userId}`
+        `${this.baseUrl}/image/download/${userId}`
       );
-      return response.data;
+      return response.data.images;
     } catch (error) {
       this.handleError(error);
       throw error;
     }
   }
 
-  async downloadProfileImage(userId: string): Promise<any[]> {
-    try {
-      const response = await axios.get(
-        `${this.baseUrl}/carImage/download/${userId}`
-      );
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-      throw error;
-    }
-  }
-
-  async deletePhoto(userId: any, carId: any): Promise<any> {
+  async deleteImage(userId: any, carId: any): Promise<any> {
     try {
         const response = await axios.delete(
-            `${this.baseUrl}/carImage/delete/${userId}/${carId}`
+            `${this.baseUrl}/image/delete/${userId}/${carId}`
         );
         return response.data;
     } catch (error) {

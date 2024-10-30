@@ -231,7 +231,8 @@ export class CarInfoPage implements OnInit {
   //Funkcja asynchroniczna pobierająca wszystkie zdjęcia pojazdów użytkownika
   async downloadPhotos(userId: string) {
     try {
-      this.croppedImages = await this.imageService.downloadCarPhotos(userId);
+      this.croppedImages = await this.imageService.downloadImages(userId);
+      console.log(this.croppedImages)
     } catch (error) {
       console.error('Błąd podczas pobierania zdjęcia:', error);
     }
@@ -253,7 +254,7 @@ export class CarInfoPage implements OnInit {
         );
 
         // Usunięcie zdjęć z bazy danych
-        await this.imageService.deletePhoto(this.userId!, carId);
+        await this.imageService.deleteImage(this.userId!, carId);
 
         //Zamknięcie ion-item-sliding
         await this.slidingItem.closeOpened();

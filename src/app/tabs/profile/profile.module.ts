@@ -9,7 +9,6 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
 import { ProfilePage } from './profile.page';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { TranslateModule } from '@ngx-translate/core';
-import { ProfilePickerModalComponent } from './profile-picker-modal/profile-picker-modal.component';
 
 @NgModule({
   imports: [
@@ -21,6 +20,6 @@ import { ProfilePickerModalComponent } from './profile-picker-modal/profile-pick
     ImageCropperComponent,
     TranslateModule
   ],
-  declarations: [ProfilePage, ProfilePickerModalComponent]
+  declarations: [ProfilePage]
 })
 export class ProfilePageModule {}

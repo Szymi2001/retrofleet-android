@@ -36,7 +36,6 @@ export class AppComponent {
     second_question: '',
     second_answer: '',
   };
-  profileImage: any[] = [];
 
   constructor(
     private menuController: MenuController,
@@ -94,7 +93,6 @@ export class AppComponent {
     try {
       this.userId = await this.storageService.get('userId');
       await Promise.all([
-        this.downloadPhotos(this.userId!),
         this.loadUserInfo(),
         this.setProfileMenuItems()
       ]);
@@ -174,14 +172,6 @@ export class AppComponent {
       this.userInfo = await this.profileService.getUserInfo(this.userId);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
-    }
-  }
-
-  async downloadPhotos(userId: string) {
-    try {
-      this.profileImage = await this.imageService.downloadProfileImage(userId);
-    } catch (error) {
-      console.error('Błąd podczas pobierania zdjęcia:', error);
     }
   }
 

@@ -4,17 +4,14 @@
     <ion-toolbar>
       <ion-title>{{ pageTitle }}</ion-title>
       <ion-buttons slot="end" *ngIf="isLoggedIn">
-        <ion-button (click)="profileMenu()">
-          <!-- <ion-button id="click-trigger"> -->
+        <!--<ion-button (click)="profileMenu()">-->
+          <ion-button id="click-trigger">
           <ion-avatar>
-            <img
-              [src]="'/assets/images/profile_icon.png'"
-              alt="Zdjęcie profilowe"
-            />
+            <ion-icon name="person-circle-outline"></ion-icon>
           </ion-avatar>
         </ion-button>
       </ion-buttons>
-      <!-- <ion-popover trigger="click-trigger" triggerAction="click">
+      <ion-popover trigger="click-trigger" triggerAction="click" showBackdrop="false">
         <ng-template>
           <ion-content>
             <ion-list lines="full">
@@ -28,7 +25,7 @@
             </ion-item>
           </ion-list></ion-content>
         </ng-template>
-      </ion-popover> -->
+      </ion-popover>
     </ion-toolbar>
   </ion-header>
 
@@ -84,10 +81,7 @@
             (click)="navigateTo('/profile')"
           >
             <ion-avatar>
-              <img
-                [src]="'/assets/images/profile_icon.png'"
-                alt="Zdjęcie profilowe"
-              />
+              <ion-icon name="person-circle-outline"></ion-icon>
             </ion-avatar>
             <ion-label class="ion-margin-start" *ngIf="userInfo?.login">{{ userInfo.name ? userInfo.name : userInfo.login }}</ion-label>
           </ion-item>

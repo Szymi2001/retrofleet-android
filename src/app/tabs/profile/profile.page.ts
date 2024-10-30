@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileService } from 'src/services/endpoints/profileEndpoint.service';
-import { IonModal, LoadingController, ModalController } from '@ionic/angular';
-import { OverlayEventDetail } from '@ionic/core/components';
-import { ProfilePickerModalComponent } from './profile-picker-modal/profile-picker-modal.component';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { UserInfo } from 'src/app/shared/interfaces/user.interface';
 
@@ -65,7 +63,6 @@ export class ProfilePage implements OnInit {
       });
 
     await this.presentLoading();
-    await this.downloadPhotos(this.userId!);
     this.loadingController.dismiss();
   }
 
@@ -76,14 +73,6 @@ export class ProfilePage implements OnInit {
     });
     await loading.present();
     return loading;
-  }
-
-  async openImagePicker() {
-    const modal = await this.modalController.create({
-      component: ProfilePickerModalComponent,
-    });
-
-    return await modal.present();
   }
 
   initializeForms(): void {
@@ -219,14 +208,5 @@ export class ProfilePage implements OnInit {
 
   onDeleteAccountSubmit(): void {
 
-  }
-
-  //Funkcja asynchroniczna pobierająca wszystkie zdjęcia pojazdów użytkownika
-  async downloadPhotos(userId: string) {
-    try {
-      this.profileImage = await this.imageService.downloadProfileImage(userId);
-    } catch (error) {
-      console.error('Błąd podczas pobierania zdjęcia:', error);
-    }
   }
 }

@@ -62,7 +62,7 @@ export class ImagePickerComponent {
     formData.append('image', this.croppedBlob, `${this.userId}.png`);
 
     try {
-      await this.imageService.uploadCarImage(this.userId!, this.carId, formData);
+      await this.imageService.uploadImage(this.userId!, this.carId, formData);
       this.imageUpdateService.notifyPhotoUpdate();
       this.dismiss();
     } catch (error: any) {

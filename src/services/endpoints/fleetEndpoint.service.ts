@@ -10,6 +10,7 @@ export class FleetService {
 
   async getVehicles(userId: string): Promise<any> {
     try {
+      console.log(this.baseUrl)
       const response = await axios.get(
         `${this.baseUrl}/fleet/getVehicles/${userId}`
       );

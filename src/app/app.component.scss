@@ -3,12 +3,11 @@ ion-button ion-avatar {
   width: 2.5rem;
 }
 
-ion-title {
-  ion-avatar {
-    height: 2.5rem;
-    width: 2.5rem;
-  }
+ion-avatar ion-icon {
+  height: 2.5rem;
+  width: 2.5rem;
 }
+
 
 ion-item-divider {
   background: none;
