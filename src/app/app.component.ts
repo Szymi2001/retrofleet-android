@@ -16,7 +16,7 @@ import { StorageService } from 'src/services/storage.service';
   styleUrls: ['./app.component.scss'],
   providers: [],
 })
-
+//TODO: Popover musi znikać po kliknięciu
 export class AppComponent {
   private userId!: string | null;
 

@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://localhost:3000'
-  //backendUrl: 'https://backend-server-git-master-szymi2001s-projects.vercel.app'
+  backendUrl: 'https://backend-server-git-master-szymi2001s-projects.vercel.app'
 };
 
 /*
