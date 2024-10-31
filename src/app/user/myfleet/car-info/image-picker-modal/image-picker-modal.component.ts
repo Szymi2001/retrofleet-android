@@ -11,7 +11,7 @@ import { ImageUpdateService } from 'src/services/imageUpdate.service';
   templateUrl: './image-picker-modal.component.html',
   styleUrls: ['./image-picker-modal.component.scss'],
 })
-//TODO: Ustawienie domyślnego zdjęcia
+//TODO: Usunięcia zdjęcia w celu zastosowania domyślnego
 export class ImagePickerComponent {
   private userId = localStorage.getItem('userId');
 
@@ -64,13 +64,17 @@ export class ImagePickerComponent {
     try {
       await this.imageService.uploadImage(this.userId!, this.carId, formData);
       this.imageUpdateService.notifyPhotoUpdate();
-      this.dismiss();
+      this.modalController.dismiss({ imageAdded: true });
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
   }
 
-  dismiss() {
+  async removeImage() {
+
+  }
+
+  dismiss():void {
     this.modalController.dismiss();
   }
 

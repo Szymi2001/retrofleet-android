@@ -13,7 +13,9 @@
         <ion-toggle
           [(ngModel)]="paletteToggle"
           (ionChange)="toggleDarkModeChange($event)"
-          >{{ 'SETTINGS.DARK_MODE_TITLE' | translate }}</ion-toggle
+          aria-hidden="false"
+          >{{ 'SETTINGS.DARK_MODE_TITLE' | translate }}
+          </ion-toggle
         >
       </ion-item>
 

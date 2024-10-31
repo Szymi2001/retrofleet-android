@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 })
 export class ImageService {
   private baseUrl = environment.backendUrl;
+  private cachedImages: any[] = [];
+  private hasCachedImages = false;
 
   async uploadImage(userId: any, carId: any, formData: FormData): Promise<any> {
     try {
@@ -21,6 +23,7 @@ export class ImageService {
           },
         }
       );
+      this.clearImageCache();
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -29,11 +32,17 @@ export class ImageService {
   }
 
   async downloadImages(userId: string): Promise<any[]> {
+    if (this.hasCachedImages) {
+      return this.cachedImages;
+    }
+
     try {
       const response = await axios.get(
         `${this.baseUrl}/image/download/${userId}`
       );
-      return response.data.images;
+      this.cachedImages = response.data.images;
+      this.hasCachedImages = true;
+      return this.cachedImages;
     } catch (error) {
       this.handleError(error);
       throw error;
@@ -45,11 +54,17 @@ export class ImageService {
         const response = await axios.delete(
             `${this.baseUrl}/image/delete/${userId}/${carId}`
         );
+        this.clearImageCache();
         return response.data;
     } catch (error) {
         this.handleError(error);
         throw error;
     }
+  }
+
+  private clearImageCache() {
+    this.cachedImages = [];
+    this.hasCachedImages = false;
   }
 
   private handleError(error: any) {

@@ -5,25 +5,31 @@
       <ion-title>{{ pageTitle }}</ion-title>
       <ion-buttons slot="end" *ngIf="isLoggedIn">
         <!--<ion-button (click)="profileMenu()">-->
-          <ion-button id="click-trigger">
+        <ion-button id="menu">
           <ion-avatar>
             <ion-icon name="person-circle-outline"></ion-icon>
           </ion-avatar>
         </ion-button>
       </ion-buttons>
-      <ion-popover trigger="click-trigger" triggerAction="click" showBackdrop="false">
+      <ion-popover
+        trigger="menu"
+        triggerAction="click"
+        showBackdrop="false"
+        *ngIf="isLoggedIn"
+      >
         <ng-template>
           <ion-content>
             <ion-list lines="full">
-            <ion-item (click)="navigateTo('/settings')">
-              <ion-icon name="settings-outline" slot="start"></ion-icon>
-              <ion-label>Ustawienia</ion-label>
-            </ion-item>
-            <ion-item (click)="logout()">
-              <ion-icon name="log-out-outline" slot="start"></ion-icon>
-              <ion-label>Wyloguj</ion-label>
-            </ion-item>
-          </ion-list></ion-content>
+              <ion-item (click)="navigateTo('/settings')">
+                <ion-icon name="settings-outline" slot="start"></ion-icon>
+                <ion-label>Ustawienia</ion-label>
+              </ion-item>
+              <ion-item (click)="logout()">
+                <ion-icon name="log-out-outline" slot="start"></ion-icon>
+                <ion-label>Wyloguj</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-content>
         </ng-template>
       </ion-popover>
     </ion-toolbar>
@@ -35,37 +41,69 @@
   </ion-content>
 
   <ion-tab-bar slot="bottom" *ngIf="isLoggedIn">
-    <ion-tab-button routerLink="/myfleet" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/myfleet"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="car-outline"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button routerLink="/driving-log" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/driving-log"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="map-outline"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button routerLink="/calendar" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/calendar"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="calendar-outline"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button routerLink="/services" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/services"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="build-outline"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button routerLink="/fuelings" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/fuelings"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="speedometer-outline"></ion-icon>
     </ion-tab-button>
   </ion-tab-bar>
 
   <ion-tab-bar slot="bottom" *ngIf="!isLoggedIn">
-    <ion-tab-button routerLink="/login" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/login"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="log-in-outline"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button routerLink="/register" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/register"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="person-add-outline"></ion-icon>
     </ion-tab-button>
-    <ion-tab-button routerLink="/settings" routerLinkActive="active" routerDirection="root">
+    <ion-tab-button
+      routerLink="/settings"
+      routerLinkActive="active"
+      routerDirection="root"
+    >
       <ion-icon name="settings-outline"></ion-icon>
     </ion-tab-button>
   </ion-tab-bar>
 
   <!-- Menu -->
-  <ion-menu
+  <!-- <ion-menu
     side="end"
     menuId="profile-menu"
     contentId="main-content"
@@ -109,5 +147,5 @@
         </ion-menu-toggle>
       </ion-list>
     </ion-content>
-  </ion-menu>
+  </ion-menu> -->
 </ion-app>

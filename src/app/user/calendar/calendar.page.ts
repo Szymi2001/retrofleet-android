@@ -36,7 +36,6 @@ interface Event {
   styleUrls: ['./calendar.page.scss'],
 })
 
-//TODO: Po zmienie godziny na 00:00 ustaw następny dzień
 export class CalendarPage implements OnInit {
   @ViewChild(CalendarComponent) calendarRef!: CalendarComponent;
 

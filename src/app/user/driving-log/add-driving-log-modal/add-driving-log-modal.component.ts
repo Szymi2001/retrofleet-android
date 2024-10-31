@@ -47,7 +47,6 @@ export class AddDrivingLogModal implements OnInit {
 
   statusOptions = [
     { label: 'Zaplanowana', value: 'Planned' },
-    { label: 'W trakcie', value: 'InProgress' },
     { label: 'Zakończona', value: 'Ended' },
   ];
 
@@ -62,7 +61,6 @@ export class AddDrivingLogModal implements OnInit {
     this.loadVehicleData();
   }
 
-  //TODO: Zaplanowana data może być tylko od następnego dnia itp.
   initializeForm(): void {
     this.routeForm = this.formBuilder.group({
       selectedCar: ['', Validators.required],
@@ -191,10 +189,6 @@ export class AddDrivingLogModal implements OnInit {
       case 'Planned':
         this.minDate = todayISO;
         this.maxDate = futureISO;
-        break;
-      case 'InProgress':
-        this.minDate = todayISO;
-        this.maxDate = todayISO;
         break;
       case 'Ended':
         this.minDate = '1900-01-01';

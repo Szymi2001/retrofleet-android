@@ -57,9 +57,7 @@ export class CarInfoPage implements OnInit {
     private datePipe: DatePipe,
     private translate: TranslateService,
     private storageService: StorageService
-  ) {
-    console.log(this.myFleet)
-  }
+  ) {}
 //TODO: Dodanie nowego pojazdu, walidacja zdjęcia
 //TODO: Zapisywanie pobranych pojazdów i zdjęć w serwisie aby uniknąć ponownego pobierania z bazy
   async ngOnInit() {
@@ -107,6 +105,13 @@ export class CarInfoPage implements OnInit {
         carId: selectedCarData._id,
       },
     });
+
+    modal.onDidDismiss().then((data) => {
+      if(data.data && data.data.imageAdded == true && this.userId) {
+        this.downloadPhotos(this.userId);
+      }
+    });
+
     await this.slidingItem.closeOpened();
     return await modal.present();
   }
@@ -174,7 +179,6 @@ export class CarInfoPage implements OnInit {
       this.myFleet = await this.fleetService.getVehicles(this.userId);
 
       if (this.myFleet.length > 0) {
-        console.log("Pobrano zdjęcia z bazy!");
         this.downloadPhotos(this.userId);
       }
     } catch (error) {
@@ -232,7 +236,6 @@ export class CarInfoPage implements OnInit {
   async downloadPhotos(userId: string) {
     try {
       this.croppedImages = await this.imageService.downloadImages(userId);
-      console.log(this.croppedImages)
     } catch (error) {
       console.error('Błąd podczas pobierania zdjęcia:', error);
     }
