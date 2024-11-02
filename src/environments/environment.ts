@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'https://backend-server-git-master-szymi2001s-projects.vercel.app'
+  backendUrl: 'https://www.retrofleet.online'
 };
 
 /*

@@ -59,6 +59,7 @@ export class AddDrivingLogModal implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.loadVehicleData();
+    console.log(this.baseUrl)
   }
 
   initializeForm(): void {
@@ -142,6 +143,7 @@ export class AddDrivingLogModal implements OnInit {
           },
         }
       );
+      console.log(response);
       return response.data;
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
