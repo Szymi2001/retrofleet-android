@@ -1,31 +1,39 @@
 ion-calendar {
+  padding: 0 !important;
+  .title {
     padding: 0 !important;
-    .title {
-        padding: 0 !important;
-        display: flex;
-    }
-    .switch-btn {
-        order: 1;
-    }
-    .back {
-        margin-left: 0 !important;
-        left: 0 !important;
-        order: 0;
-    }
-    .forward {
-        margin-left: 0 !important;
-        right: 0 !important;
-        order: 2;
-    }
+    display: flex;
+  }
+  .switch-btn {
+    order: 1;
+  }
+  .back {
+    margin-left: 0 !important;
+    left: 0 !important;
+    order: 0;
+  }
+  .forward {
+    margin-left: 0 !important;
+    right: 0 !important;
+    order: 2;
+  }
 }
 
+ion-calendar-month { 
+    .days-btn.today small {
+        bottom: -10px !important;
+    }
+    .days-btn.on-selected small {
+        bottom: 0px !important;
+    }
+}  
 
 .list-md.list-inset {
-    margin-inline-start: 10px;
-    margin-inline-end: 10px;
-    border-radius: 4px;
+  margin-inline-start: 10px;
+  margin-inline-end: 10px;
+  border-radius: 4px;
 }
 
 button.days-btn ion-note {
-    bottom: 0px !important;
+  bottom: 0px !important;
 }
