@@ -10,9 +10,6 @@
           </ion-card-header>
           <ion-card-content>
             <ion-item lines="none">
-                <!-- <ion-thumbnail slot="start" (click)="openImagePicker()">
-                  <img [src]="profileImage[0] || '/assets/images/profile_icon.png'" alt="Zdjęcie profilowe" />
-                </ion-thumbnail> -->
               <ion-label>
                 <ion-note *ngIf="userInfo?.login">
                   {{ 'PROFILE.LOGIN_LABEL' | translate }}: {{ userInfo.login }} <br />

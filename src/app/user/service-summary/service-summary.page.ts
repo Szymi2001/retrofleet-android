@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FleetService } from 'src/services/endpoints/fleetEndpoint.service';
 import { VehicleMaintenanceService } from 'src/services/endpoints/vehicleMaintenanceEndpoint.service';
 import { ChartConfiguration } from 'chart.js';
+import { AuthService } from 'src/services/auth.service';
 
 interface Vehicle {
   brand: string;
@@ -31,7 +32,7 @@ interface TotalPriceByMonth {
   styleUrls: ['./service-summary.page.scss'],
 })
 export class ServiceSummaryPage implements OnInit {
-  private userId = localStorage.getItem('userId');
+  userId: string | null = null;
 
   vehicleStrings: any[] = [];
   receivedData: Vehicle[] = [];
@@ -112,13 +113,15 @@ export class ServiceSummaryPage implements OnInit {
 
   constructor(
     private fleetService: FleetService,
-    private vehicleMaintenanceService: VehicleMaintenanceService
+    private vehicleMaintenanceService: VehicleMaintenanceService,
+    private authService: AuthService
   ) {
     this.currentYear = new Date().getFullYear();
   }
 
   async ngOnInit(): Promise<void> {
     try {
+      this.userId = await this.authService.getUserIdFromStorage();
       if (this.userId) {
         this.receivedData = await this.fleetService.getVehicles(this.userId);
         this.updateVehicleStrings();

@@ -4,6 +4,7 @@ import { AddFuelingModalComponent } from './add-fueling-modal/add-fueling-modal.
 import { FuelingService } from 'src/services/endpoints/fuelingEndpoint.service';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
+import { AuthService } from 'src/services/auth.service';
 
 interface FuelReceipt {
   _id?: string;
@@ -27,11 +28,15 @@ interface FuelReceipt {
   styleUrls: ['./add-fueling.page.scss'],
 })
 export class AddFuelingPage implements OnInit {
+  userId: string | null = null;
 
-  private userId = localStorage.getItem('userId');
   myFuelings: FuelReceipt[] = [];
 
-  constructor(private modalController: ModalController, private fuelingService: FuelingService) { }
+  constructor(
+    private modalController: ModalController,
+    private fuelingService: FuelingService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadFuelings();
@@ -78,16 +83,15 @@ export class AddFuelingPage implements OnInit {
       fuelType: serviceData.fuelType,
       fuelAmount: serviceData.fuelAmount,
       transactionType: serviceData.transactionType,
-      receiptNumber: serviceData.receiptNumber
+      receiptNumber: serviceData.receiptNumber,
     };
   }
 
   async loadFuelings(): Promise<void> {
     try {
+      this.userId = await this.authService.getUserIdFromStorage();
       if (this.userId) {
-        this.myFuelings = await this.fuelingService.getFuelings(
-          this.userId
-        );
+        this.myFuelings = await this.fuelingService.getFuelings(this.userId);
         //this.filteredServices = [...this.myServices];
       }
     } catch (error: any) {

@@ -21,6 +21,7 @@ import { AddEventModalComponent } from './add-event-modal/add-event-modal.compon
 import { StorageService } from 'src/services/storage.service';
 
 interface Event {
+  _id?: string;
   user_id: string | null;
   title: string;
   startDate: string;
@@ -172,12 +173,12 @@ export class CalendarPage implements OnInit {
     };
   }
 
-  private async addEvent(eventData: any): Promise<void> {
+  private async addEvent(eventData: Event): Promise<void> {
     const newEvent = this.buildNewEvent(eventData);
 
     try {
-      await this.eventService.addEvent(newEvent);
-      this.events.push(newEvent);
+      const savedEvent = await this.eventService.addEvent(newEvent);
+      this.events.push(savedEvent);
       this.loadEventsForSelectedDate(this.date);
       this.updateCalendarDays();
     } catch (error: any) {
@@ -185,7 +186,7 @@ export class CalendarPage implements OnInit {
     }
   }
 
-  private buildNewEvent(eventData: any): Event {
+  private buildNewEvent(eventData: Event): Event {
     return {
       user_id: this.userId,
       title: eventData.title,
@@ -194,5 +195,18 @@ export class CalendarPage implements OnInit {
       startTime: format(eventData.startDate, 'HH:mm'),
       endTime: format(eventData.endDate, 'HH:mm'),
     };
+  }
+
+  async deleteEvent(eventData: Event) {
+    if (!eventData._id) return;
+
+    try {
+      await this.eventService.deleteEvent(eventData._id);
+      this.events = this.events.filter(event => event._id !== eventData._id);
+      this.loadEventsForSelectedDate(this.date);
+      this.updateCalendarDays();
+    } catch (error: any) {
+      console.error('Błąd:', error.response?.data || error.message);
+    }
   }
 }

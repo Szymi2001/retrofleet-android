@@ -2,36 +2,25 @@
   <!-- Pasek nawigacyjny -->
   <ion-header>
     <ion-toolbar>
+      <ion-buttons slot="start" *ngIf="showBackButton">
+        <ion-button (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
       <ion-title>{{ pageTitle }}</ion-title>
       <ion-buttons slot="end" *ngIf="isLoggedIn">
-        <!--<ion-button (click)="profileMenu()">-->
-        <ion-button id="menu">
+        <ion-button *ngIf="showProfileButton" (click)="navigateToProfile()" class="profile-btn">
           <ion-avatar>
             <ion-icon name="person-circle-outline"></ion-icon>
           </ion-avatar>
         </ion-button>
+        <ion-button *ngIf="!showProfileButton" (click)="navigateToSettings()" class="settings-btn">
+            <ion-icon name="settings-outline"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="!showProfileButton" (click)="logout()" class="logout-btn">
+          <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
       </ion-buttons>
-      <ion-popover
-        trigger="menu"
-        triggerAction="click"
-        showBackdrop="false"
-        *ngIf="isLoggedIn"
-      >
-        <ng-template>
-          <ion-content>
-            <ion-list lines="full">
-              <ion-item (click)="navigateTo('/settings')">
-                <ion-icon name="settings-outline" slot="start"></ion-icon>
-                <ion-label>Ustawienia</ion-label>
-              </ion-item>
-              <ion-item (click)="logout()">
-                <ion-icon name="log-out-outline" slot="start"></ion-icon>
-                <ion-label>Wyloguj</ion-label>
-              </ion-item>
-            </ion-list>
-          </ion-content>
-        </ng-template>
-      </ion-popover>
     </ion-toolbar>
   </ion-header>
 

@@ -47,7 +47,7 @@ export class LoginPage implements OnInit, OnDestroy {
     });
 
     //Init Ionic Storage
-    await this.storageService.init();
+    // await this.storageService.init();
 
     this.setValidationMessages();
 
@@ -96,7 +96,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
       //UserId to Ionic Storage
       await this.storageService.set('userId', id);
-      this.authService.setLoggedIn(true, id);
+      await this.authService.setLoggedIn(true, id);
 
       //Form reset
       this.loginForm.reset();
@@ -105,7 +105,7 @@ export class LoginPage implements OnInit, OnDestroy {
       this.loginForm.setErrors(null);
 
       //Navigate to myfleet
-      this.router.navigateByUrl('myfleet');
+      this.router.navigate(['/myfleet']);
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }

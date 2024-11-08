@@ -4,6 +4,8 @@ import { ProfileService } from 'src/services/endpoints/profileEndpoint.service';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { UserInfo } from 'src/app/shared/interfaces/user.interface';
+import { AuthService } from 'src/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +13,7 @@ import { UserInfo } from 'src/app/shared/interfaces/user.interface';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  private userId = localStorage.getItem('userId');
+  userId: string | null = null;
 
   profileImage: any[] = [];
 
@@ -48,9 +50,8 @@ export class ProfilePage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private profileService: ProfileService,
-    private imageService: ImageService,
-    private modalController: ModalController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private authService: AuthService
   ) {}
 
   async ngOnInit() {
@@ -141,10 +142,11 @@ export class ProfilePage implements OnInit {
   }
 
   private async loadUserInfo(): Promise<void> {
-    if (!this.userId) return;
-
     try {
-      this.userInfo = await this.profileService.getUserInfo(this.userId);
+      this.userId = await this.authService.getUserIdFromStorage();
+      if (this.userId) {
+        this.userInfo = await this.profileService.getUserInfo(this.userId);
+      }
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }

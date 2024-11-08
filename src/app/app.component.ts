@@ -16,14 +16,15 @@ import { StorageService } from 'src/services/storage.service';
   styleUrls: ['./app.component.scss'],
   providers: [],
 })
-
+//Powrót powinien być zrealizowany za pomocą subskrypcji
 export class AppComponent {
   private userId!: string | null;
 
   isLoggedIn: boolean = false;
-  profileMenuItems: any[] = [];
   titleNames: any[] = [];
   pageTitle = 'RetroFleet';
+  showProfileButton: boolean = true;
+  showBackButton: boolean = false;
 
   userInfo: UserInfo = {
     login: '',
@@ -38,8 +39,6 @@ export class AppComponent {
   };
 
   constructor(
-    private menuController: MenuController,
-    private popoverController: PopoverController,
     private authService: AuthService,
     private appSettings: AppSettingsService,
     private imageService: ImageService,
@@ -53,7 +52,7 @@ export class AppComponent {
 
   async ngOnInit() {
     //Init Ionic Storage
-    await this.storageService.init();
+    // await this.storageService.init();
 
     this.subscribeToAuthService();
     this.subscribeToRouterEvents();
@@ -77,7 +76,11 @@ export class AppComponent {
 
   private subscribeToRouterEvents() {
     this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
       .subscribe(() => {
         this.updatePageTitle();
       });
@@ -85,29 +88,29 @@ export class AppComponent {
 
   private subscribeToLanguageChange() {
     this.translate.onLangChange.subscribe(() => {
-      this.setProfileMenuItems();
       this.updatePageTitle();
     });
   }
 
   private async handleUserData() {
     try {
-      this.userId = await this.storageService.get('userId');
-      await Promise.all([
-        this.loadUserInfo(),
-        this.setProfileMenuItems()
-      ]);
+      this.userId = await this.authService.getUserIdFromStorage();
+      await this.loadUserInfo();
     } catch (error) {
-      console.error('Błąd podczas pobierania userId lub wykonania operacji:', error);
+      console.error(
+        'Błąd podczas pobierania userId lub wykonania operacji:',
+        error
+      );
     }
   }
 
   private updatePageTitle() {
     const activeRoute = this.router.url;
 
-    this.pageTitle = activeRoute === 'profile'
-    ? this.getProfileTitle()
-    : this.getMenuItemTitle(activeRoute) || 'RetroFleet';
+    this.pageTitle =
+      activeRoute === 'profile'
+        ? this.getProfileTitle()
+        : this.getMenuItemTitle(activeRoute) || 'RetroFleet';
   }
 
   private getProfileTitle() {
@@ -123,7 +126,7 @@ export class AppComponent {
       this.titleNames = this.mapTitlesToPaths(translations);
     });
 
-    const menuItem = this.titleNames.find(item => item.path === activeRoute);
+    const menuItem = this.titleNames.find((item) => item.path === activeRoute);
     return menuItem ? menuItem.title : null;
   }
 
@@ -156,14 +159,34 @@ export class AppComponent {
     ];
   }
 
-  // async profileMenu() {
-  //   const isOpen = await this.menuController.isOpen('profile-menu');
-  //   await this.menuController[isOpen? 'close' : 'open']('profile-menu');
-  // }
-
   navigateTo(path: string) {
     this.router.navigate([path]);
-    this.popoverController.dismiss('menu');
+  }
+
+  async navigateToProfile() {
+    const currentPath = this.router.url;
+
+    if (currentPath !== '/settings') {
+      await this.storageService.set('previousPath', currentPath);
+    }
+    
+    this.showProfileButton = false;
+    this.showBackButton = true;
+
+    await this.router.navigate(['/profile']);
+  }
+
+  async navigateToSettings() {
+    await this.router.navigate(['/settings']);
+    this.showProfileButton = true;
+    this.showBackButton = false;
+  }
+
+  async goBack() {
+    this.showProfileButton = true;
+    this.showBackButton = false;
+    const previousPath = await this.storageService.get('previousPath');
+    await this.router.navigate([previousPath])
   }
 
   async loadUserInfo(): Promise<void> {
@@ -176,26 +199,8 @@ export class AppComponent {
     }
   }
 
-  setProfileMenuItems() {
-    if (this.isLoggedIn) {
-      this.translate.get(['TABS.LOGOUT_TITLE', 'TABS.SETTINGS_TITLE'])
-        .subscribe(translations => {
-          this.profileMenuItems = this.createProfileMenuItems(translations);
-        });
-    }
-  }
-
-
-  private createProfileMenuItems(translations: any) {
-    return [
-      { title: translations['TABS.SETTINGS_TITLE'], icon: 'settings-outline', path: '/settings' },
-      { title: translations['TABS.LOGOUT_TITLE'], icon: 'log-out-outline', path: '/login', action: () => this.logout() },
-    ];
-  }
-
   async logout() {
-    await this.menuController.close('main-menu');
-    this.router.navigate(['/login']);
     this.authService.logout();
+    this.showBackButton = false;
   }
 }

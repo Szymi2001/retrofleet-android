@@ -15,67 +15,74 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <form [formGroup]="eventForm" (ngSubmit)="submitForm()">
-    <ion-item>
-      <ion-input
-        type="text"
-        label="{{ 'CALENDAR.MODAL.TITLE_INPUT' | translate }}"
-        labelPlacement="floating"
-        formControlName="title"
-      />
-    </ion-item>
-    <ion-text
-      color="danger"
-      *ngFor="let validation of validationMessages.title"
-    >
-      <div
-        *ngIf="
-          eventForm.controls['title'].hasError(validation.type) &&
-          eventForm.controls['title'].touched
-        "
-        class="error-message"
-      >
-        <ion-icon name="information-circle-outline"></ion-icon>
-        <span>{{ validation.message }}</span>
-      </div>
-    </ion-text>
-    <ion-item>
-      <ion-label>{{ "CALENDAR.MODAL.FROM" | translate }}</ion-label>
-      <ion-datetime-button datetime="startDatetime"></ion-datetime-button>
-    </ion-item>
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime
-          id="startDatetime"
-          formControlName="startDate"
-          [locale]="settings.language"
-        ></ion-datetime>
-      </ng-template>
-    </ion-modal>
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="eventForm" (ngSubmit)="submitForm()">
+        <ion-item>
+          <ion-input
+            type="text"
+            label="{{ 'CALENDAR.MODAL.TITLE_INPUT' | translate }}"
+            labelPlacement="floating"
+            formControlName="title"
+          />
+        </ion-item>
+        <ion-text
+          color="danger"
+          *ngFor="let validation of validationMessages.title"
+        >
+          <div
+            *ngIf="
+              eventForm.controls['title'].hasError(validation.type) &&
+              eventForm.controls['title'].touched
+            "
+            class="error-message"
+          >
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>{{ validation.message }}</span>
+          </div>
+        </ion-text>
+        <ion-item>
+          <ion-label>{{ "CALENDAR.MODAL.FROM" | translate }}</ion-label>
+          <ion-datetime-button datetime="startDatetime"></ion-datetime-button>
+        </ion-item>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="startDatetime"
+              formControlName="startDate"
+              [locale]="settings.language"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
 
-    <ion-item>
-      <ion-label>{{ "CALENDAR.MODAL.TO" | translate }}</ion-label>
-      <ion-datetime-button datetime="endDatetime"></ion-datetime-button>
-    </ion-item>
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime
-          id="endDatetime"
-          formControlName="endDate"
-          [locale]="settings.language"
-        ></ion-datetime>
-      </ng-template>
-    </ion-modal>
+        <ion-item>
+          <ion-label>{{ "CALENDAR.MODAL.TO" | translate }}</ion-label>
+          <ion-datetime-button datetime="endDatetime"></ion-datetime-button>
+        </ion-item>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="endDatetime"
+              formControlName="endDate"
+              [locale]="settings.language"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
 
-    <ion-text
-      color="danger"
-      *ngFor="let validation of validationMessages.endDate"
-    >
-      <div *ngIf="eventForm.hasError(validation.type)" class="error-message">
-        <ion-icon name="information-circle-outline"></ion-icon>
-        <span>{{ validation.message }}</span>
-      </div>
-    </ion-text>
-  </form>
+        <ion-text
+          color="danger"
+          *ngFor="let validation of validationMessages.endDate"
+        >
+          <div
+            *ngIf="eventForm.hasError(validation.type)"
+            class="error-message"
+          >
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>{{ validation.message }}</span>
+          </div>
+        </ion-text>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

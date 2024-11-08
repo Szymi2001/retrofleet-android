@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { RouteService } from 'src/services/routeService.service';
 import { AddDrivingLogModal } from './add-driving-log-modal/add-driving-log-modal.component';
-import { DomSanitizer } from '@angular/platform-browser';
+import { AuthService } from 'src/services/auth.service';
 
 const MONTHS = [
   'styczeń',
@@ -41,14 +41,13 @@ interface Route {
 
 //TODO: Usuwanie tras dla usuniętego pojazdu
 export class DrivingLogPage implements OnInit {
-  private userId = localStorage.getItem('userId');
-
+  userId: string | null = null;
   myRoutes: Route[] = [];
 
   constructor(
     private routeService: RouteService,
     private modalController: ModalController,
-    private sanitizer: DomSanitizer
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -71,10 +70,9 @@ export class DrivingLogPage implements OnInit {
 
   async loadRoutes(): Promise<void> {
     try {
+      this.userId = await this.authService.getUserIdFromStorage();
       if (this.userId) {
-        this.myRoutes = await this.routeService.getRoutes(
-          this.userId
-        );
+        this.myRoutes = await this.routeService.getRoutes(this.userId);
       }
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);

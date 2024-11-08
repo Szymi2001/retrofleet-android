@@ -34,6 +34,16 @@ export class EventService {
     }
   }
 
+  async deleteEvent(eventId: any): Promise<any> {
+    try {
+      const response = await axios.delete(`${this.baseUrl}/event/deleteEvent/${eventId}`);
+      return response.data;
+    } catch (error: any) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+
   private handleError(error: any) {
     console.error('Błąd serwera:', error);
     if (error.response) {

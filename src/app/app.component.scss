@@ -1,27 +1,21 @@
-ion-button ion-avatar {
-  height: 2.5rem;
-  width: 2.5rem;
+.profile-btn ion-avatar {
+  height: 2rem;
+  width: 2rem;
 }
 
-ion-avatar ion-icon {
-  height: 2.5rem;
-  width: 2.5rem;
+.profile-btn ion-icon {
+  height: 2rem;
+  width: 2rem;
 }
 
-
-ion-item-divider {
-  background: none;
-  border-bottom: 0;
+.settings-btn ion-icon {
+  height: 1.5rem;
+  width: 1.5rem;
 }
 
-ion-menu ion-list.list-md {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.divider {
-  margin-top: auto;
+.logout-btn ion-icon {
+  height: 1.5rem;
+  width: 1.5rem;
 }
 
 ion-tab-button.active {

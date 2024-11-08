@@ -23,6 +23,11 @@
           Czas: {{ event.startTime }} - {{ event.endTime }}
         </p>
       </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="deleteEvent(event)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-item>
     <ion-item *ngIf="selectedDateEvents.length === 0">
       <ion-icon name="information-circle-outline" slot="start"></ion-icon>

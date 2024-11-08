@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { VehicleMaintenanceService } from 'src/services/endpoints/vehicleMaintenanceEndpoint.service';
 import { AddServiceModalComponent } from './add-service-modal/add-service-modal.component';
+import { AuthService } from 'src/services/auth.service';
 
 const MONTHS = [
   'styczeń',
@@ -38,8 +39,7 @@ interface Service {
   styleUrls: ['./add-service.page.scss'],
 })
 export class AddServicePage implements OnInit {
-
-  private userId = localStorage.getItem('userId');
+  private userId!: string | null;
 
   //Sortowanie według typu serwisu
   filteredServices: any[] = [];
@@ -68,7 +68,8 @@ export class AddServicePage implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    private vehicleMaintenanceService: VehicleMaintenanceService
+    private vehicleMaintenanceService: VehicleMaintenanceService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -157,6 +158,7 @@ export class AddServicePage implements OnInit {
 
   async loadServices(): Promise<void> {
     try {
+      this.userId = await this.authService.getUserIdFromStorage();
       if (this.userId) {
         this.myServices = await this.vehicleMaintenanceService.getServices(
           this.userId
