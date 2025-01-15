@@ -16,7 +16,7 @@ import { StorageService } from 'src/services/storage.service';
   styleUrls: ['./app.component.scss'],
   providers: [],
 })
-//Powrót powinien być zrealizowany za pomocą subskrypcji
+
 export class AppComponent {
   private userId!: string | null;
 
@@ -24,6 +24,7 @@ export class AppComponent {
   titleNames: any[] = [];
   pageTitle = 'RetroFleet';
   showProfileButton: boolean = true;
+  showSettingsButton: boolean = true;
   showBackButton: boolean = false;
 
   userInfo: UserInfo = {
@@ -159,34 +160,28 @@ export class AppComponent {
     ];
   }
 
-  navigateTo(path: string) {
-    this.router.navigate([path]);
-  }
-
-  async navigateToProfile() {
+  async navigateTo(path: string) {
     const currentPath = this.router.url;
 
-    if (currentPath !== '/settings') {
+    if (currentPath !== '/profile' && currentPath !== '/settings') {
       await this.storageService.set('previousPath', currentPath);
     }
     
-    this.showProfileButton = false;
-    this.showBackButton = true;
-
-    await this.router.navigate(['/profile']);
-  }
-
-  async navigateToSettings() {
-    await this.router.navigate(['/settings']);
-    this.showProfileButton = true;
-    this.showBackButton = false;
+    this.updateButtonStates(path);
+    await this.router.navigate([path]);
   }
 
   async goBack() {
-    this.showProfileButton = true;
-    this.showBackButton = false;
     const previousPath = await this.storageService.get('previousPath');
-    await this.router.navigate([previousPath])
+    this.updateButtonStates(previousPath || '/');
+    await this.router.navigate([previousPath || '/']);
+  }
+
+  private updateButtonStates(path: string) {
+    const isSpecialPage = path === '/profile' || path === '/settings';
+    this.showProfileButton = !isSpecialPage;
+    this.showSettingsButton =  !isSpecialPage;
+    this.showBackButton = isSpecialPage;
   }
 
   async loadUserInfo(): Promise<void> {
@@ -197,10 +192,5 @@ export class AppComponent {
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
-  }
-
-  async logout() {
-    this.authService.logout();
-    this.showBackButton = false;
   }
 }

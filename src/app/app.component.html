@@ -9,17 +9,14 @@
       </ion-buttons>
       <ion-title>{{ pageTitle }}</ion-title>
       <ion-buttons slot="end" *ngIf="isLoggedIn">
-        <ion-button *ngIf="showProfileButton" (click)="navigateToProfile()" class="profile-btn">
+        <ion-button *ngIf="showSettingsButton" (click)="navigateTo('/settings')" class="settings-btn">
+            <ion-icon name="settings-outline"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="showProfileButton" (click)="navigateTo('/profile')" class="profile-btn">
           <ion-avatar>
             <ion-icon name="person-circle-outline"></ion-icon>
           </ion-avatar>
         </ion-button>
-        <ion-button *ngIf="!showProfileButton" (click)="navigateToSettings()" class="settings-btn">
-            <ion-icon name="settings-outline"></ion-icon>
-        </ion-button>
-        <ion-button *ngIf="!showProfileButton" (click)="logout()" class="logout-btn">
-          <ion-icon name="log-out-outline"></ion-icon>
-      </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -73,7 +70,7 @@
       routerLinkActive="active"
       routerDirection="root"
     >
-      <ion-icon name="log-in-outline"></ion-icon>
+      <ion-icon name="person-outline"></ion-icon>
     </ion-tab-button>
     <ion-tab-button
       routerLink="/register"

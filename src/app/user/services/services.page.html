@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-segment value="list" (ionChange)="segmentChanged($event)">
+    <ion-segment [(ngModel)]="currentSegment" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="list">
         <ion-label>Lista Serwisów</ion-label>
       </ion-segment-button>

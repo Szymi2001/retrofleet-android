@@ -18,6 +18,7 @@ export class GuestGuard implements CanActivate {
       map(isLoggedIn => {
         if (isLoggedIn) {
           this.router.navigate(['/myfleet']);
+          
           return false;
         }
         return true;

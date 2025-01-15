@@ -4,7 +4,7 @@
       <ion-col size="12" size-md="6" class="ion-margin-bottom">
         <ion-card>
           <ion-card-content>
-            <ion-item>
+            <ion-item lines="none">
               <ion-label>Pojazd</ion-label>
               <ion-select
                 interface="action-sheet"
@@ -21,7 +21,7 @@
               </ion-select>
             </ion-item>
 
-            <ion-list class="scrollable-list">
+            <!-- <ion-list class="scrollable-list">
               <ion-item *ngFor="let service of serviceDataMapped">
                 <ion-label>
                   <h2>{{ service.date }}</h2>
@@ -30,7 +30,7 @@
                   <p>Opis: {{ service.desc || 'Brak opisu' }}</p>
                 </ion-label>
               </ion-item>
-            </ion-list>
+            </ion-list> -->
 
             <ion-item
               *ngIf="serviceData.length == 0 && selectedCar != undefined"
@@ -47,11 +47,6 @@
             <ion-card-title>Wydatki według kategorii</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <p>Liczba serwisów: {{ serviceData.length }}</p>
-            <p>
-              Najdroższy serwis: {{ mostExpensiveService?.price || 'Brak danych'
-              }} zł
-            </p>
             <canvas
               baseChart
               [data]="priceByTypeData"

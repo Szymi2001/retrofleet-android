@@ -31,7 +31,7 @@ export interface Vehicle {
   registration_number: string;
   insurance_expiry_date: string | null;
 }
-
+//TODO: W celach zabytkowych (przegląd co rok), inaczej dożywotnio.
 @Component({
   selector: 'app-car-info',
   templateUrl: './car-info.page.html',

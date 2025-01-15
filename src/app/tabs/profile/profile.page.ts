@@ -211,4 +211,8 @@ export class ProfilePage implements OnInit {
   onDeleteAccountSubmit(): void {
 
   }
+
+  async logout() {
+    this.authService.logout();
+  }
 }
