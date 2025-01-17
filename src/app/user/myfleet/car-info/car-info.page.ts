@@ -43,7 +43,7 @@ export class CarInfoPage implements OnInit {
   private userId!: string | null;
 
   //ImagePicker
-  croppedImages: any[] = [];
+  croppedImages: { [key: string]: string } = {};
 
   myFleet: Vehicle[] = [];
 
@@ -107,7 +107,7 @@ export class CarInfoPage implements OnInit {
     });
 
     modal.onDidDismiss().then((data) => {
-      if(data.data && data.data.imageAdded == true && this.userId) {
+      if(data.data && (data.data.imageAdded == true || data.data.imageDeleted === true) && this.userId) {
         this.downloadPhotos(this.userId);
       }
     });
@@ -235,7 +235,13 @@ export class CarInfoPage implements OnInit {
   //Funkcja asynchroniczna pobierająca wszystkie zdjęcia pojazdów użytkownika
   async downloadPhotos(userId: string) {
     try {
-      this.croppedImages = await this.imageService.downloadImages(userId);
+      const images = await this.imageService.downloadImages(userId);
+      this.croppedImages = images.reduce((acc: { [key: string]: string }, image: any) => {
+        if (image.carId) {
+          acc[image.carId] = image.url;
+        }
+        return acc;
+      }, {});
     } catch (error) {
       console.error('Błąd podczas pobierania zdjęcia:', error);
     }
@@ -252,9 +258,9 @@ export class CarInfoPage implements OnInit {
         await this.fleetService.deleteVehicle(carId);
 
         // (Opcjonalnie) Znajdź i usuń zdjęcie powiązane z tym pojazdem
-        this.croppedImages = this.croppedImages.filter(
-          (image) => image.carId !== carId
-        );
+        if (this.croppedImages[carId]) {
+          delete this.croppedImages[carId];
+        }
 
         // Usunięcie zdjęć z bazy danych
         await this.imageService.deleteImage(this.userId!, carId);

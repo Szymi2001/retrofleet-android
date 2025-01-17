@@ -6,7 +6,7 @@
           <ion-item detail lines="none">
             <ion-thumbnail slot="start">
               <img
-                [src]="croppedImages[i] || '/assets/images/car-icon.png'"
+                *ngIf="car._id != undefined" [src]="croppedImages[car._id] || '/assets/images/car-icon.png'"
                 alt="Zdjęcie pojazdu"
               />
             </ion-thumbnail>

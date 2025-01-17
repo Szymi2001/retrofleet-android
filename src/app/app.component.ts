@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuController, PopoverController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs';
+import { every, filter } from 'rxjs';
 import { AppSettingsService } from 'src/services/appSettings.service';
 import { AuthService } from 'src/services/auth.service';
 import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
@@ -18,10 +18,10 @@ import { StorageService } from 'src/services/storage.service';
 })
 
 export class AppComponent {
-  private userId!: string | null;
+  private userId: string | null = null;
 
   isLoggedIn: boolean = false;
-  titleNames: any[] = [];
+  titleNames: { title: string; path: string }[] = [];
   pageTitle = 'RetroFleet';
   showProfileButton: boolean = true;
   showSettingsButton: boolean = true;
@@ -49,54 +49,45 @@ export class AppComponent {
     private storageService: StorageService
   ) {
     this.initializeSettings();
-  }
-
-  async ngOnInit() {
-    //Init Ionic Storage
-    // await this.storageService.init();
-
     this.subscribeToAuthService();
     this.subscribeToRouterEvents();
     this.subscribeToLanguageChange();
   }
 
-  private initializeSettings() {
+  private initializeSettings(): void {
     const settings = this.appSettings.loadSettings();
     this.translate.setDefaultLang(settings.language);
     this.translate.use(settings.language);
   }
 
-  private subscribeToAuthService() {
+  private subscribeToAuthService(): void {
     this.authService.isLoggedIn().subscribe(async (isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
       if (isLoggedIn) {
-        await this.handleUserData();
+        await this.loadUserInfo();
       }
     });
   }
 
-  private subscribeToRouterEvents() {
+  private subscribeToRouterEvents(): void {
     this.router.events
-      .pipe(
-        filter(
-          (event): event is NavigationEnd => event instanceof NavigationEnd
-        )
-      )
-      .subscribe(() => {
-        this.updatePageTitle();
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.updatePageTitle(event.urlAfterRedirects);
+        this.updateButtonStates(event.urlAfterRedirects);
       });
   }
 
-  private subscribeToLanguageChange() {
-    this.translate.onLangChange.subscribe(() => {
-      this.updatePageTitle();
-    });
+  private subscribeToLanguageChange(): void {
+    this.translate.onLangChange.subscribe(() => this.updatePageTitle(this.router.url));
   }
 
-  private async handleUserData() {
+  private async loadUserInfo(): Promise<void> {
     try {
       this.userId = await this.authService.getUserIdFromStorage();
-      await this.loadUserInfo();
+      if (this.userId) {
+        this.userInfo = await this.profileService.getUserInfo(this.userId);
+      }
     } catch (error) {
       console.error(
         'Błąd podczas pobierania userId lub wykonania operacji:',
@@ -105,33 +96,25 @@ export class AppComponent {
     }
   }
 
-  private updatePageTitle() {
-    const activeRoute = this.router.url;
+  private updatePageTitle(currentRoute: string): void {
+    const defaultTitle = 'RetroFleet';
 
-    this.pageTitle =
-      activeRoute === 'profile'
-        ? this.getProfileTitle()
-        : this.getMenuItemTitle(activeRoute) || 'RetroFleet';
+    if (!this.titleNames.length) {
+      this.translate.get(this.getTabTitles()).subscribe((translations) => {
+        this.titleNames = this.mapTitlesToPaths(translations);
+        this.setPageTitleFromRoute(currentRoute, defaultTitle);
+      });
+    } else {
+      this.setPageTitleFromRoute(currentRoute, defaultTitle);
+    }
   }
 
-  private getProfileTitle() {
-    let translatedTitle = '';
-    this.translate.get('PROFILE.TITLE').subscribe((title: string) => {
-      translatedTitle = title;
-    });
-    return translatedTitle;
+  private setPageTitleFromRoute(currentRoute: string, defaultTitle: string): void {
+    const menuItem = this.titleNames.find((item) => item.path === currentRoute);
+    this.pageTitle = menuItem?.title || defaultTitle; 
   }
 
-  private getMenuItemTitle(activeRoute: string) {
-    this.translate.get(this.getTabTitles()).subscribe((translations) => {
-      this.titleNames = this.mapTitlesToPaths(translations);
-    });
-
-    const menuItem = this.titleNames.find((item) => item.path === activeRoute);
-    return menuItem ? menuItem.title : null;
-  }
-
-  private getTabTitles() {
+  private getTabTitles(): string[] {
     return [
       'TABS.LOGIN_TITLE',
       'TABS.CALENDAR_TITLE',
@@ -146,7 +129,7 @@ export class AppComponent {
     ];
   }
 
-  private mapTitlesToPaths(translations: any) {
+  private mapTitlesToPaths(translations: any): { title: string; path: string }[] {
     return [
       { title: translations['TABS.MYFLEET_TITLE'], path: '/myfleet' },
       { title: translations['TABS.LOGBOOK_TITLE'], path: '/driving-log' },
@@ -160,37 +143,23 @@ export class AppComponent {
     ];
   }
 
-  async navigateTo(path: string) {
+  async navigateTo(path: string): Promise<void> {
     const currentPath = this.router.url;
-
     if (currentPath !== '/profile' && currentPath !== '/settings') {
       await this.storageService.set('previousPath', currentPath);
     }
-    
-    this.updateButtonStates(path);
     await this.router.navigate([path]);
   }
 
-  async goBack() {
+  async goBack(): Promise<void> {
     const previousPath = await this.storageService.get('previousPath');
-    this.updateButtonStates(previousPath || '/');
     await this.router.navigate([previousPath || '/']);
   }
 
-  private updateButtonStates(path: string) {
+  private updateButtonStates(path: string): void {
     const isSpecialPage = path === '/profile' || path === '/settings';
     this.showProfileButton = !isSpecialPage;
     this.showSettingsButton =  !isSpecialPage;
-    this.showBackButton = isSpecialPage;
-  }
-
-  async loadUserInfo(): Promise<void> {
-    if (!this.userId) return;
-
-    try {
-      this.userInfo = await this.profileService.getUserInfo(this.userId);
-    } catch (error: any) {
-      console.error('Błąd:', error.response?.data || error.message);
-    }
+    this.showBackButton = isSpecialPage && this.isLoggedIn;
   }
 }
