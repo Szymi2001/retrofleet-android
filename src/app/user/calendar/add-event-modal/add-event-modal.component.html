@@ -1,17 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="dismiss()">{{
-        "CALENDAR.MODAL.CANCEL" | translate
-      }}</ion-button>
+      <ion-button (click)="dismiss()">Anuluj</ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">{{
-      "CALENDAR.MODAL.TITLE" | translate
-    }}</ion-title>
+    <ion-title class="ion-text-center">Nowe wydarzenie</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="primary" strong (click)="submitForm()">{{
-        "CALENDAR.MODAL.CONFIRM" | translate
-      }}</ion-button>
+      <ion-button color="primary" strong (click)="submitForm()">Dodaj</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -22,7 +16,7 @@
         <ion-item>
           <ion-input
             type="text"
-            label="{{ 'CALENDAR.MODAL.TITLE_INPUT' | translate }}"
+            label="Tytuł"
             labelPlacement="floating"
             formControlName="title"
           />
@@ -43,7 +37,7 @@
           </div>
         </ion-text>
         <ion-item>
-          <ion-label>{{ "CALENDAR.MODAL.FROM" | translate }}</ion-label>
+          <ion-label>Od</ion-label>
           <ion-datetime-button datetime="startDatetime"></ion-datetime-button>
         </ion-item>
         <ion-modal [keepContentsMounted]="true">
@@ -51,13 +45,12 @@
             <ion-datetime
               id="startDatetime"
               formControlName="startDate"
-              [locale]="settings.language"
             ></ion-datetime>
           </ng-template>
         </ion-modal>
 
         <ion-item>
-          <ion-label>{{ "CALENDAR.MODAL.TO" | translate }}</ion-label>
+          <ion-label>Do</ion-label>
           <ion-datetime-button datetime="endDatetime"></ion-datetime-button>
         </ion-item>
         <ion-modal [keepContentsMounted]="true">
@@ -65,7 +58,6 @@
             <ion-datetime
               id="endDatetime"
               formControlName="endDate"
-              [locale]="settings.language"
             ></ion-datetime>
           </ng-template>
         </ion-modal>

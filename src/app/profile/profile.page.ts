@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileService } from 'src/services/endpoints/profileEndpoint.service';
-import { LoadingController, ModalController } from '@ionic/angular';
-import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
+import { LoadingController } from '@ionic/angular';
 import { UserInfo } from 'src/app/shared/interfaces/user.interface';
 import { AuthService } from 'src/services/auth.service';
 import { Router } from '@angular/router';
@@ -14,8 +13,6 @@ import { Router } from '@angular/router';
 })
 export class ProfilePage implements OnInit {
   userId: string | null = null;
-
-  profileImage: any[] = [];
 
   //Sekcja informacje
   changeUserInfo!: FormGroup;
@@ -42,11 +39,6 @@ export class ProfilePage implements OnInit {
   //Sekcja prywatność
   deleteAccount!: FormGroup;
 
-  //Sekcja bezpieczeństwo
-  remindQuestions!: FormGroup;
-  firstQuestions: Array<{ label: string }> = [];
-  secondQuestions: Array<{ label: string }> = [];
-
   constructor(
     private formBuilder: FormBuilder,
     private profileService: ProfileService,
@@ -56,7 +48,6 @@ export class ProfilePage implements OnInit {
 
   async ngOnInit() {
     this.initializeForms();
-    this.initializeQuestions();
     this.loadUserInfo();
 
     this.profileService.userInfo$.subscribe(data => {
@@ -91,29 +82,6 @@ export class ProfilePage implements OnInit {
     this.deleteAccount = this.formBuilder.group({
       password: ['', Validators.required],
     });
-
-    this.remindQuestions = this.formBuilder.group({
-      first_question: ['', Validators.required],
-      first_answer: ['', Validators.required],
-      second_question: ['', Validators.required],
-      second_answer: ['', Validators.required],
-    });
-  }
-
-  initializeQuestions(): void {
-    this.firstQuestions = [
-      { label: 'Jakie jest imię Twojego pierwszego zwierzaka?' },
-      { label: 'Jakie jest panieńskie nazwisko Twojej matki?' },
-      {
-        label: 'Jakie jest imię Twojego najlepszego przyjaciela z dzieciństwa?',
-      },
-      { label: 'Jaki jest kolor Twojego pierwszego samochodu?' },
-      { label: 'Jakie jest Twoje ulubione miejsce wakacyjne?' },
-      { label: 'Jak nazywa się Twoja pierwsza szkoła?' },
-      { label: 'Jakie jest Twoje ulubione danie?' },
-      { label: 'Jaki jest twój numer ulubiony?' },
-    ];
-    this.secondQuestions = [...this.firstQuestions];
   }
 
   //Modals
@@ -202,10 +170,6 @@ export class ProfilePage implements OnInit {
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
-  }
-
-  onRemindQuestionsSubmit(): void {
-
   }
 
   onDeleteAccountSubmit(): void {

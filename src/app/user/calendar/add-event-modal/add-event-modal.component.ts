@@ -1,10 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { format, isAfter, isEqual, parseISO, setDay } from 'date-fns';
 import { dateRangeValidator } from 'src/app/shared/validators/formValidators';
-import { AppSettingsService } from 'src/services/appSettings.service';
 
 @Component({
   selector: 'app-add-event-modal',
@@ -12,7 +10,6 @@ import { AppSettingsService } from 'src/services/appSettings.service';
   styleUrls: ['./add-event-modal.component.scss'],
 })
 
-//TODO: Pobierz locale i przypisz do ion-datetime
 export class AddEventModalComponent implements OnInit {
   @Input() selectedDate!: string;
   
@@ -23,13 +20,9 @@ export class AddEventModalComponent implements OnInit {
   date!: string;
   todayDate = new Date();
 
-  settings = this.appSettings.loadSettings();
-
   constructor(
     private modalController: ModalController,
-    private formBuilder: FormBuilder,
-    private translate: TranslateService,
-    private appSettings: AppSettingsService
+    private formBuilder: FormBuilder
   ) {
     this.setDayToday();
   }
@@ -56,18 +49,19 @@ export class AddEventModalComponent implements OnInit {
     );
   }
 
+  //TODO: Do poprawy po usunięciu języka
   setValidationMessages() {
-    this.translate.get('CALENDAR.ERRORS').subscribe((translations) => {
-      this.validationMessages = {
-        title: [{ type: 'required', message: translations.TITLE_REQUIRED }],
-        endDate: [
-          {
-            type: 'dateRangeInvalid',
-            message: translations.DATE_RANGE_INVALID,
-          },
-        ],
-      };
-    });
+    // this.translate.get('CALENDAR.ERRORS').subscribe((translations) => {
+    //   this.validationMessages = {
+    //     title: [{ type: 'required', message: translations.TITLE_REQUIRED }],
+    //     endDate: [
+    //       {
+    //         type: 'dateRangeInvalid',
+    //         message: translations.DATE_RANGE_INVALID,
+    //       },
+    //     ],
+    //   };
+    // });
   }
 
   private formatDateTime(date: string, time: Date, hourOffset: number = 0): string {

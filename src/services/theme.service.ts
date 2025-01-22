@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  private themeKey = 'theme';
-
-  constructor() {}
+  constructor(private storageService: StorageService) {
+  }
 
   saveSettings(isDark: boolean): void {
-    localStorage.setItem(this.themeKey, isDark ? 'dark' : 'light');
+    this.storageService.set('theme', isDark ? 'dark' : 'light');
     this.applySettings(isDark);
   }
 
-  loadSettings(): void {
-    const savedTheme = localStorage.getItem(this.themeKey);
+  async loadSettings(): Promise<void> {
+    const savedTheme = await this.storageService.get('theme');
 
     const isDark = savedTheme === 'dark';
 
@@ -25,9 +25,9 @@ export class ThemeService {
     document.documentElement.classList.toggle('ion-palette-dark', isDark);
   }
 
-  getSettings(): { isDark: boolean } {
-    const savedTheme = localStorage.getItem(this.themeKey);
-
+  async getSettings() {
+    const savedTheme = await this.storageService.get('theme');
+    console.log("Saved theme: ", savedTheme)
     const isDark = savedTheme === 'dark';
 
     return { isDark };

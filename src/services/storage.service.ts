@@ -16,15 +16,18 @@ export class StorageService {
   }
 
   async get(key: string) {
+    await this.init();
     const value = await this.storage?.get(key);
     return value;
   }
 
   async set(key: string, value: any) {
+    await this.init();
     await this.storage?.set(key, value);
   }
 
   async remove(key: string) {
+    await this.init();
     await this.storage?.remove(key);
   }
 }

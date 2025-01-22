@@ -50,3 +50,17 @@ ion-item-options ion-item-option:not(:nth-child(3)) {
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
 }
+
+.ready-to-drive {
+  display: flex;
+  align-items: center;
+  background-color: #e0f7e9;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.car-details {
+  display: flex;
+}

@@ -7,14 +7,14 @@
             <ion-back-button default-href="#"></ion-back-button>
           </ion-buttons>
           <ion-card-header>
-            <ion-card-title>{{ 'REGISTER.TITLE' | translate }}</ion-card-title>
+            <ion-card-title>Załóż konto</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
               <ion-item>
                 <ion-icon name="person-outline" slot="start"></ion-icon>
                 <ion-input
-                  placeholder="{{ 'REGISTER.LOGIN_PLACEHOLDER' | translate }}"
+                  placeholder="Nazwa użytkownika"
                   type="text"
                   formControlName="username"
                 >
@@ -30,7 +30,7 @@
               <ion-item class="ion-margin-top">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
                 <ion-input
-                  placeholder="{{ 'REGISTER.PASSWORD_PLACEHOLDER' | translate }}"
+                  placeholder="Hasło"
                   type="password"
                   formControlName="password"
                 >
@@ -46,7 +46,7 @@
               <ion-item class="ion-margin-top">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
                 <ion-input
-                  placeholder="{{ 'REGISTER.REPEAT_PASSWORD_PLACEHOLDER' | translate }}"
+                  placeholder="Powtórz hasło"
                   type="password"
                   formControlName="repeatPassword"
                 >
@@ -76,7 +76,7 @@
               </ion-text>
 
               <ion-button expand="block" type="submit" class="ion-margin-top">
-                {{ 'REGISTER.BUTTON_LABEL' | translate }}
+                Stwórz konto
               </ion-button>
             </form>
           </ion-card-content>

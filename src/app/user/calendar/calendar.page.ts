@@ -9,13 +9,11 @@ import {
   parseISO,
 } from 'date-fns';
 import { ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import {
   CalendarComponent,
   ICalendarComponentOptions,
   IDayConfig,
 } from '@heliomarpm/ion-calendar';
-import { AppSettingsService } from 'src/services/appSettings.service';
 import { EventService } from 'src/services/endpoints/eventEndpoint.service';
 import { AddEventModalComponent } from './add-event-modal/add-event-modal.component';
 import { StorageService } from 'src/services/storage.service';
@@ -52,12 +50,9 @@ export class CalendarPage implements OnInit {
   constructor(
     private eventService: EventService,
     private modalController: ModalController,
-    private appSettings: AppSettingsService,
-    private translate: TranslateService,
     private storageService: StorageService
   ) {
-    const settings = this.appSettings.loadSettings();
-    this.options = this.initializeCalendarOptions(settings.language);
+    this.options = this.initializeCalendarOptions();
     this.setDayToday();
   }
 
@@ -65,16 +60,11 @@ export class CalendarPage implements OnInit {
     await this.storageService.init();
     this.userId = await this.storageService.get('userId');
     this.loadEvents();
-
-    this.translate.onLangChange.subscribe(() => {
-      this.setLocale(this.translate.currentLang);
-    });
   }
 
-  private initializeCalendarOptions(lang: string): ICalendarComponentOptions {
+  private initializeCalendarOptions(): ICalendarComponentOptions {
     return {
       pickMode: 'single',
-      locale: { locale: lang, weekdays: 'short' },
       showToggleButtons: true,
       color: 'primary',
       showAdjacentMonthDay: false,

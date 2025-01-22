@@ -24,11 +24,7 @@ const routes: Routes = [
   {
     path: 'profile',
     canActivate: [AuthGuard],
-    loadChildren: () => import('../app/tabs/profile/profile.module').then(m => m.ProfilePageModule)
-  },
-  {
-    path: 'settings',
-    loadChildren: () => import('./tabs/settings/settings.module').then(m => m.SettingsPageModule)
+    loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule)
   },
   {
     path: 'myfleet',

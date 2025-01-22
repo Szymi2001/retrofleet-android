@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import axios from 'axios';
-import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -22,8 +21,7 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
-    private translate: TranslateService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -58,10 +56,6 @@ export class RegisterPage implements OnInit, OnDestroy {
     );
 
     this.setValidationMessages();
-
-    this.subscription = this.translate.onLangChange.subscribe(() => {
-      this.setValidationMessages();
-    });
   }
 
   ngOnDestroy() {
@@ -71,30 +65,30 @@ export class RegisterPage implements OnInit, OnDestroy {
   }
 
   setValidationMessages() {
-    this.translate.get('REGISTER.ERRORS').subscribe((translations) => {
-      this.validationMessages = {
-        username: [
-          { type: 'required', message: translations.USERNAME_REQUIRED },
-          { type: 'minlength', message: translations.USERNAME_MINLENGTH },
-          { type: 'maxlength', message: translations.USERNAME_MAXLENGTH },
-          { type: 'pattern', message: translations.USERNAME_PATTERN },
-        ],
-        password: [
-          { type: 'required', message: translations.PASSWORD_REQUIRED },
-          { type: 'minlength', message: translations.PASSWORD_MINLENGTH },
-          { type: 'maxlength', message: translations.PASSWORD_MAXLENGTH },
-          { type: 'pattern', message: translations.PASSWORD_PATTERN },
-        ],
-        repeatPassword: [
-          { type: 'required', message: translations.REPEAT_PASSWORD_REQUIRED },
-          { type: 'matching', message: translations.PASSWORD_MISMATCH },
-        ],
-        email: [
-          { type: 'required', message: translations.EMAIL_REQUIRED },
-          { type: 'email', message: translations.EMAIL_INVALID },
-        ],
-      };
-    });
+    // this.translate.get('REGISTER.ERRORS').subscribe((translations) => {
+    //   this.validationMessages = {
+    //     username: [
+    //       { type: 'required', message: translations.USERNAME_REQUIRED },
+    //       { type: 'minlength', message: translations.USERNAME_MINLENGTH },
+    //       { type: 'maxlength', message: translations.USERNAME_MAXLENGTH },
+    //       { type: 'pattern', message: translations.USERNAME_PATTERN },
+    //     ],
+    //     password: [
+    //       { type: 'required', message: translations.PASSWORD_REQUIRED },
+    //       { type: 'minlength', message: translations.PASSWORD_MINLENGTH },
+    //       { type: 'maxlength', message: translations.PASSWORD_MAXLENGTH },
+    //       { type: 'pattern', message: translations.PASSWORD_PATTERN },
+    //     ],
+    //     repeatPassword: [
+    //       { type: 'required', message: translations.REPEAT_PASSWORD_REQUIRED },
+    //       { type: 'matching', message: translations.PASSWORD_MISMATCH },
+    //     ],
+    //     email: [
+    //       { type: 'required', message: translations.EMAIL_REQUIRED },
+    //       { type: 'email', message: translations.EMAIL_INVALID },
+    //     ],
+    //   };
+    // });
   }
 
   matchingPasswords(password: string, repeatPassword: string) {

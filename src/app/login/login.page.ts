@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import axios from 'axios';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/services/auth.service';
@@ -27,7 +26,6 @@ export class LoginPage implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private translate: TranslateService,
     private router: Router,
     private authService: AuthService,
     private storageService: StorageService
@@ -50,10 +48,6 @@ export class LoginPage implements OnInit, OnDestroy {
     // await this.storageService.init();
 
     this.setValidationMessages();
-
-    this.subscription = this.translate.onLangChange.subscribe(() => {
-      this.setValidationMessages();
-    });
   }
 
   ngOnDestroy() {
@@ -63,19 +57,19 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   setValidationMessages() {
-    this.translate.get('LOGIN.ERRORS').subscribe((translations) => {
-      this.validationMessages = {
-        login: [
-          { type: 'required', message: translations.USERNAME_REQUIRED },
-          { type: 'minlength', message: translations.USERNAME_MINLENGTH },
-          { type: 'maxlength', message: translations.USERNAME_MAXLENGTH },
-        ],
-        password: [
-          { type: 'required', message: translations.PASSWORD_REQUIRED },
-          { type: 'minlength', message: translations.PASSWORD_MINLENGTH },
-        ],
-      };
-    });
+    // this.translate.get('LOGIN.ERRORS').subscribe((translations) => {
+    //   this.validationMessages = {
+    //     login: [
+    //       { type: 'required', message: translations.USERNAME_REQUIRED },
+    //       { type: 'minlength', message: translations.USERNAME_MINLENGTH },
+    //       { type: 'maxlength', message: translations.USERNAME_MAXLENGTH },
+    //     ],
+    //     password: [
+    //       { type: 'required', message: translations.PASSWORD_REQUIRED },
+    //       { type: 'minlength', message: translations.PASSWORD_MINLENGTH },
+    //     ],
+    //   };
+    // });
   }
 
   async onSubmit() {

@@ -11,7 +11,6 @@ import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { AddVehicleModalComponent } from './add-vehicle-modal/add-vehicle-modal.component';
 import { EditInfoModalComponent } from './edit-info/edit-info-modal.component';
 import { ImagePickerComponent } from './image-picker-modal/image-picker-modal.component';
-import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/services/auth.service';
 import { StorageService } from 'src/services/storage.service';
 
@@ -55,7 +54,6 @@ export class CarInfoPage implements OnInit {
     private fleetService: FleetService,
     private imageService: ImageService,
     private datePipe: DatePipe,
-    private translate: TranslateService,
     private storageService: StorageService
   ) {}
 //TODO: Dodanie nowego pojazdu, walidacja zdjęcia
@@ -128,45 +126,45 @@ export class CarInfoPage implements OnInit {
   }
 
   async presentDeleteConfirmation(selectedCarData: any) {
-    this.translate
-      .get([
-        'DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER',
-        'DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE',
-        'DELETECAR-ALERT.CANCEL',
-        'DELETECAR-ALERT.DELETE',
-      ])
-      .subscribe(async (translations) => {
-        const header =
-          translations['DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER'];
-        const message =
-          translations['DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE'];
-        const cancelText = translations['DELETECAR-ALERT.CANCEL'];
-        const deleteText = translations['DELETECAR-ALERT.DELETE'];
+    // this.translate
+    //   .get([
+    //     'DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER',
+    //     'DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE',
+    //     'DELETECAR-ALERT.CANCEL',
+    //     'DELETECAR-ALERT.DELETE',
+    //   ])
+    //   .subscribe(async (translations) => {
+    //     const header =
+    //       translations['DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER'];
+    //     const message =
+    //       translations['DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE'];
+    //     const cancelText = translations['DELETECAR-ALERT.CANCEL'];
+    //     const deleteText = translations['DELETECAR-ALERT.DELETE'];
 
-        const alert = await this.alertController.create({
-          header: header,
-          message: message,
-          buttons: [
-            {
-              text: cancelText,
-              role: 'cancel',
-              handler: async () => {
-                await this.slidingItem.closeOpened();
-              },
-            },
-            {
-              text: deleteText,
-              role: 'confirm',
-              handler: async () => {
-                await this.deleteCar(selectedCarData._id);
-                this.alertController.dismiss();
-              },
-            },
-          ],
-        });
+    //     const alert = await this.alertController.create({
+    //       header: header,
+    //       message: message,
+    //       buttons: [
+    //         {
+    //           text: cancelText,
+    //           role: 'cancel',
+    //           handler: async () => {
+    //             await this.slidingItem.closeOpened();
+    //           },
+    //         },
+    //         {
+    //           text: deleteText,
+    //           role: 'confirm',
+    //           handler: async () => {
+    //             await this.deleteCar(selectedCarData._id);
+    //             this.alertController.dismiss();
+    //           },
+    //         },
+    //       ],
+    //     });
 
-        await alert.present();
-      });
+    //     await alert.present();
+    //   });
   }
 
   //Pobieranie pojazdów z serwera
