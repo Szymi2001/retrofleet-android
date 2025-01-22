@@ -51,16 +51,20 @@ ion-item-options ion-item-option:not(:nth-child(3)) {
   font-size: 14px;
 }
 
-.ready-to-drive {
-  display: flex;
-  align-items: center;
-  background-color: #e0f7e9;
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
+.car-container {
   width: 100%;
 }
 
-.car-details {
+.details-container {
   display: flex;
+  justify-content: space-between;
+}
+
+.ready-container {
+  display: flex;
+  align-items: center;
+
+  ion-icon {
+    margin-right: 0.5rem;
+  }
 }

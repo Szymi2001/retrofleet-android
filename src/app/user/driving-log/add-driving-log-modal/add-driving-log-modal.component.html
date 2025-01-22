@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Nowa trasa</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">Anuluj</ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Trasa</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      <ion-button strong color="primary" (click)="submitForm()"
+        >Zatwierdź
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -129,15 +132,5 @@
         auto-grow="true"
       ></ion-textarea>
     </ion-item>
-
-    <ion-button
-      class="ion-margin-top"
-      expand="block"
-      type="submit"
-      color="primary"
-    >
-      <ion-icon name="add" slot="start"></ion-icon>
-      Dodaj trasę</ion-button
-    >
   </form>
 </ion-content>

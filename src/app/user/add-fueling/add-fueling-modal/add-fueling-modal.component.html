@@ -1,10 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Dodaj tankowanie</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">Anuluj</ion-button>
+    </ion-buttons>
+    <ion-title>Tankowanie</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-      </ion-button>
+      <ion-button strong color="primary" (click)="submitForm()">
+        Zatwierdź</ion-button
+      >
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

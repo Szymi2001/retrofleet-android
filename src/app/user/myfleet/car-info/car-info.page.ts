@@ -46,6 +46,8 @@ export class CarInfoPage implements OnInit {
 
   myFleet: Vehicle[] = [];
 
+  statusIcon: string = '';
+
   constructor(
     private modalController: ModalController,
     private alertController: AlertController,
@@ -56,21 +58,18 @@ export class CarInfoPage implements OnInit {
     private datePipe: DatePipe,
     private storageService: StorageService
   ) {}
-//TODO: Dodanie nowego pojazdu, walidacja zdjęcia
-//TODO: Zapisywanie pobranych pojazdów i zdjęć w serwisie aby uniknąć ponownego pobierania z bazy
+
   async ngOnInit() {
     this.authService.isLoggedIn().subscribe(async (isLoggedIn) => {
       if (isLoggedIn) {
         this.userId = await this.storageService.get('userId');
         await this.fetchFleetData();
-        
       } else {
         this.clearFleetData();
       }
     });
-  
+
     await this.presentLoading();
-    // await this.downloadPhotos(this.userId!);
     this.loadingController.dismiss();
   }
 
@@ -105,7 +104,11 @@ export class CarInfoPage implements OnInit {
     });
 
     modal.onDidDismiss().then((data) => {
-      if(data.data && (data.data.imageAdded == true || data.data.imageDeleted === true) && this.userId) {
+      if (
+        data.data &&
+        (data.data.imageAdded == true || data.data.imageDeleted === true) &&
+        this.userId
+      ) {
         this.downloadPhotos(this.userId);
       }
     });
@@ -126,45 +129,29 @@ export class CarInfoPage implements OnInit {
   }
 
   async presentDeleteConfirmation(selectedCarData: any) {
-    // this.translate
-    //   .get([
-    //     'DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER',
-    //     'DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE',
-    //     'DELETECAR-ALERT.CANCEL',
-    //     'DELETECAR-ALERT.DELETE',
-    //   ])
-    //   .subscribe(async (translations) => {
-    //     const header =
-    //       translations['DELETECAR-ALERT.DELETE_CONFIRMATION_HEADER'];
-    //     const message =
-    //       translations['DELETECAR-ALERT.DELETE_CONFIRMATION_MESSAGE'];
-    //     const cancelText = translations['DELETECAR-ALERT.CANCEL'];
-    //     const deleteText = translations['DELETECAR-ALERT.DELETE'];
+    const alert = await this.alertController.create({
+      header: 'Moja flota',
+      message: 'Czy na pewno chcesz usunąć pojazd?',
+      buttons: [
+        {
+          text: 'Anuluj',
+          role: 'cancel',
+          handler: async () => {
+            await this.slidingItem.closeOpened();
+          },
+        },
+        {
+          text: 'Potwierdź',
+          role: 'confirm',
+          handler: async () => {
+            await this.deleteCar(selectedCarData._id);
+            this.alertController.dismiss();
+          },
+        },
+      ],
+    });
 
-    //     const alert = await this.alertController.create({
-    //       header: header,
-    //       message: message,
-    //       buttons: [
-    //         {
-    //           text: cancelText,
-    //           role: 'cancel',
-    //           handler: async () => {
-    //             await this.slidingItem.closeOpened();
-    //           },
-    //         },
-    //         {
-    //           text: deleteText,
-    //           role: 'confirm',
-    //           handler: async () => {
-    //             await this.deleteCar(selectedCarData._id);
-    //             this.alertController.dismiss();
-    //           },
-    //         },
-    //       ],
-    //     });
-
-    //     await alert.present();
-    //   });
+    await alert.present();
   }
 
   //Pobieranie pojazdów z serwera
@@ -234,12 +221,15 @@ export class CarInfoPage implements OnInit {
   async downloadPhotos(userId: string) {
     try {
       const images = await this.imageService.downloadImages(userId);
-      this.croppedImages = images.reduce((acc: { [key: string]: string }, image: any) => {
-        if (image.carId) {
-          acc[image.carId] = image.url;
-        }
-        return acc;
-      }, {});
+      this.croppedImages = images.reduce(
+        (acc: { [key: string]: string }, image: any) => {
+          if (image.carId) {
+            acc[image.carId] = image.url;
+          }
+          return acc;
+        },
+        {}
+      );
     } catch (error) {
       console.error('Błąd podczas pobierania zdjęcia:', error);
     }
@@ -269,5 +259,76 @@ export class CarInfoPage implements OnInit {
     } catch (error: any) {
       console.error('Błąd:', error.response?.data || error.message);
     }
+  }
+
+  getCarStatus(vehicleData: any): number {
+    const isHeritageListed = vehicleData.is_heritage_listed;
+    const technicalInspectionDate = vehicleData.technical_inspection_date;
+    const registrationNumber = vehicleData.registration_number;
+    const insuranceExpiryDate = vehicleData.insurance_expiry_date;
+
+    function calculatePercentage(
+      isHeritageListed: boolean,
+      technicalInspectionDate: any,
+      insuranceExpiryDate: any,
+      registrationNumber: string
+    ): number {
+      let percentage = 0;
+
+      if (isHeritageListed) {
+        percentage += 25;
+      }
+
+      if (technicalInspectionDate !== null) {
+        percentage += 25;
+      }
+
+      if (insuranceExpiryDate !== null) {
+        percentage += 25;
+      }
+
+      if (registrationNumber !== null && registrationNumber !== '') {
+        percentage += 25;
+      }
+
+      return percentage;
+    }
+
+    const calculatedPercentage = calculatePercentage(
+      isHeritageListed,
+      technicalInspectionDate,
+      insuranceExpiryDate,
+      registrationNumber
+    );
+
+    return calculatedPercentage;
+  }
+
+  getStatusLabel(vehicleData: any): string {
+    const percentage = this.getCarStatus(vehicleData);
+
+    if (percentage > 75) {
+      return 'Gotowy do jazdy';
+    } else if (percentage <= 75) {
+      return 'Wymaga uwagi';
+    } else {
+      return 'Stan nieokreślony';
+    }
+  }
+
+  getStatusIcon(vehicleData: any): { icon: string, color: string } {
+    const percentage = this.getCarStatus(vehicleData);
+
+    if (percentage > 75) {
+      return { icon: 'checkmark-circle', color: 'success' };
+    } else if (percentage <= 75) {
+      return { icon: 'alert-circle', color: 'danger' };
+    } else {
+      return { icon: 'alert-circle', color: 'danger' };
+    }
+  }
+
+  getReadyForUseCount(): number {
+    return this.myFleet.filter(car => this.getCarStatus(car) === 100).length;
   }
 }

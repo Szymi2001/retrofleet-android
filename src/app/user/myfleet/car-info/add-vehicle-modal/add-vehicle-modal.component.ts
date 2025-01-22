@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { vinValidator } from 'src/app/shared/validators/formValidators';
 import { fleetDataService } from 'src/services/fleetData.service';
@@ -30,8 +29,7 @@ export class AddVehicleModalComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private formBuilder: FormBuilder,
-    private fleetDataService: fleetDataService,
-    private translate: TranslateService
+    private fleetDataService: fleetDataService
   ) {
     this.setMaxDate();
   }
@@ -40,10 +38,6 @@ export class AddVehicleModalComponent implements OnInit {
     this.initializeForm();
     this.populateDropdowns();
     this.setValidationMessages();
-
-    this.subscription = this.translate.onLangChange.subscribe(() => {
-      this.setValidationMessages();
-    });
   }
 
   ngOnDestroy() {
@@ -53,54 +47,52 @@ export class AddVehicleModalComponent implements OnInit {
   }
 
   setValidationMessages() {
-    this.translate.get('MYFLEET.ERRORS').subscribe((translations) => {
-      this.validationMessages = {
-        vin: [
-          { type: 'required', message: translations.VIN_REQUIRED },
-          { type: 'exactLength', message: translations.VIN_EXACT_LENGTH },
-          { type: 'pattern', message: translations.VIN_INVALID },
-        ],
-        registrationNumber: [
-          {
-            type: 'required',
-            message: translations.REGISTRATION_NUMBER_REQUIRED,
-          },
-          {
-            type: 'pattern',
-            message: translations.REGISTRATION_NUMBER_INVALID,
-          },
-        ],
-        mileage: [{ type: 'required', message: translations.MILEAGE_REQUIRED }],
-        brand: [{ type: 'required', message: translations.BRAND_REQUIRED }],
-        model: [{ type: 'required', message: translations.MODEL_REQUIRED }],
-        year: [{ type: 'required', message: translations.YEAR_REQUIRED }],
-        color: [{ type: 'required', message: translations.COLOR_REQUIRED }],
-        bodyType: [
-          { type: 'required', message: translations.BODY_TYPE_REQUIRED },
-        ],
-        fuelType: [
-          { type: 'required', message: translations.FUEL_TYPE_REQUIRED },
-        ],
-        technicalInspectionDate: [
-          {
-            type: 'required',
-            message: translations.TECHNICAL_INSPECTION_DATE_REQUIRED,
-          },
-        ],
-        insuranceExpiryDate: [
-          {
-            type: 'required',
-            message: translations.INSURANCE_EXPIRY_DATE_REQUIRED,
-          },
-        ],
-        isHeritageListed: [
-          {
-            type: 'required',
-            message: translations.IS_HERITAGE_LISTED_REQUIRED,
-          },
-        ],
-      };
-    });
+    this.validationMessages = {
+      vin: [
+        { type: 'required', message: 'Numer VIN jest wymagany.' },
+        { type: 'exactLength', message: 'Numer VIN musi mieć dokładnie 17 znaków.' },
+        { type: 'pattern', message: 'Numer VIN nie może zawierać liter I, O, Q.' },
+      ],
+      registrationNumber: [
+        {
+          type: 'required',
+          message: 'Numer rejestracyjny jest wymagany.',
+        },
+        {
+          type: 'pattern',
+          message: 'Numer rejestracyjny jest nieprawidłowy',
+        },
+      ],
+      mileage: [{ type: 'required', message: 'Przebieg jest wymagany.' }],
+      brand: [{ type: 'required', message: '"Marka pojazdu jest wymagana.' }],
+      model: [{ type: 'required', message: 'Model pojazdu jest wymagany.' }],
+      year: [{ type: 'required', message: 'Rok produkcji jest wymagany.' }],
+      color: [{ type: 'required', message: 'Kolor pojazdu jest wymagany.' }],
+      bodyType: [
+        { type: 'required', message: 'Rodzaj nadwozia jest wymagany.' },
+      ],
+      fuelType: [
+        { type: 'required', message: 'Rodzaj paliwa jest wymagany.' },
+      ],
+      technicalInspectionDate: [
+        {
+          type: 'required',
+          message: 'Data badania technicznego jest wymagana.',
+        },
+      ],
+      insuranceExpiryDate: [
+        {
+          type: 'required',
+          message: 'Data ważności ubezpieczenia jest wymagana.',
+        },
+      ],
+      isHeritageListed: [
+        {
+          type: 'required',
+          message: 'Wpis do rejestru zabytków jest wymagany.',
+        },
+      ],
+    };
   }
 
   initializeForm() {
@@ -113,12 +105,7 @@ export class AddVehicleModalComponent implements OnInit {
           Validators.pattern(/^(?!.*[IOQ]).*$/),
         ],
       ],
-      registrationNumber: [
-        '',
-        [
-          Validators.required
-        ],
-      ],
+      registrationNumber: ['', [Validators.required]],
       mileage: ['', Validators.required],
       brand: [null, Validators.required],
       model: [{ value: null, disabled: true }, Validators.required],

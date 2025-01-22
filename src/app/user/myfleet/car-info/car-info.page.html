@@ -4,38 +4,42 @@
       <ion-card-content>
         <ion-item-sliding #slidingItem>
           <ion-item detail lines="none">
-            <ion-label class="ready-container">
-              <ion-icon name="checkmark-circle" color="success"></ion-icon>
-              <span class="ready-text">Gotowy do jazdy</span>
-            </ion-label>
-
-            <div class="car-details">
-              <ion-thumbnail>
-                <img
-                  *ngIf="car._id != undefined" [src]="croppedImages[car._id] || '/assets/images/car-icon.png'"
-                  alt="Zdjęcie pojazdu"
-                />
-              </ion-thumbnail>
-              <ion-label>
-                <ion-note class="registration-number">
-                  {{ car.registration_number }}
-                </ion-note>
-                <ion-text>
-                  <h2>{{ car.brand }} {{ car.model }}</h2>
-                </ion-text>
-                <ion-text>
-                  <h3>
-                    Rok produkcji: {{ car.year
-                    }}
-                  </h3>
-                </ion-text>
-                <ion-note color="medium" class="ion-text-wrap">
-                  Przebieg: {{ car.mileage }}
-                  <br />
-                  Typ paliwa: {{ car.fuel_type }}
-                  <br />
-                  Typ nadwozia: {{ car.body_type }}
-                </ion-note>
+            <div class="car-container">
+              <div class="details-container">
+                <ion-thumbnail slot="start">
+                  <img
+                    *ngIf="car._id != undefined"
+                    [src]="croppedImages[car._id] || '/assets/images/car-icon.png'"
+                    alt="Zdjęcie pojazdu"
+                  />
+                </ion-thumbnail>
+                <ion-label>
+                  <ion-note class="registration-number">
+                    {{ car.registration_number }}
+                  </ion-note>
+                  <ion-text>
+                    <h2>{{ car.brand }} {{ car.model }}</h2>
+                  </ion-text>
+                  <ion-text>
+                    <h3>Rok produkcji: {{ car.year }}</h3>
+                  </ion-text>
+                  <ion-note color="medium" class="ion-text-wrap">
+                    Przebieg: {{ car.mileage }}
+                    <br />
+                    Typ paliwa: {{ car.fuel_type }}
+                    <br />
+                    Typ nadwozia: {{ car.body_type }}
+                  </ion-note>
+                </ion-label>
+              </div>
+              <ion-label class="ready-container">
+                <ion-icon
+                  slot="start"
+                  size="large"
+                  [name]="getStatusIcon(car).icon"
+                  [color]="getStatusIcon(car).color"
+                ></ion-icon>
+                <ion-text><h3>{{ getStatusLabel(car) }}</h3></ion-text>
               </ion-label>
             </div>
           </ion-item>
@@ -78,3 +82,9 @@
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar
+    ><ion-title size="small">Pojazdy gotowe do użytku: {{ getReadyForUseCount() }}</ion-title></ion-toolbar
+  >
+</ion-footer>

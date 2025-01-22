@@ -65,6 +65,7 @@ export class CalendarPage implements OnInit {
   private initializeCalendarOptions(): ICalendarComponentOptions {
     return {
       pickMode: 'single',
+      locale: { locale: 'pl-PL', weekdays: 'short'},
       showToggleButtons: true,
       color: 'primary',
       showAdjacentMonthDay: false,

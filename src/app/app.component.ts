@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { MenuController, PopoverController } from '@ionic/angular';
-import { every, filter } from 'rxjs';
+import { filter } from 'rxjs';
 import { AuthService } from 'src/services/auth.service';
-import { ImageService } from 'src/services/endpoints/imageEndpoint.service';
 import { UserInfo } from './shared/interfaces/user.interface';
 import { ProfileService } from 'src/services/endpoints/profileEndpoint.service';
 import { StorageService } from 'src/services/storage.service';
@@ -15,7 +13,7 @@ import { ThemeService } from 'src/services/theme.service';
   styleUrls: ['./app.component.scss'],
   providers: [],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private userId: string | null = null;
 
   isLoggedIn: boolean = false;
@@ -39,7 +37,6 @@ export class AppComponent {
 
   constructor(
     private authService: AuthService,
-    private imageService: ImageService,
     private profileService: ProfileService,
     private router: Router,
     private storageService: StorageService,
@@ -48,6 +45,22 @@ export class AppComponent {
     this.loadTheme();
     this.subscribeToAuthService();
     this.subscribeToRouterEvents();
+  }
+
+  ngOnInit(): void {
+    this.authService.isLoggedIn().subscribe((isLoggedIn) => {
+      const currentUrl = this.router.url;
+      
+      if (isLoggedIn) {
+        if (currentUrl === '/login' || currentUrl === '/') {
+          this.router.navigateByUrl('/myfleet');
+        }
+      } else {
+        if (currentUrl !== '/login') {
+          this.router.navigateByUrl('/login');
+        }
+      }
+    })
   }
 
   private async loadTheme(): Promise<void> {

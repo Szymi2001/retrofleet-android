@@ -2,17 +2,17 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="dismiss()">
-        {{ "MYFLEET.MODAL.CANCEL" | translate }}
+        Anuluj
       </ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">{{ "MYFLEET.MODAL.TITLE" | translate }}</ion-title>
+    <ion-title class="ion-text-center">Pojazd</ion-title>
     <ion-buttons slot="end">
       <ion-button
           strong
           color="primary"
           (click)="submitForm()"
         >
-        {{ "MYFLEET.MODAL.CONFIRM" | translate }}</ion-button
+        Zatwierdź</ion-button
         >
     </ion-buttons>
   </ion-toolbar>
@@ -24,7 +24,7 @@
         <!-- VIN -->
         <ion-item>
           <ion-input
-            label="{{ 'MYFLEET.MODAL.VIN' | translate }}"
+            label="VIN"
             labelPlacement="floating"
             formControlName="vin"
           ></ion-input>
@@ -48,7 +48,7 @@
         <!-- Zarejestrowany -->
         <ion-item>
           <ion-input
-            label="{{ 'MYFLEET.MODAL.REGISTRATION_NUMBER' | translate }}"
+            label="Numer rejestracyjny"
             labelPlacement="floating"
             formControlName="registrationNumber"
           />
@@ -73,7 +73,7 @@
         <!-- Aktualny przebieg -->
         <ion-item>
           <ion-input
-            label="{{ 'MYFLEET.MODAL.MILEAGE' | translate }}"
+            label="Przebieg"
             labelPlacement="floating"
             type="number"
             formControlName="mileage"
@@ -98,7 +98,7 @@
         <!-- Marka -->
         <ion-item>
           <ion-select
-            label="{{ 'MYFLEET.MODAL.BRAND' | translate }}"
+            label="Marka"
             labelPlacement="floating"
             interface="popover"
             formControlName="brand"
@@ -128,7 +128,7 @@
         <!-- Model -->
         <ion-item>
           <ion-select
-            label="{{ 'MYFLEET.MODAL.MODEL' | translate }}"
+            label="Model"
             labelPlacement="floating"
             interface="popover"
             formControlName="model"
@@ -157,7 +157,7 @@
         <!-- Rok -->
         <ion-item>
           <ion-select
-            label="{{ 'MYFLEET.MODAL.PRODUCTION_YEAR' | translate }}"
+            label="Rok produkcji"
             labelPlacement="floating"
             interface="popover"
             formControlName="year"
@@ -189,7 +189,7 @@
         <!-- Kolor -->
         <ion-item>
           <ion-select
-            label="{{ 'MYFLEET.MODAL.COLOR' | translate }}"
+            label="Kolor"
             labelPlacement="floating"
             formControlName="color"
             interface="popover"
@@ -218,7 +218,7 @@
         <!-- Nadwozie -->
         <ion-item>
           <ion-select
-            label="{{ 'MYFLEET.MODAL.BODY_TYPE' | translate }}"
+            label="Typ nadwozia"
             labelPlacement="floating"
             interface="popover"
             formControlName="bodyType"
@@ -249,7 +249,7 @@
         <!-- Rodzaj paliwa -->
         <ion-item>
           <ion-select
-            label="{{ 'MYFLEET.MODAL.FUEL_TYPE' | translate }}"
+            label="Rodzaj paliwa"
             labelPlacement="floating"
             interface="popover"
             formControlName="fuelType"
@@ -281,9 +281,7 @@
 
         <!-- Badanie techniczne -->
         <ion-item>
-          <ion-label>{{
-            "MYFLEET.MODAL.TECHNICAL_INSPECTION_DATE" | translate
-          }}</ion-label>
+          <ion-label>Przegląd techniczny</ion-label>
           <ion-datetime-button
             datetime="technicalInspectionDate"
           ></ion-datetime-button>
@@ -303,9 +301,7 @@
 
         <!-- Ubezpieczenie -->
         <ion-item>
-          <ion-label>{{
-            "MYFLEET.MODAL.INSURANCE_EXPIRY_DATE" | translate
-          }}</ion-label>
+          <ion-label>Ubezpieczenie</ion-label>
           <ion-datetime-button
             datetime="insuranceExpiryDate"
           ></ion-datetime-button>
@@ -391,9 +387,7 @@
         </ion-item>
         <!-- Wpis do rejestru zabytków -->
         <ion-item>
-          <ion-label>{{
-            "MYFLEET.MODAL.IS_HERITAGE_LISTED" | translate
-          }}</ion-label>
+          <ion-label>Wpis na listę zabytków</ion-label>
           <ion-checkbox formControlName="isHeritageListed"></ion-checkbox>
         </ion-item>
 
